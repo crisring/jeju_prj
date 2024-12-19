@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.sist.searchMapper">
+
+	<!-- 숙소 유형별 리스트 검색 -->
+	<select id="selectByACMType" resultType="searchACMDomain"
+		parameterType="int">
+		SELECT a.ACM_ID acm_id, a.ACM_NAME acm_name,
+		a.DETAIL_ADDRESS detail_address, a.MAIN_IMG main_img,
+		a.ACM_TYPE_ID
+		acm_type_id, r.PRICE, r.DISCOUNT_PRICE
+		FROM ACCOMMODATION a
+		JOIN ROOM r
+		ON a.ACM_ID = r.ACM_ID
+		WHERE a.ACM_TYPE_ID = #{acm_type_id}
+	</select>
+
+
+	<!-- 각 숙소마다 평균 평점+리뷰수 구하기 -->
+	<select id="selectRatingReview" resultType="searchACMDomain"
+		parameterType="int">
+		SELECT
+		A.ACM_ID ACM_ID,
+		AVG(R.RATING) AS
+		RATING,
+		COUNT(R.REVIEW_ID) AS
+		REVIEWCNT
+		FROM ACCOMMODATION A
+		LEFT
+		JOIN REVIEW
+		R
+		ON
+		A.ACM_ID =
+		R.ACM_ID
+		WHERE A.ACM_ID = #{ACM_ID}
+		GROUP BY A.ACM_ID
+	</select>
+
+
+</mapper>

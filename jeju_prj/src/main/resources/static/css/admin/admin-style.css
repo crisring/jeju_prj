@@ -1,0 +1,186 @@
+@charset "UTF-8";
+/* Base styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f6f9;
+}
+
+.wrapper {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Sidebar styles */
+.sidebar {
+    width: 250px;
+    background-color: #fff;
+    padding-top: 20px;
+    min-height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    border-right: 1px solid #dee2e6;
+}
+
+.logo {
+    padding: 15px 20px;
+    border-bottom: 1px solid #dee2e6;
+    margin-bottom: 20px;
+}
+
+.logo a {
+    color: #ff6b6b;
+    text-decoration: none;
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
+/* Menu category style */
+.menu-category {
+    padding: 15px 5px 5px;
+    font-size: 0.75rem;
+    color: #ff6b6b;
+    margin-top: 10px;
+}
+
+/* Navigation menu styles */
+.nav-menu {
+    padding: 0 15px;
+}
+
+.nav-item {
+    margin-bottom: 5px;
+}
+
+.nav-header {
+    padding: 10px 15px;
+    color: #6c757d;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.nav-header:hover {
+    color: #000;
+}
+
+.nav-item.active > .nav-header {
+    color: #000;
+}
+
+/* Arrow icon */
+.arrow {
+    border: solid #6c757d;
+    border-width: 0 2px 2px 0;
+    display: inline-block;
+    padding: 3px;
+    transform: rotate(45deg);
+    transition: transform 0.3s;
+}
+
+.nav-item.active .arrow {
+    transform: rotate(-135deg);
+}
+
+/* Submenu styles */
+.nav-submenu {
+    display: none;
+    list-style: none;
+    padding-left: 20px;
+}
+
+.nav-item.active > .nav-submenu {
+    display: block;
+}
+
+.nav-submenu li {
+    position: relative;
+    padding: 8px 15px;
+}
+
+.nav-submenu li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background-color: #ff0000;
+}
+
+.nav-submenu a {
+    color: #6c757d;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.nav-submenu a:hover {
+    color: #ff0000;
+}
+
+.nav-submenu li.active {
+    background-color: #FCF1EF;
+    border-radius: 12px;  /* 이 부분 추가 */
+}
+
+.nav-submenu li.active a {
+    color: #ff0000;
+}
+
+/* Main content styles */
+.main-content {
+    flex-grow: 1;
+    margin-left: 250px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+/* Top navigation styles */
+.top-nav {
+    background-color: #fff;
+    padding: 15px 30px;
+    border-bottom: 1px solid #dee2e6;
+    margin-bottom: 10px;
+}
+
+.user-menu {
+    text-align: right;
+}
+
+.logout-link {
+    margin-left: 15px;
+    color: #6c757d;
+    text-decoration: none;
+}
+
+.logout-link:hover {
+    color: #343a40;
+}
+
+/* Footer styles */
+.footer {
+    position: relative;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 15px 30px;
+    background-color: #fff;
+    border-top: 1px solid #dee2e6;
+    text-align: right;
+    color: #6c757d;
+    font-size: 0.875rem;
+    height: 80px;
+}

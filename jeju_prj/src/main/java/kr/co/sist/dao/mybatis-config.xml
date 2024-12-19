@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<properties resource="properties/database.properties" />
+
+	<typeAliases>
+		<!-- Domain -->
+		<typeAlias type="kr.co.sist.user.searchACM.SearchACMDomain"
+			alias="searchACMDomain" />
+
+		<!-- 숙소리스트 검색을 위한 SearchVO -->
+		<typeAlias type="kr.co.sist.admin.acc.SearchAccVO"
+			alias="searchAccVO" />
+
+		<!-- 숙소 결과를 위한 Domain -->
+		<typeAlias type="kr.co.sist.admin.acc.AccommodationDomain"
+			alias="aDomain" />
+
+
+	</typeAliases>
+
+
+	<environments default="development">
+		<environment id="development">
+			<transactionManager type="JDBC" />
+			<dataSource type="POOLED">
+				<property name="driver" value="${driver}" />
+				<property name="url" value="${connectionURL}" />
+				<property name="username" value="${username}" />
+				<property name="password" value="${password}" />
+			</dataSource>
+		</environment>
+	</environments>
+	<mappers>
+
+		<!--user -->
+		<!-- 메인페이지 검색 -->
+		<mapper
+			resource="kr/co/sist/user/searchACM/searchACMMapper.xml" />
+
+
+		<!-- admin -->
+		<mapper resource="kr/co/sist/admin/acc/acmMapper.xml" />
+
+	</mappers>
+</configuration>

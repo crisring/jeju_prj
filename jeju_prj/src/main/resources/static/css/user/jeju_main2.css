@@ -1,0 +1,195 @@
+@charset "UTF-8";
+
+/* 날씨 배너 */
+.weather-banner {
+	width: 73%;
+	background: linear-gradient(to right, #4facfe, #00f2fe);
+	color: white;
+	text-align: center;
+	padding: 20px 0;
+	border-radius: 15px;
+	margin-bottom: 20px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	margin-left: auto;
+	margin-right: auto;
+}
+
+/* 날씨 배너 내부 콘텐츠 */
+.weather-content {
+	justify-content: center;
+	align-items: center;
+	gap: 20px;
+	display: flex;
+}
+
+/* 날씨 정보 카드 */
+.weather-info {
+	display: flex;
+	align-items: center;
+	gap: 15px;
+	font-size: 18px;
+}
+
+/* 이미지 스타일 */
+.weather-info img {
+	width: 80px;
+	height: 80px;
+	border-radius: 50%;
+	object-fit: cover;
+}
+
+/* 날씨 정보 텍스트 스타일 */
+.weather-info p {
+	margin: 0;
+	font-size: 18px;
+	font-weight: bold;
+	color: white;
+}
+
+/* 광고 */
+.promo-banner {
+	padding: 20px 0;
+}
+
+.promo-content {
+	width: 73%;
+	height: 220px;
+	margin: 0 auto;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	border-radius: 15px;
+	background-color: #EDEBFD;
+}
+
+.promo-info {
+	display: flex;
+	align-items: center;
+	margin-left: auto;
+}
+
+.promo-image {
+	width: 20%;
+	height: auto;
+	margin-right: 50px;
+}
+
+.promo-description {
+	font-size: 16px;
+	line-height: 1.5;
+	margin: 10px 0;
+}
+
+.promo-button {
+	background-color: #1273E4;
+	color: white;
+	padding: 10px 20px;
+	border-radius: 5px;
+	text-decoration: none;
+	font-weight: bold;
+}
+
+.promo-button:hover {
+	background-color: #FF4C39;
+}
+
+.promo-text {
+	padding-left: 30px;
+}
+
+/* 호텔 리스트 */
+.hotel-list {
+	display: flex;
+	gap: 20px;
+	padding: 20px;
+	width: 100%;
+	flex-wrap: wrap;
+	box-sizing: border-box;
+	justify-content: center;
+}
+
+/* 호텔 카드 */
+.hotel-card {
+	width: 260px;
+	border-radius: 8px;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+	overflow: hidden;
+	background-color: #fff;
+	transition: transform 0.3s, box-shadow 0.3s; /* 호버 시 애니메이션 추가 */
+}
+
+.hotel-card:hover {
+	transform: translateY(-5px); /* 호버 시 약간 위로 이동 */
+	box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2); /* 호버 시 그림자 강조 */
+}
+
+/* 호텔 이미지 */
+.hotel-image {
+	width: 100%;
+	height: 180px; /* 이미지 크기 고정 */
+	object-fit: cover;
+}
+
+/* 호텔 정보 */
+.hotel-info {
+	padding: 15px;
+	text-align: left;
+}
+
+.hotel-type {
+	font-size: 13px;
+	color: #555;
+	margin-bottom: 5px;
+}
+
+.hotel-info h3 {
+	font-size: 16px;
+	margin: 5px 0;
+	font-weight: bold;
+	color: #333;
+}
+
+.hotel-info p {
+	font-size: 14px;
+	margin: 5px 0;
+	color: #555;
+}
+
+/* 호텔 평점 */
+.hotel-rating {
+	margin-top: 8px;
+	font-size: 14px;
+	color: #f5a623;
+}
+
+.rating-score {
+	font-weight: bold;
+}
+
+.rating-count {
+	color: #777;
+	margin-left: 5px;
+}
+
+/* 호텔 가격 */
+.hotel-price {
+	margin-top: 10px;
+	font-size: 14px;
+}
+
+.coupon {
+	color: #008000;
+	font-weight: bold;
+}
+
+.original-price {
+	text-decoration: line-through;
+	color: #999;
+	margin-left: 5px;
+}
+
+.hotel-banner h2 {
+	text-align: center;
+	margin-bottom: 20px;
+	font-size: 1.5rem;
+}

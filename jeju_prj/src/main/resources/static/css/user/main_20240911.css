@@ -1,0 +1,99 @@
+@charset "UTF-8";
+
+body {
+	margin: 0px;
+	padding: 0px
+}
+
+body {
+	font-size: 12px;
+	color: #a9a9a9;
+	font-family: '맑은 고딕', sans-serif;
+}
+
+a {
+	font-size: 12px;
+	color: #a9a9a9;
+	text-decoration: none
+}
+
+a:hover {
+	font-size: 12px;
+	color: #a9a9a9;
+	text-decoration: none;
+}
+
+caption, legend {
+	font-size: 0px;
+	width: 0px;
+	height: 0px;
+	overflow: hidden;
+	position: absolute;
+	visibility: hidden;
+}
+
+img {
+	border: 0px;
+}
+
+fieldset {
+	border: 0;
+	vertical-align: top;
+}
+
+input, textarea, select {
+	font-family: inherit;
+	font-size: inherit;
+	font-weight: inherit;
+	padding-left: 5px;
+}
+
+input[type=password] {
+	IME-MODE: disabled;
+}
+
+ul, ol, dl {
+	list-style: none;
+	margin: 0;
+}
+
+button {
+	cursor: pointer;
+}
+
+hr {
+	display: none;
+	clear: both;
+}
+
+.inputBox {
+	border: 1px solid #DEDEDE;
+	height: 37px;
+}
+
+.btnMy {
+	border: 1px solid #222222;
+	height: 41px;
+	background-color: #FFFFFF;
+	cursor: pointer;
+}
+
+.btnMySubmit {
+	border: 1px solid #04264C;
+	height: 41px;
+	width: 180px;
+	background-color: #04264C;
+	color: #FFFFFF;
+	font-size: 13px;
+	cursor: pointer;
+}
+
+.btnMyReset {
+	border: 1px solid #87888A;
+	height: 41px;
+	width: 180px;
+	background-color: #87888A;
+	color: #FFFFFF;
+	font-size: 13px;
+	cursor: pointer;
+}

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration status="trace">
+	<Properties>
+		<property name="LOGS_PATH">c:/dev/mybatis/log</property>
+	</Properties>
+	<Appenders>
+		<Console name="console" target="SYSTEM_OUT">
+			<PatternLayout
+				pattern="[%d{yyyy-MM-dd hh:mm:ss}] [%5p] [%c]  [%m]%n" />
+		</Console>
+		<RollingFile name="RollingFile">
+			<FileName>${LOGS_PATH}/mybatis.log</FileName>
+			<FilePattern>${LOGS_PATH}/mybatis.%d{yyyy-MM-dd}.%i.log.gz
+			</FilePattern>
+			<PatternLayout>
+				<Pattern>[%d{yyyy-MM-dd HH:mm:ss}] [%5p] [%c] [%m]%n</Pattern>
+			</PatternLayout>
+			<Policies>
+				<SizeBasedTriggeringPolicy size="50MB" />
+				<TimeBasedTriggeringPolicy interval="1"
+					modulate="true" />
+			</Policies>
+
+			<DefaultRolloverStrategy max="7"
+				fileIndex="max">
+				<Delete basePath="${LOGS_PATH}" maxDepth="1">
+					<!-- 3일이 경과한 로그파일은 자동 삭제 -->
+					<IfLastModified age="3d" />
+				</Delete>
+			</DefaultRolloverStrategy>
+		</RollingFile>
+	</Appenders>
+
+	<loggers>
+		<root level="trace" additivity="true">
+			<AppenderRef ref="console" />
+			<AppenderRef ref="RollingFile" />
+		</root>
+	</loggers>
+
+</configuration>
