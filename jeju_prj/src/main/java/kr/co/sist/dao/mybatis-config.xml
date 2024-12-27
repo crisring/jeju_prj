@@ -6,9 +6,33 @@
 	<properties resource="properties/database.properties" />
 
 	<typeAliases>
-		<!-- Domain -->
+		<!-- user -->
+		<!-- 메인페이지 Domain -->
 		<typeAlias type="kr.co.sist.user.searchACM.SearchACMDomain"
 			alias="searchACMDomain" />
+		<!-- 마이페이지 예약 Domain -->
+		<typeAlias type="kr.co.sist.user.mypage.ReservationDomain"
+			alias="reservationDomain" />
+		<!-- 마이페이지 리스트 조회 VO -->
+		<typeAlias type="kr.co.sist.user.util.SearchVO"
+			alias="searchVO" />
+		<!-- 리뷰 쓰기 VO -->
+		<typeAlias type="kr.co.sist.user.mypage.ReviewVO"
+			alias="reviewVO" />
+
+		<!-- 예약페이지 Domain -->
+		<typeAlias type="kr.co.sist.user.reservation.RoomDomain"
+			alias="roomDomain" />
+
+		<!-- 예약페이지 VO -->
+		<typeAlias type="kr.co.sist.user.reservation.ReservationVO"
+			alias="reservationVO" />
+
+
+		<!-- admin -->
+		<!-- 대시보드 결과 Domain -->
+		<typeAlias type="kr.co.sist.admin.dashboard.DashboardDomain"
+			alias="dashboardDomain" />
 
 		<!-- 숙소리스트 검색을 위한 SearchVO -->
 		<typeAlias type="kr.co.sist.admin.acc.SearchAccVO"
@@ -18,7 +42,8 @@
 		<typeAlias type="kr.co.sist.admin.acc.AccommodationDomain"
 			alias="aDomain" />
 
-
+		<typeAlias type="kr.co.sist.admin.acc.AccmmodationVO"
+			alias="accommodationVO" />
 	</typeAliases>
 
 
@@ -40,8 +65,21 @@
 		<mapper
 			resource="kr/co/sist/user/searchACM/searchACMMapper.xml" />
 
+		<!-- 메인페이지 검색 -->
+		<mapper
+			resource="kr/co/sist/user/reservation/reservationMapper.xml" />
+
+		<!-- 마이페이지 -->
+		<mapper resource="kr/co/sist/user/mypage/RSRManageMapper.xml" />
+
+
 
 		<!-- admin -->
+		<!-- 대시보드 -->
+		<mapper
+			resource="kr/co/sist/admin/dashboard/dashboardMapper.xml" />
+
+		<!-- 숙소관리 -->
 		<mapper resource="kr/co/sist/admin/acc/acmMapper.xml" />
 
 	</mappers>

@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
 <!DOCTYPE html>
 <html>
@@ -23,169 +24,203 @@
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
 
-<style type="text/css">
+<link rel="stylesheet" type="text/css"
+	href="/css/user/mypage_reservation.css">
 
-/* 기존 스타일 유지 */
-#main {
-	width: 800px;
-	min-height: 600px; /* 최소높이 보장  */
-	position: relative;
-	margin-left: 630px;
-	margin-top: 80px;
-	margin-bottom: 80px;
-}
+<script type="text/javascript">
 
-#frm {
-	padding: 10px
-}
+/* window.onload = function() {
+    var msg = '${msg}';
 
-.bold {
-	font-weight: bold;
-}
+    // sessionStorage 키를 확인
+    if (msg && !sessionStorage.getItem('msgDisplayed')) {
+        alert(msg);
+        sessionStorage.setItem('msgDisplayed', 'true');
+    }
 
-#emptyList {
-	position: absolute;
-	border: 1px solid #F5F7FA;
-	width: 750px;
-	height: 300px;
-	margin-top: 15px;
-	margin-left: 30px;
-	box-shadow: 5px 5px 5px 5px rgba(0, 0, 0, 0.1);
-	border-radius: 10px;
-	/* Flexbox 설정 */
-	display: flex;
-	align-items: center; /* 세로 정렬 */
-	justify-content: space-between; /* 요소 간 간격 */
-}
+}; */
 
-.reservation {
-	border: 1px solid #F5F7FA;
-	width: 750px;
-	height: 300px;
-	margin-top: 15px;
-	margin-left: 30px;
-	box-shadow: 5px 5px 5px 5px rgba(0, 0, 0, 0.1);
-	border-radius: 15px;
-	overflow: hidden; /* 자식 요소를 부모 경계 안으로 제한 */
-	/* Flexbox 설정 */
-	display: flex;
-	align-items: center; /* 세로 정렬 */
-	justify-content: space-between; /* 요소 간 간격 */
-}
+</script>
 
-.reservationImg {
-	height: 100%;
-	width: 30%;
-	border-right: 1px solid #F5F7FA;
-}
-
-.reservationInfo {
-	height: 100%;
-	width: 70%;
-	padding: 20px;
-	padding-top: 40px;
-}
-
-.star {
-	font-size: 24px;
-	color: #ccc;
-	cursor: pointer;
-}
-
-.star:hover, .star.selected {
-	color: gold;
-}
-
-/* 모달 이미지 스타일 */
-.modal-body img {
-	max-width: 100%; /* 모달 너비를 넘지 않도록 */
-	max-height: 90% height: auto; /* 비율을 유지하며 크기 조정 */
-	display: block; /* 중앙 정렬을 위한 블록 요소 */
-	margin: 0 auto; /* 이미지를 중앙에 정렬 */
-}
-
-/* 미디어 쿼리 적용 */
-@media screen and (max-width: 1200px) {
-	/* 전체 래퍼의 위치 조정 */
-	#wrap {
-		position: relative;
-	}
-	#main {
-		position: relative;
-		margin-left: auto;
-		margin-right: auto;
-		margin-top: 80px;
-		margin-bottom: 80px;
-		width: 90%;
-	}
-
-	/* 예약 카드의 크기 조정 */
-	.reservation, #emptyList {
-		width: 100%;
-		margin-left: 0;
-	}
-}
-
-@media screen and (max-width: 768px) {
-	/* 사이드바와 메인 콘텐츠를 세로로 배치 */
-	#wrap {
-		display: block;
-	}
-	#sidebar {
-		width: 100%;
-		margin-top: 0;
-	}
-	#main {
-		width: 100%;
-		margin-top: 0;
-	}
-
-	/* 예약 카드의 레이아웃 변경 */
-	.reservation {
-		flex-direction: column;
-		height: auto;
-	}
-	.reservationImg, .reservationInfo {
-		width: 100%;
-		height: auto;
-	}
-	.reservationImg {
-		border-right: none;
-		border-bottom: 1px solid #F5F7FA;
-	}
-	.reservationInfo {
-		padding-top: 20px;
-	}
-}
-</style>
 
 <script type="text/javascript">
 /*모달 별점구현 함수  */
-$(document).ready(function () {
-  // 별점 선택 로직
-  $(".star").on("click", function () {
-    const rating = $(this).data("value"); // 클릭한 별의 값 가져오기
-    $(".star").each(function (index) {
-      if (index < rating) {
-        $(this).addClass("selected"); // 선택된 별들에 클래스 추가
-      } else {
-        $(this).removeClass("selected"); // 선택되지 않은 별들에서 클래스 제거
-      }
-    });
-  });
-});
-</script>
-<script>
-function setActive(element) {
-  // 모든 버튼에서 active 클래스 제거
-  document.querySelectorAll("#sidebar .btn-outline-secondary").forEach((btn) => {
-    btn.classList.remove("active");
-  });
+$(function () {
+	
+	let letRating = 0; // 별점 값 저장 변수
+	
+	$(".star").on("click", function () {
+	    const selectedRating = $(this).data("value"); // 클릭한 별의 값 가져오기
+	    letRating = selectedRating; // 전역 변수에 저장
+	    console.log("선택한 별점:", letRating);
 
-  // 클릭된 버튼에 active 클래스 추가
-  element.classList.add("active");
-}
+	    $(".star").each(function (index) {
+	        if (index < letRating) {
+	            $(this).addClass("selected"); // 선택된 별들에 클래스 추가
+	        } else {
+	            $(this).removeClass("selected"); // 선택되지 않은 별들에서 클래스 제거
+	        }
+	    });
+	});
+	
+	/* 취소신청 업데이트 AJAX */
+	$("#btnCancel").click(function(){
+		var rsr_id = $("#rsr_id").val();
+		var data={ rsr_id:rsr_id };
+		
+		if(!confirm("취소하시겠습니까?")){
+			return;
+		}
+		
+		$.ajax({
+			url:"/mypage/cancelReservation/"+rsr_id,
+			type:"PUT", //@PutMapping("/{rsr_id}")
+			data:data,
+			dataType:"JSON",
+			error:function( xhr ){
+				alert( xhr.status );
+			},
+			success:function( jsonObj ){
+				var outMsg=`취소 중 문제가 발생하였습니다.`;
+				if( jsonObj.resultFlag ){
+					outMsg=`취소되었습니다!`;
+				}//end if
+				
+				alert(outMsg);
+			}
+		});//ajax
+
+	})// click
+	
+	/* 리뷰 추가 */
+	$("#btnAddReview").click(function () {
+
+	    var rsr_id = $("#rsr_id").val();
+
+	    // 내용 유효성 검사
+	    if (!validateContent()) { 
+	        return; 
+	    } 
+
+	    var content = $("#content").val();
+	    var user_id = $('#user_id').val();    
+	    var acm_id = $('#acm_id').val();
+	    $('#rating').val(letRating); 
+
+	    var rating = $('#rating').val();
+	    
+	 // 파일 유효성 검사
+	    var img_names = validateImageFiles(); 
+	    
+	    if (img_names && img_names.length > 0) {
+	        $("#uploadFrm").submit();
+	    }
+	}); // click
+
+
+
+
+	}); // ready
+
+	/* 내용 유효성 검사 */
+	function validateContent() {
+	    var flag = true; 
+	    var content = $('#content').val();
+	    
+	    // 문자열 길이 확인
+	    if (content.length < 10) {
+	        alert('리뷰는 최소 10자 이상 입력해야 합니다!');
+	        flag = false; 
+	    }
+	    
+	    return flag; 
+	}// validateContent
+
+
+	
+	
+/* 유효성 검사 */
+function validateImageFiles() {
+	/* 파일 확장자 설정  */
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+    const fileInput = $('#upfile')[0];
+    const files = fileInput.files;
+    const filesArray = Array.from(files);
+    
+    
+    if (filesArray.length > 3) {
+        alert('최대 3개의 파일만 업로드 가능합니다.');
+        $('#upfile').val('');
+        return;
+    }
+    
+    if (filesArray.length === 0) {
+        alert('파일을 선택해주세요.');
+        return;
+    }
+    
+    const invalidFiles = filesArray.filter(file => !allowedTypes.includes(file.type));
+    
+    if (invalidFiles.length > 0) {
+        const invalidFileNames = invalidFiles.map(file => file.name).join(', ');
+        alert(`다음 파일은 이미지 파일이 아닙니다: ${invalidFileNames}\n\n이미지 파일(jpg, png, gif, webp)만 업로드 가능합니다.`);
+        $('#upfile').val('');
+        return false;
+    }
+    
+    // 파일 이름만 추출하여 배열로 반환
+    return filesArray.map(file => file.name);
+}// validateImageFiles
+
 </script>
+
+<script type="text/javascript">
+
+</script>
+
+<style type="text/css">
+.pagination {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-top: 20px;
+}
+
+.pagination span {
+	margin: 0 5px;
+}
+
+.prev, .next {
+	font-weight: bold;
+	color: #333;
+	cursor: pointer;
+}
+
+.page-links a {
+	text-decoration: none;
+	color: #0056b3;
+	font-weight: bold;
+}
+
+.page-links a:hover {
+	color: #ff5722;
+}
+
+.page-links .active {
+	color: #fff;
+	background-color: #007bff;
+	border-radius: 5px;
+}
+
+.page-links a:focus, .page-links a:hover {
+	outline: none;
+	color: #ff5722;
+}
+
+.page-links .active a {
+	background-color: #004085;
+}
+</style>
 
 </head>
 
@@ -200,42 +235,212 @@ function setActive(element) {
 		<!-- sidebar import -->
 		<jsp:include page="../common/jsp/mypage_sidebar.jsp" />
 
+
 		<div id="main">
 			<h5 class="bold mb-4">예약 내역</h5>
 			<p>예약 내역을 확인하고 취소할 수 있어요</p>
 
 			<!-- 예약 내역이 없을 때 보여질 내용 -->
+			<c:if test="${ empty rsrList}">
+				<div class="reservation">예약된 내용이 없습니다.</div>
+			</c:if>
+
+			<c:forEach var="list" items="${rsrList }" varStatus="i">
+				<div class="reservation">
+					<div class="reservationImg">
+						<img src="/common/admin/images/${list.acm_main_img }"
+							alt="${list.acm_main_img }" />
+					</div>
+
+					<div class="reservationInfo">
+						<input type="hidden" id="rsr_id" name="rsr_id"
+							value="${list.rsr_id }"> <Strong><c:out
+								value="${list.acm_name } - ${list.room_name}" /></Strong><br> 예약일자:
+						<fmt:formatDate value="${list.check_in_date }"
+							pattern="yyyy년 MM월 dd일" />
+						부터<br> <span style="padding-left: 73px;"> <fmt:formatDate
+								value="${list.check_out_date }" pattern="yyyy년 MM월 dd일" /></span> 까지 <br>
+						<br>
+						<p>예약자 명: ${list.rsr_name }</p>
+						<c:choose>
+							<c:when test="${list.discount_price > 0 }">
+								<p>
+									결제금액:
+									<c:choose>
+										<c:when test="${list.discount_price < 100000}">
+											<fmt:formatNumber pattern="00,000"
+												value="${list.discount_price}" />
+										</c:when>
+										<c:otherwise>
+											<fmt:formatNumber pattern="###,###"
+												value="${list.discount_price}" />
+										</c:otherwise>
+									</c:choose>
+									원
+								</p>
+							</c:when>
+							<c:otherwise>
+								<c:choose>
+									<c:when test="${list.price > 0 }">
+										<p>
+											결제금액:
+											<c:choose>
+												<c:when test="${list.price < 100000}">
+													<fmt:formatNumber pattern="00,000" value="${list.price}" />
+												</c:when>
+												<c:otherwise>
+													<fmt:formatNumber pattern="###,###" value="${list.price}" />
+												</c:otherwise>
+											</c:choose>
+											원
+										</p>
+									</c:when>
+								</c:choose>
+							</c:otherwise>
+						</c:choose>
+						<input type="button" class="cancel-link" id="btnCancel"
+							value="취소신청 하기">
 
 
-			<!-- 예약 내역의 존재 여부를 c:if로 물어보고 사용하면 될듯. -->
-			<!-- <div id="emptyList" style="display: flex; align-items: center;">
-              <div style="margin-top: 20px; margin-left: 20px;  width: 300px;">
-                <h5>예정된 여행이 없습니다.</h5>
-                <p>지금 새로운 여행을 시작해 보세요.</p>
-                <a href="#" class="btn btn-primary btn-lmg">숙소 보러가기</a>
-              </div>
-              <img src="http://localhost/second_prj/common/images/reservation.png" style=" height: auto; margin-left: 20px; object-fit: contain;">
-            </div>
-             -->
 
-			<div class="reservation">
-
-				<div class="reservationImg">숙소 이미지 div</div>
-
-				<div class="reservationInfo">
-
-					<p>예약일자: xxxx년 xx월 xx일 부터 xxxx년 xx월 xx일 까지</p>
-					<br>
-					<p>예약자 명: xxx</p>
-					<br>
-					<p>결제금액: 0,000,000원</p>
-					<br> <a href="#" class="review-link" data-bs-toggle="modal"
-						data-bs-target="#reviewModal">리뷰 쓰러 가기(리뷰 작성 링크)</a>
-
+					</div>
 				</div>
-			</div>
+			</c:forEach>
+
+			<br>
+
+			<h5 class="bold mb-4">이용완료 내역</h5>
+
+			<c:forEach var="list" items="${rsrList2 }" varStatus="i">
+				<div class="reservation">
+					<div class="reservationImg">
+						<img src="/common/admin/images/${list.acm_main_img }"
+							alt="${list.acm_main_img }" />
+					</div>
+					<div class="reservationInfo">
+						<input type="hidden" id="rsr_id" name="rsr_id"
+							value="${list.rsr_id }"> <Strong><c:out
+								value="${list.acm_name } - ${list.room_name}" /></Strong><br> 예약일자:
+						<fmt:formatDate value="${list.check_in_date }"
+							pattern="yyyy년 MM월 dd일" />
+						부터<br> <span style="padding-left: 73px;"> <fmt:formatDate
+								value="${list.check_out_date }" pattern="yyyy년 MM월 dd일" /></span> 까지<br>
+						<br>
+						<p>예약자 명: ${list.rsr_name }</p>
+						<c:choose>
+							<c:when test="${list.discount_price > 0 }">
+								<p>
+									결제금액:
+									<c:choose>
+										<c:when test="${list.discount_price < 100000}">
+											<fmt:formatNumber pattern="00,000"
+												value="${list.discount_price}" />
+										</c:when>
+										<c:otherwise>
+											<fmt:formatNumber pattern="###,###"
+												value="${list.discount_price}" />
+										</c:otherwise>
+									</c:choose>
+									원
+								</p>
+							</c:when>
+							<c:otherwise>
+								<c:choose>
+									<c:when test="${list.price > 0 }">
+										<p>
+											결제금액:
+											<c:choose>
+												<c:when test="${list.price < 100000}">
+													<fmt:formatNumber pattern="00,000" value="${list.price}" />
+												</c:when>
+												<c:otherwise>
+													<fmt:formatNumber pattern="###,###" value="${list.price}" />
+												</c:otherwise>
+											</c:choose>
+											원
+										</p>
+									</c:when>
+								</c:choose>
+							</c:otherwise>
+						</c:choose>
+
+
+						<c:choose>
+							<c:when test="${list.review_id eq 0}">
+								<a href="#" class="review-link" data-bs-toggle="modal"
+									data-bs-target="#reviewModal"
+									data-review='{"acm_main_img": "${list.acm_main_img}", "acm_name": "${list.acm_name}"}'>
+									리뷰 쓰러 가기 </a>
+
+
+							</c:when>
+							<c:otherwise>
+								<span class="review-complete">리뷰 쓰기 완료</span>
+							</c:otherwise>
+						</c:choose>
+
+						<!-- 모달 시작  -->
+						<form action="/mypage/ReviewWriteProcess" method="post"
+							enctype="multipart/form-data" id="uploadFrm" name="uploadFrm">
+							<div class="modal fade" id="reviewModal" tabindex="-1"
+								aria-labelledby="reviewModalLabel" aria-hidden="true">
+								<div class="modal-dialog">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h5 class="modal-title" id="reviewModalLabel">리뷰쓰기</h5>
+											<button type="button" class="btn-close"
+												data-bs-dismiss="modal" aria-label="Close"></button>
+										</div>
+										<input type="hidden" id="rsr_id" name="rsr_id"
+											value="${list.rsr_id }"> <input type="hidden"
+											id="acm_id" name="acm_id" value="${list.acm_id }"> <input
+											type="hidden" id="user_id" name="user_id"
+											value="${user_info.user_id }">
+										<div class="modal-body">
+											<img alt="숙소 이미지"
+												src="/common/admin/images/${list.acm_main_img }"> <span
+												class="fw-bold">${list.acm_name }</span> <span
+												class="fw-bold">( ${list.room_name } )</span><br> <span
+												style="text-align: center;">숙소는 만족하셨나요?</span>
+											<div class="d-flex justify-content-center mb-3">
+												<span class="star" data-value="1">★</span> <span
+													class="star" data-value="2">★</span> <span class="star"
+													data-value="3">★</span> <span class="star" data-value="4">★</span>
+												<span class="star" data-value="5">★</span>
+											</div>
+
+											<!-- 숨겨진 input 태그로 rating 값 관리 -->
+											<input type="hidden" name="rating" id="rating" value="">
+
+											<textarea class="form-control" id="content"
+												placeholder="어떤 점이 좋았나요? 최소 10자 이상 입력해주세요." rows="6"
+												maxlength="5000" name="content"></textarea>
+											<br> <input type="file" id="upfile" multiple
+												accept="image/*" name="upfile" />
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="btn btn-secondary"
+												data-bs-dismiss="modal">취소</button>
+											<input type="button" id="btnAddReview"
+												class="btn btn-primary" value="등록" />
+										</div>
+									</div>
+								</div>
+							</div>
+						</form>
+
+
+					</div>
+				</div>
+			</c:forEach>
+
+			<br> <span class="pagination"><c:out
+					value="${ pagination }" escapeXml="false" /></span>
+
 		</div>
 	</div>
+
+
 
 	<div id="footer">
 		<!-- footer import -->
@@ -245,45 +450,6 @@ function setActive(element) {
 
 
 
-
-
-
-
-	<!-- 모달 시작  -->
-	<div class="modal fade" id="reviewModal" tabindex="-1"
-		aria-labelledby="reviewModalLabel" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="reviewModalLabel">리뷰쓰기</h5>
-					<button type="button" class="btn-close" data-bs-dismiss="modal"
-						aria-label="Close"></button>
-				</div>
-				<div class="modal-body">
-					<img alt="숙소 이미지"
-						src="http://localhost/second_prj/common/images/test.jpg">
-					<p class="fw-bold">숙소명</p>
-					<p>숙소는 만족하셨나요?</p>
-					<div class="d-flex justify-content-center mb-3">
-						<span class="star" data-value="1">★</span> <span class="star"
-							data-value="2">★</span> <span class="star" data-value="3">★</span>
-						<span class="star" data-value="4">★</span> <span class="star"
-							data-value="5">★</span>
-					</div>
-
-					<textarea class="form-control"
-						placeholder="어떤 점이 좋았나요? 최소 10자 이상 입력해주세요." rows="6"
-						maxlength="5000"></textarea>
-					<button class="btn btn-outline-secondary mt-3">사진 첨부하기</button>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary"
-						data-bs-dismiss="modal">취소</button>
-					<button type="button" class="btn btn-primary">등록</button>
-				</div>
-			</div>
-		</div>
-	</div>
 </body>
 </html>
 

@@ -1,0 +1,160 @@
+@charset "UTF-8";
+
+#main {
+	width: 800px;
+	min-height: 600px;
+	position: relative;
+	margin-left: 630px;
+	margin-top: 30px;
+	margin-bottom: 30px;
+}
+
+#frm {
+	padding: 10px;
+}
+
+.bold {
+	font-weight: bold;
+}
+
+#emptyList {
+	position: absolute;
+	border: 1px solid #F5F7FA;
+	width: 750px;
+	height: 300px;
+	margin-top: 15px;
+	margin-left: 30px;
+	box-shadow: 5px 5px 5px 5px rgba(0, 0, 0, 0.1);
+	border-radius: 10px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.reservation {
+	border: 1px solid #F5F7FA;
+	width: 700px;
+	height: 280px;
+	margin-top: 15px;
+	margin-left: 30px;
+	box-shadow: 5px 5px 5px 5px rgba(0, 0, 0, 0.1);
+	border-radius: 15px;
+	overflow: hidden;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.reservationImg {
+	height: 100%;
+	width: 30%;
+	border-right: 1px solid #F5F7FA;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	overflow: hidden;
+}
+
+.reservationImg img {
+	height: 100%;
+	width: 100%;
+	object-fit: cover;
+}
+
+.reservationInfo {
+	height: 100%;
+	width: 70%;
+	padding: 20px;
+	padding-top: 40px;
+}
+
+.star {
+	font-size: 24px;
+	color: #ccc;
+	cursor: pointer;
+}
+
+.star:hover, .star.selected {
+	color: gold;
+}
+
+.modal-body img {
+	max-width: 100%;
+	max-height: 90%;
+	display: block;
+	margin: 0 auto;
+}
+
+@media screen and (max-width: 1200px) {
+	#wrap {
+		position: relative;
+	}
+	#main {
+		position: relative;
+		margin-left: auto;
+		margin-right: auto;
+		margin-top: 80px;
+		margin-bottom: 80px;
+		width: 90%;
+	}
+	.reservation, #emptyList {
+		width: 100%;
+		margin-left: 0;
+	}
+}
+
+@media screen and (max-width: 768px) {
+	#wrap {
+		display: block;
+	}
+	#sidebar {
+		width: 100%;
+		margin-top: 0;
+	}
+	#main {
+		width: 100%;
+		margin-top: 0;
+	}
+	.reservation {
+		flex-direction: column;
+		height: auto;
+	}
+	.reservationInfo {
+		width: 100%;
+		height: auto;
+		padding-top: 20px;
+	}
+}
+
+.cancel-link, .review-link {
+	display: inline-block;
+	padding: 10px 20px;
+	background-color: #007bff;
+	color: white;
+	text-align: center;
+	text-decoration: none;
+	border-radius: 5px;
+	font-size: 16px;
+	font-weight: bold;
+	transition: background-color 0.3s ease;
+	margin-top: 10px;
+	border: none;
+}
+
+.review-complete {
+	display: inline-block;
+	padding: 10px 20px;
+	background-color: #FB4141;
+	color: white;
+	text-align: center;
+	text-decoration: none;
+	border-radius: 5px;
+	font-size: 16px;
+	font-weight: bold;
+	transition: background-color 0.3s ease;
+	margin-top: 10px;
+}
+
+.cancel-link:hover, .review-link:hover, review-complete:hover {
+	background-color: #0056b3;
+}

@@ -11,6 +11,15 @@ import lombok.ToString;
 @ToString
 public class MemberVO {
 
+	public MemberVO(String user_id, String password, String user_name, String user_ip, String member_type) {
+		super();
+		this.user_id = user_id;
+		this.password = password;
+		this.user_name = user_name;
+		this.user_ip = user_ip;
+		this.member_type = member_type;
+	}
+
 	private String user_id, password, user_name, phone_number, birth, gender, user_ip, user_status, member_type;
 
 	private Timestamp join_date;

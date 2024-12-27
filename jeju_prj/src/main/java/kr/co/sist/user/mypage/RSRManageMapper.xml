@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.sist.RSRManageMapper">
+
+
+
+	<sql id="RSRList">
+		SELECT *
+		FROM
+		(SELECT
+		rsr.CHECK_IN_DATE AS check_in_date,
+		rsr.CHECK_OUT_DATE AS check_out_date,
+		rsr.RSR_ID AS rsr_id,
+		rsr.RSR_NAME AS rsr_name,
+		rsr.room_id AS room_id,
+		rsr.RSR_DATE AS
+		rsr_date,
+		rev.REVIEW_ID AS review_id,
+		r.PRICE AS price,
+		r.DISCOUNT_PRICE
+		AS discount_price,
+		r.room_name room_name,
+		a.MAIN_IMG AS acm_main_img,
+		a.ACM_NAME AS acm_name,
+		A.ACM_ID AS acm_id,
+		ROW_NUMBER() OVER (ORDER BY
+		rsr.check_out_date)
+		AS rnum
+		FROM
+		RESERVATION rsr
+		JOIN ROOM r ON
+		rsr.ROOM_ID = r.ROOM_ID
+		JOIN
+		ACCOMMODATION a ON r.ACM_ID = a.ACM_ID
+		LEFT
+		JOIN REVIEW rev ON
+		rsr.RSR_ID = rev.RSR_ID
+	</sql>
+
+	<!-- 총 게시물의 수 얻기 -->
+	<!-- 예약내역 검색 숙소이미지, 체크인, 체크아웃, 예약자명, 룸 금액, 리뷰 있는지 없는지, 상태 = 결제완료 -->
+	<select id="selectAllReservation" resultType="reservationDomain"
+		parameterType="string">
+		<include refid="RSRList" />
+
+		WHERE
+		rsr.RSR_STATUS = '결제완료'
+		AND rsr.USER_ID = #{USER_ID}
+		) subquery
+	</select>
+
+	<!-- 예약내역 검색 숙소이미지, 체크인, 체크아웃, 예약자명, 룸 금액, 리뷰 있는지 없는지, 상태 = 이용완료 -->
+	<select id="selectAllReservation2"
+		resultType="reservationDomain" parameterType="searchVO">
+		<include refid="RSRList" />
+
+		WHERE
+		rsr.RSR_STATUS = '이용완료'
+		AND rsr.USER_ID = #{user_id}
+		) subquery
+		WHERE
+		subquery.rnum between #{startNum} and #{endNum}
+
+	</select>
+
+
+	<select id="totalCnt" resultType="int" parameterType="String">
+		SELECT
+		COUNT(RSR_ID) cnt
+		FROM RESERVATION
+		WHERE
+		USER_ID=#{USER_ID} and
+		rsr_status='이용완료'
+
+	</select>
+
+
+	<!-- 예약번호를 받아서 '예약취소'로 변경 -->
+	<update id="updateReservation" parameterType="int">
+
+		update RESERVATION
+		set RSR_STATUS='예약취소'
+		where RSR_ID=#{RSR_ID}
+
+	</update>
+
+	<select id="getReviewId" resultType="int">
+		SELECT REVIEW_ID_SEQ.NEXTVAL
+		FROM dual
+	</select>
+
+
+	<!-- 내용,숙소번호,별점,예약번호,유저ID를 받아서 리뷰 추가 -->
+	<insert id="insertReview" parameterType="reviewVO">
+		INSERT INTO
+		REVIEW(CONTENT, ACM_ID, RATING, RSR_ID, USER_ID, REVIEW_ID)
+		VALUES(#{content},
+		#{acm_id}, #{rating}, #{rsr_id},
+		#{user_id},
+		#{review_id})
+	</insert>
+
+	<!-- 리뷰 추가 후 리뷰ID를 받아 이미지 이름과 함께 추가 -->
+	<insert id="insertReviewImg" parameterType="reviewVO">
+		INSERT
+		INTO
+		REVIEW_IMG(REVIEW_ID, IMG_NAME)
+		VALUES(#{review_id},
+		#{img_name})
+	</insert>
+
+
+
+</mapper>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.sist.reservationMapper">
+
+	<!-- 예약하는 객실 검색 -->
+	<select id="selectRoom" resultType="roomDomain"
+		parameterType="int">
+
+		SELECT
+		r.ROOM_NAME room_name, r.PRICE price,
+		r.DISCOUNT_PRICE discount_price,
+		r.CHECK_IN check_in, r.CHECK_OUT
+		check_out,
+		ri.CAPACITY_INFO capacity_info, rim.IMG_NAME room_img_name,
+		a.acm_name acm_name
+		FROM ROOM r
+		JOIN
+		ROOM_INFO ri ON
+		r.ROOM_ID =
+		ri.ROOM_ID
+		LEFT JOIN ROOM_IMG
+		rim ON
+		r.ROOM_ID = rim.ROOM_ID
+		LEFT JOIN
+		ACCOMMODATION a ON
+		a.acm_id = r.acm_id
+		WHERE
+		r.ROOM_ID = #{room_id} AND
+		(rim.ROOM_IMG_NO = 1 OR
+		rim.ROOM_IMG_NO IS NULL)
+
+	</select>
+
+	<insert id="insertReservation" parameterType="reservationVO">
+		INSERT INTO
+		RESERVATION(RSR_NAME, RSR_PHONE_NUMBER, CHECK_IN_DATE,
+		CHECK_OUT_DATE,
+		NUMBER_PEOPLE, RSR_STATUS, USER_ID, ROOM_ID)
+		VALUES(#{rsr_name},#{rsr_phone_number},#{check_in_date},#{check_out_date},#{number_people},'결제완료',#{user_id},#{room_id})
+
+	</insert>
+
+
+</mapper>

@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.sist.dashboardMapper">
+
+	<!-- 월간 매출현황 -->
+	<select id="selectMonthlySales" resultType="dashboardDomain">
+		SELECT
+		TO_CHAR(rsr.RSR_DATE, 'YYYY-MM') AS
+		reservation_month,
+		SUM( CASE
+		WHEN
+		r.discount_price IS NOT NULL
+		THEN
+		r.discount_price
+		ELSE r.price
+		END ) AS
+		total_revenue
+		FROM
+		reservation rsr
+		JOIN room r ON
+		r.room_id = rsr.room_id
+		GROUP BY
+		TO_CHAR(rsr.RSR_DATE, 'YYYY-MM')
+		ORDER BY reservation_month
+
+	</select>
+
+	<!-- 주간 매출 현황 -->
+	<select id="selectWeeklySales" resultType="dashboardDomain">
+<![CDATA[
+WITH date_range AS (
+SELECT TRUNC(SYSDATE) - LEVEL + 1 AS reservation_date
+FROM dual
+CONNECT BY LEVEL <= 7
+)
+SELECT
+TO_CHAR(d.reservation_date, 'YYYY-MM-DD') AS reservation_date,
+TO_CHAR(d.reservation_date, 'DY', 'NLS_DATE_LANGUAGE=KOREAN') AS reservation_weekday,
+NVL(SUM(CASE
+WHEN r.discount_price IS NOT NULL THEN r.discount_price
+ELSE r.price
+END), 0) AS total_revenue
+FROM date_range d
+LEFT JOIN reservation rsr ON TRUNC(rsr.RSR_DATE) = d.reservation_date
+LEFT JOIN room r ON r.room_id = rsr.room_id
+GROUP BY
+d.reservation_date,
+TO_CHAR(d.reservation_date, 'YYYY-MM-DD'),
+TO_CHAR(d.reservation_date, 'DY', 'NLS_DATE_LANGUAGE=KOREAN')
+ORDER BY
+CASE TO_CHAR(d.reservation_date, 'D') 
+   WHEN '2' THEN 1  -- 월요일
+   WHEN '3' THEN 2  -- 화요일
+   WHEN '4' THEN 3  -- 수요일
+   WHEN '5' THEN 4  -- 목요일
+   WHEN '6' THEN 5  -- 금요일
+   WHEN '7' THEN 6  -- 토요일
+   WHEN '1' THEN 7  -- 일요일
+END,
+d.reservation_date
+]]>
+	</select>
+
+	<!-- 숙소 유형별 매출 현황 -->
+	<select id="selectACCTypeSales" resultType="dashboardDomain">
+		SELECT
+		acct.ACM_TYPE
+		acm_type,
+		SUM(CASE
+		WHEN r.discount_price IS NOT NULL THEN
+		r.discount_price
+		ELSE r.price
+		END) AS total_revenue
+		FROM ACCOMMODATION
+		acc
+		JOIN ACCOMMODATION_TYPE acct ON
+		acc.ACM_TYPE_ID = acct.ACM_TYPE_ID
+		LEFT JOIN ROOM r ON
+		r.ACM_ID = acc.ACM_ID
+		LEFT JOIN reservation rsr ON
+		rsr.room_id = r.room_id
+		WHERE
+		rsr.rsr_id IS NOT NULL
+		GROUP BY
+		acct.ACM_TYPE
+
+	</select>
+
+	<!-- 취소율 통계 -->
+	<select id="selectCancelRate" resultType="dashboardDomain">
+		SELECT
+		COUNT(*) AS
+		total_reservation_count,
+		COUNT(CASE
+		WHEN rsr.RSR_STATUS = '예약취소' THEN 1
+		END) AS cancellation_count
+		FROM reservation rsr
+		JOIN room r ON
+		r.room_id
+		= rsr.room_id
+
+	</select>
+
+	<!-- 회원수 통계 -->
+	<select id="selectMemberCount" resultType="dashboardDomain">
+<![CDATA[
+		SELECT
+		(SELECT COUNT(*)
+		FROM member
+		WHERE
+		join_date >= TRUNC(SYSDATE, 'MM') AND
+		join_date <
+		ADD_MONTHS(TRUNC(SYSDATE, 'MM'), 1)) AS newMemberCnt,
+		(SELECT COUNT(*)
+		FROM member) AS totalMemberCnt
+		FROM DUAL
+]]>
+	</select>
+
+	<select id="selectPopularACM" resultType="dashboardDomain">
+		<![CDATA[
+		SELECT *
+		FROM
+		(SELECT
+		a.ACM_NAME ACM_NAME,
+		SUM( CASE
+		WHEN r.discount_price IS NOT NULL THEN r.discount_price
+		ELSE r.price
+		END ) AS total_revenue
+		FROM reservation rsr
+		JOIN room r ON
+		r.room_id = rsr.room_id
+		LEFT JOIN ACCOMMODATION a ON
+		r.acm_id = a.acm_id
+		GROUP BY ACM_NAME
+		ORDER BY total_revenue DESC)
+		WHERE
+		ROWNUM <= 3
+]]>
+
+	</select>
+
+</mapper>

@@ -1,25 +1,21 @@
 @charset "UTF-8";
 
-* {
+body {
+	font-family: Arial, sans-serif;
+	line-height: 1.6;
 	margin: 0;
 	padding: 0;
 	box-sizing: border-box;
 }
 
-body {
-	font-family: Arial, sans-serif;
-	line-height: 1.6;
-}
-
-header {
+/* header {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
 	padding: 10px 20px;
 	background-color: #fff;
 	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
+} 
 header img {
 	height: 40px;
 }
@@ -34,8 +30,7 @@ header .menu a {
 	text-decoration: none;
 	color: #333;
 	font-size: 14px;
-}
-
+} */
 .hero {
 	background: url('http://localhost/project2/common/images/main_1.jpg')
 		no-repeat center center/cover;
@@ -52,7 +47,7 @@ header .menu a {
 /* 검색창 */
 .search-bar {
 	background: #ffffff;
-	padding: 20px 30px;
+	padding: 20px 80px;
 	border-radius: 10px;
 	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 	display: inline-flex;

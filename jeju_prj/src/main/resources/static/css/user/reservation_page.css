@@ -1,0 +1,212 @@
+@charset "UTF-8";
+
+/* 전체 레이아웃 */
+main {
+	font-family: Arial, sans-serif;
+	margin: 0;
+	padding: 20px 350px; /* 양 옆에 여백 추가 */
+}
+
+.hotel-summary {
+	padding: 20px;
+	border: 1px solid #ccc;
+	border-radius: 8px;
+	max-width: 100%; /* 1200 */
+	margin: 20px auto;
+	background-color: #f8f9fa;
+}
+
+.reservation-container {
+	display: flex;
+	justify-content: space-between;
+	gap: 20px;
+}
+
+/* 각 섹션 스타일 */
+section {
+	flex: 1;
+	border: 1px solid #ddd;
+	border-radius: 10px;
+	padding: 20px;
+	background-color: #fff;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.section-title {
+	font-size: 24px;
+	font-weight: bold;
+	margin-bottom: 15px;
+	color: #333;
+}
+/* 예약자 정보 */
+.info-group {
+	margin-bottom: 15px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.info-group label {
+	display: block;
+	font-size: 14px;
+	color: #555;
+	margin-bottom: 5px;
+	flex: 1;
+}
+
+.info-group input, .select-guest-count {
+	width: 48%;
+	padding: 10px;
+	border: 1px solid #ddd;
+	border-radius: 5px;
+	background-color: #f9f9f9;
+	font-size: 14px;
+	color: #333;
+}
+
+.info-notice {
+	font-size: 12px;
+	color: #888;
+	margin-top: 10px;
+}
+
+/* 호텔 정보 */
+.hotel-content {
+	display: flex;
+	gap: 60px;
+}
+
+.hotel-image img {
+	width: 540px;
+	height: 320px;
+	border-radius: 8px;
+}
+
+.hotel-details {
+	flex-grow: 1;
+}
+
+.info-row {
+	display: flex;
+	gap: 5px;
+	margin-bottom: 5px;
+	align-items: center;
+}
+
+.info-row .label {
+	width: 200px;
+	font-size: 16px;
+	color: #555;
+	margin-bottom: 3px;
+	flex: 1;
+	display: block;
+}
+
+.label {
+	font-weight: bold;
+	color: #555;
+	flex-basis: 80px;
+	flex-shrink: 0;
+}
+
+.value {
+	font-size: 16px;
+	color: #333;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex: 2;
+	padding: 15px 30px;
+	width: auto;
+}
+
+/* 결제 정보 */
+.payment-details {
+	margin-top: 15px;
+}
+
+.total {
+	font-size: 16px;
+	font-weight: bold;
+	color: #e74c3c;
+}
+
+.terms {
+	margin-top: 15px;
+}
+
+.pay-button {
+	width: 100%;
+	padding: 15px;
+	background-color: #3498db;
+	color: #fff;
+	border: none;
+	border-radius: 5px;
+	font-size: 16px;
+	cursor: pointer;
+	margin-top: 15px;
+}
+
+.pay-button:hover {
+	background-color: #2980b9;
+}
+
+.select-guest-count {
+	width: 80px;
+}
+
+/* 약관 동의 */
+#termsContent {
+	margin-top: 10px;
+}
+
+#toggleTerms {
+	background-color: transparent;
+	border: none;
+	margin-left: 10px;
+	cursor: pointer;
+}
+
+#toggleTerms:hover {
+	color: #555;
+}
+
+#agreeContainer {
+	display: inline-flex;
+	align-items: center;
+	background-color: #f0f0f0;
+	border-radius: 12px;
+	padding: 8px 12px;
+}
+
+#agreeAllLabel {
+	margin: 0;
+}
+
+#agreeAll {
+	margin-right: 8px;
+	margin-left: -5px;
+}
+
+#reservation-info {
+	position: fixed;
+}
+
+.original-price {
+	text-decoration: line-through; /* 취소선 적용 */
+	color: #999; /* 정상가를 연한 회색으로 표시 */
+	margin-left: 10px;
+	font-size: 0.9em;
+}
+
+#banner {
+	border: 1px solid #ccc;
+	border-radius: 8px;
+	width: 100%;
+}
+
+#banner2 {
+	border: 1px solid #ccc;
+	border-radius: 8px;
+	width: 70%;
+}

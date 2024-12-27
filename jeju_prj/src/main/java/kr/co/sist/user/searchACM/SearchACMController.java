@@ -1,17 +1,23 @@
 package kr.co.sist.user.searchACM;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import jakarta.servlet.http.HttpSession;
+import kr.co.sist.user.member.MemberVO;
+import kr.co.sist.user.util.SearchVO;
+
+@SessionAttributes("user_info")
 @Controller
 public class SearchACMController {
 
@@ -25,7 +31,13 @@ public class SearchACMController {
 	 * @return
 	 */
 	@RequestMapping(value = "/", method = { GET, POST })
-	public String main(Model model) {
+	public String main(HttpSession session, Model model) {
+
+		MemberVO mVO = new MemberVO("cafeoz", "16ozoz", "박은찬", "192.168.10.209", "일반회원");
+
+		session.setAttribute("user_info", mVO); // 임시로 세션에 설정
+
+		model.addAttribute("user_info", session.getAttribute("user_info"));
 
 		List<SearchACMDomain> list = null;
 
@@ -45,9 +57,14 @@ public class SearchACMController {
 	 * @return
 	 */
 	@GetMapping("/acm/searchProcess")
-	public String searchProc(SearchVO sVO, Model model) {
+	public String searchProc(SearchVO sVO, RedirectAttributes redirectAttributes, Model model) {
 
-		return "user/acm/searchProcess";
+		redirectAttributes.addAttribute("room_id", 44);
+		redirectAttributes.addAttribute("startDate", sVO.getStartDate());
+		redirectAttributes.addAttribute("finishDate", sVO.getFinishDate());
+		redirectAttributes.addAttribute("numberPeople", sVO.getNumberPeople());
+
+		return "redirect:/reservation";
 	}// searchProc
 
 	/**

@@ -8,8 +8,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>제주어때</title>
 
-<link rel="stylesheet" type="text/css" href="css/user/jeju_main.css">
-<link rel="stylesheet" type="text/css" href="css/user/jeju_main2.css">
+<link rel="stylesheet" type="text/css" href="/css/user/jeju_main.css">
+<link rel="stylesheet" type="text/css" href="/css/user/jeju_main2.css">
 
 
 <!-- jQuery CDN 시작 -->
@@ -88,6 +88,14 @@
 
 .dot.active {
 	background-color: #333;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: none;
 }
 </style>
 
@@ -184,7 +192,7 @@
 	})
 </script>
 
-
+<!-- 이미지 사진 클릭시 새로운 페이지 이동 -->
 <script type="text/javascript">
 	function newPage(url) {
 		window.open(url);
@@ -239,28 +247,76 @@
 
 		$("#search-button").click(function() {
 
-			$("#searchFrm").submit();
-		})
+			if (chkNull()) {
+				$("#searchFrm").submit();
+			}
+
+		})// click
 
 	})// ready
+
+	function chkNull() {
+
+		var keyWord = $('#keyWord').val();
+		var startDate = $('#startDate').val();
+		var finishDate = $('#finishDate').val();
+		var numberPeople = $('#numberPeople').val();
+
+		// 유효성 검사
+		if (!keyWord || keyWord.trim() === "") {
+			alert("키워드를 입력해주세요.");
+			$('#keyWord').focus();
+			return;
+		}
+
+		if (!startDate) {
+			alert("시작 날짜를 입력해주세요.");
+			$('#startDate').focus();
+			return;
+		}
+
+		if (!finishDate) {
+			alert("종료 날짜를 입력해주세요.");
+			$('#finishDate').focus();
+			return;
+		}
+
+		if (startDate > finishDate) {
+			alert("시작날짜는 종료 날짜보다 적어야합니다!");
+			$('#startDate').focus();
+			return;
+		}
+
+		if (!numberPeople) {
+			alert("인원 수를 입력해주세요.");
+			$('#numberPeople').focus();
+			return;
+		}
+
+		return true;
+
+	}
 </script>
 
 
 </head>
-<body>
 
-	<jsp:include page="user/common/jsp/header.jsp" />
+<jsp:include page="user/common/jsp/header.jsp" />
+
+<body>
 
 	<div class="hero">
 		<h1>제주도 여행할 땐 제주어때</h1>
 		<div class="search-bar">
 			<form action="/acm/searchProcess" id="searchFrm" name="searchFrm"
 				method="get">
-				<input type="text" placeholder="여행지나 숙소를 검색해보세요."> <input
-					type="date" value="2024-11-28"> <input type="date"
-					value="2024-11-29"> <input type="number" min="1" max="10"
-					placeholder="인원수" id="people"> <input type="button"
-					id="search-button" value="검색">
+				<input type="text" placeholder="여행지나 숙소를 검색해보세요." id="keyWord"
+					name="keyWord"> <input type="date" id="startDate"
+					name="startDate" id="startDate" value="2024-11-28"> <input
+					id="finishDate" type="date" name="finishDate" value="2024-11-29">
+				<input type="number" min="1" max="10" placeholder="인원수"
+					id="numberPeople" name="numberPeople" value="3"> <input
+					type="button" id="search-button" value="검색">
 			</form>
 		</div>
 	</div>
@@ -346,6 +402,7 @@
 					src="common/user/images/%EB%A7%8C%EC%9E%A5%EA%B5%B4.jpg">
 				</a>
 				<h3>만장굴</h3>
+
 			</div>
 			<div class="card1">
 				<a
@@ -392,126 +449,144 @@
 	<section class="hotel-banner">
 		<h2>인기 제주도 호텔/리조트</h2>
 		<div class="hotel-list">
-
 			<c:forEach var="hotel" items="${list1}" varStatus="i">
 				<c:if test="${i.index < 5}">
-					<div class="hotel-card">
-						<img src="common/user/images/${hotel.main_img }"
-							alt="${hotel.main_img }" class="hotel-image" />
-						<div class="hotel-info">
-							<span class="hotel-type">호텔</span>
-							<h3>${hotel.acm_name }</h3>
-							<p>${hotel.detail_address }</p>
-							<div class="hotel-rating">
-								<span class="rating-score">★ ${hotel.rating }</span> <span
-									class="rating-count">${hotel.reviewCnt }명 평가</span>
-							</div>
-							<p class="hotel-price">
-								<c:choose>
-									<c:when test="${hotel.discountPrice > 0}">
-										<span class="coupon">할인가</span> ${hotel.discountPrice}원
+					<a href="/acm/acmDetail?acm_id=${hotel.acm_id}">
+						<div class="hotel-card">
+							<img src="common/admin/images/${hotel.main_img }"
+								alt="${hotel.main_img }" class="hotel-image" />
+							<div class="hotel-info">
+								<span class="hotel-type">호텔/리조트</span>
+								<h3>${hotel.acm_name }</h3>
+								<p>${hotel.detail_address }</p>
+								<div class="hotel-rating">
+									<span class="rating-score">★ ${hotel.rating }</span> <span
+										class="rating-count">${hotel.reviewCnt }명 평가</span>
+								</div>
+								<p class="hotel-price">
+									<c:choose>
+										<c:when test="${hotel.discountPrice > 0}">
+											<span class="coupon">할인가</span> ${hotel.discountPrice}원
 										<span class="original-price">${hotel.price}원</span>
-									</c:when>
-									<c:otherwise>
-										<span class="coupon">기본가</span> ${hotel.price}원
+										</c:when>
+										<c:otherwise>
+											<span class="coupon">기본가</span> ${hotel.price}원
 									</c:otherwise>
-								</c:choose>
-							</p>
+									</c:choose>
+								</p>
+							</div>
 						</div>
-					</div>
+					</a>
 				</c:if>
 			</c:forEach>
-
 		</div>
 	</section>
 	<br>
 	<section class="hotel-banner">
 		<h2>인기 제주도 펜션/풀빌라</h2>
 		<div class="hotel-list">
-			<%
-			for (int i = 0; i < 5; i++) {
-			%>
-			<div class="hotel-card">
-				<img
-					src="common/user/images/%EA%B5%AC%EC%9B%94%ED%98%B8%ED%85%94%EB%B0%98%EC%9B%94.jpg"
-					alt="구월 호텔반월" class="hotel-image" />
-				<div class="hotel-info">
-					<span class="hotel-type">호텔</span>
-					<h3>구월 호텔반월</h3>
-					<p>제주도공항에서 도보 14분</p>
-					<div class="hotel-rating">
-						<span class="rating-score">★ 9.5</span> <span class="rating-count">11,066명
-							평가</span>
-					</div>
-					<p class="hotel-price">
-						<span class="coupon">할인가</span> 40,500원 <span
-							class="original-price">45,000원</span>
-					</p>
-				</div>
-			</div>
-			<%
-			}
-			%>
-		</div>
-	</section>
-	<br>
-	<section class="hotel-banner">
-		<h2>인기 제주도 캠핑/글램핑</h2>
-		<div class="hotel-list">
-			<%
-			for (int i = 0; i < 5; i++) {
-			%>
-			<div class="hotel-card">
-				<img
-					src="common/user/images/%EA%B5%AC%EC%9B%94%ED%98%B8%ED%85%94%EB%B0%98%EC%9B%94.jpg"
-					alt="구월 호텔반월" class="hotel-image" />
-				<div class="hotel-info">
-					<span class="hotel-type">호텔</span>
-					<h3>구월 호텔반월</h3>
-					<p>제주도공항에서 도보 14분</p>
-					<div class="hotel-rating">
-						<span class="rating-score">★ 9.5</span> <span class="rating-count">11,066명
-							평가</span>
-					</div>
-					<p class="hotel-price">
-						<span class="coupon">할인가</span> 40,500원 <span
-							class="original-price">45,000원</span>
-					</p>
-				</div>
-			</div>
-			<%
-			}
-			%>
+			<c:forEach var="hotel" items="${list2}" varStatus="i">
+				<c:if test="${i.index < 5}">
+					<a href="/acm/acmDetail?acm_id=${hotel.acm_id}">
+						<div class="hotel-card">
+							<img src="common/admin/images/${hotel.main_img }"
+								alt="${hotel.main_img }" class="hotel-image" />
+							<div class="hotel-info">
+								<span class="hotel-type">펜션/풀빌라</span>
+								<h3>${hotel.acm_name }</h3>
+								<p>${hotel.detail_address }</p>
+								<div class="hotel-rating">
+									<span class="rating-score">★ ${hotel.rating }</span> <span
+										class="rating-count">${hotel.reviewCnt }명 평가</span>
+								</div>
+								<p class="hotel-price">
+									<c:choose>
+										<c:when test="${hotel.discountPrice > 0}">
+											<span class="coupon">할인가</span> ${hotel.discountPrice}원
+										<span class="original-price">${hotel.price}원</span>
+										</c:when>
+										<c:otherwise>
+											<span class="coupon">기본가</span> ${hotel.price}원
+									</c:otherwise>
+									</c:choose>
+								</p>
+							</div>
+						</div>
+					</a>
+				</c:if>
+			</c:forEach>
 		</div>
 	</section>
 	<br>
 	<section class="hotel-banner">
 		<h2>인기 제주도 게하/한옥</h2>
 		<div class="hotel-list">
-			<%
-			for (int i = 0; i < 5; i++) {
-			%>
-			<div class="hotel-card">
-				<img
-					src="common/user/images/%EA%B5%AC%EC%9B%94%ED%98%B8%ED%85%94%EB%B0%98%EC%9B%94.jpg"
-					alt="구월 호텔반월" class="hotel-image" />
-				<div class="hotel-info">
-					<span class="hotel-type">호텔</span>
-					<h3>구월 호텔반월</h3>
-					<p>제주도공항에서 도보 14분</p>
-					<div class="hotel-rating">
-						<span class="rating-score">★ 9.5</span> <span class="rating-count">11,066명
-							평가</span>
-					</div>
-					<p class="hotel-price">
-						<span class="coupon">할인가</span> 40,500원 <span
-							class="original-price">45,000원</span>
-					</p>
-				</div>
-			</div>
-			<%
-			}
-			%>
+			<c:forEach var="hotel" items="${list3}" varStatus="i">
+				<c:if test="${i.index < 5}">
+					<a href="/acm/acmDetail?acm_id=${hotel.acm_id}">
+						<div class="hotel-card">
+							<img src="common/admin/images/${hotel.main_img }"
+								alt="${hotel.main_img }" class="hotel-image" />
+							<div class="hotel-info">
+								<span class="hotel-type">게하/한옥</span>
+								<h3>${hotel.acm_name }</h3>
+								<p>${hotel.detail_address }</p>
+								<div class="hotel-rating">
+									<span class="rating-score">★ ${hotel.rating }</span> <span
+										class="rating-count">${hotel.reviewCnt }명 평가</span>
+								</div>
+								<p class="hotel-price">
+									<c:choose>
+										<c:when test="${hotel.discountPrice > 0}">
+											<span class="coupon">할인가</span> ${hotel.discountPrice}원
+										<span class="original-price">${hotel.price}원</span>
+										</c:when>
+										<c:otherwise>
+											<span class="coupon">기본가</span> ${hotel.price}원
+									</c:otherwise>
+									</c:choose>
+								</p>
+							</div>
+						</div>
+					</a>
+				</c:if>
+			</c:forEach>
+		</div>
+	</section>
+	<br>
+	<section class="hotel-banner">
+		<h2>인기 제주도 캠핑/글램핑</h2>
+		<div class="hotel-list">
+			<c:forEach var="hotel" items="${list4}" varStatus="i">
+				<c:if test="${i.index < 5}">
+					<a href="/acm/acmDetail?acm_id=${hotel.acm_id}">
+						<div class="hotel-card">
+							<img src="common/admin/images/${hotel.main_img }"
+								alt="${hotel.main_img }" class="hotel-image" />
+							<div class="hotel-info">
+								<span class="hotel-type">캠핑/글램핑</span>
+								<h3>${hotel.acm_name }</h3>
+								<p>${hotel.detail_address }</p>
+								<div class="hotel-rating">
+									<span class="rating-score">★ ${hotel.rating }</span> <span
+										class="rating-count">${hotel.reviewCnt }명 평가</span>
+								</div>
+								<p class="hotel-price">
+									<c:choose>
+										<c:when test="${hotel.discountPrice > 0}">
+											<span class="coupon">할인가</span> ${hotel.discountPrice}원
+										<span class="original-price">${hotel.price}원</span>
+										</c:when>
+										<c:otherwise>
+											<span class="coupon">기본가</span> ${hotel.price}원
+									</c:otherwise>
+									</c:choose>
+								</p>
+							</div>
+						</div>
+					</a>
+				</c:if>
+			</c:forEach>
 		</div>
 	</section>
 	<br>

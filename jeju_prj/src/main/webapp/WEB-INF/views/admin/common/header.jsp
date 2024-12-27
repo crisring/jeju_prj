@@ -1,100 +1,97 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"
-    info=""
-    %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+	pageEncoding="UTF-8" info=""%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <!-- bootstrap CDN 시작 -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+	rel="stylesheet">
+<script
+	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <link rel="stylesheet" href="/css/admin/admin-style.css">
 
 <!-- jQuery CDN 시작 -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
 
 <style type="text/css">
-
 </style>
 </head>
 <body>
-    <div class="wrapper">
-        <!-- Sidebar -->
-        <div class="sidebar">
-            <div class="logo">
-                <a href="http://localhost/project2/admin_index.jsp">
-                <img alt="제주어때" src="/admin/images/logo.svg">
-                </a>
-            </div>
-            
-            <!-- Navigation Menu -->
-            <nav class="nav-menu">
-			    <div class="menu-category">MENU</div>
-			    
-			    <div class="nav-item">
-			        <div class="nav-header">
-			            <span>숙소관리</span>
-			            <i class="arrow"></i>
-			        </div>
-			        <ul class="nav-submenu">
-			            <li><a href="/admin/searchACM">숙소목록</a></li>
-			            <li><a href="http://localhost/project2/admin/add_acc.jsp">숙소등록</a></li>
-			        </ul>
-			    </div>
-			    
-			    <div class="nav-item">
-			        <div class="nav-header">
-			            <span>예약관리</span>
-			            <i class="arrow"></i>
-			        </div>
-			        <ul class="nav-submenu">
-			            <li><a href="http://localhost/project2/admin/reservation_list.jsp">예약목록 조회</a></li>
-			        </ul>
-			    </div>
-			    
-			    <div class="nav-item">
-			        <div class="nav-header">
-			            <span>리뷰관리</span>
-			            <i class="arrow"></i>
-			        </div>
-			        <ul class="nav-submenu">
-			            <li><a href="http://localhost/project2/admin/review_list.jsp">리뷰목록</a></li>
-			        </ul>
-			    </div>
-			
-			    <div class="menu-category">MEMBERSHIP MANAGEMENT</div>
-			    
-			    <div class="nav-item">
-			        <div class="nav-header">
-			            <span>회원관리</span>
-			            <i class="arrow"></i>
-			        </div>
-			        <ul class="nav-submenu">
-			            <li><a href="http://localhost/project2/admin/member_list.jsp">회원목록</a></li>
-			        </ul>
-			    </div>
-			</nav>
-        </div>
+	<div class="wrapper">
+		<!-- Sidebar -->
+		<div class="sidebar">
+			<div class="logo">
+				<a href="/admin/dashboard"> <img alt="제주어때"
+					src="/common/admin/images/logo.svg">
+				</a>
+			</div>
 
-        <!-- Main Content -->
-        <div class="main-content">
-            <!-- Top Navigation -->
-            <div class="top-nav">
-                <div class="user-menu">
-                    <c:if test="${not empty sessionScope.adminId}">
-                        <span>${sessionScope.adminId}</span>
-                        <a href="/admin/logout" class="logout-link">로그아웃</a>
-                    </c:if>
-                    admin아이디 부분
-                </div>
-            </div>
-           
-    
-    <script>
+			<!-- Navigation Menu -->
+			<nav class="nav-menu">
+				<div class="menu-category">MENU</div>
+
+				<div class="nav-item">
+					<div class="nav-header">
+						<span>숙소관리</span> <i class="arrow"></i>
+					</div>
+					<ul class="nav-submenu">
+						<li><a href="/admin/searchACM">숙소목록</a></li>
+						<li><a href="/admin/add_acc.jsp">숙소등록</a></li>
+					</ul>
+				</div>
+
+				<div class="nav-item">
+					<div class="nav-header">
+						<span>예약관리</span> <i class="arrow"></i>
+					</div>
+					<ul class="nav-submenu">
+						<li><a href="/admin/reservation_list.jsp">예약목록 조회</a></li>
+					</ul>
+				</div>
+
+				<div class="nav-item">
+					<div class="nav-header">
+						<span>리뷰관리</span> <i class="arrow"></i>
+					</div>
+					<ul class="nav-submenu">
+						<li><a href="http://localhost/project2/admin/review_list.jsp">리뷰목록</a></li>
+					</ul>
+				</div>
+
+				<div class="menu-category">MEMBERSHIP MANAGEMENT</div>
+
+				<div class="nav-item">
+					<div class="nav-header">
+						<span>회원관리</span> <i class="arrow"></i>
+					</div>
+					<ul class="nav-submenu">
+						<li><a href="http://localhost/project2/admin/member_list.jsp">회원목록</a></li>
+					</ul>
+				</div>
+			</nav>
+		</div>
+
+		<!-- Main Content -->
+		<div class="main-content">
+			<!-- Top Navigation -->
+			<div class="top-nav">
+				<div class="user-menu">
+					<c:if test="${not empty sessionScope.adminId}">
+						<span>${sessionScope.adminId}</span>
+						<a href="/admin/logout" class="logout-link">로그아웃</a>
+					</c:if>
+					admin아이디 부분
+				</div>
+			</div>
+
+
+			<script>
     document.addEventListener('DOMContentLoaded', function() {
         // Toggle submenu with closing others
         const navHeaders = document.querySelectorAll('.nav-header');

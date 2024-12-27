@@ -9,9 +9,10 @@ header {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	padding: 10px 20px;
+	padding: 10px 30px;
 	background-color: #f8f9fa;
 	border-bottom: 1px solid #ddd;
+	position: relative;
 }
 
 /* 사이드바 스타일 */
@@ -33,12 +34,12 @@ header {
 	display: flex;
 	align-items: center;
 	gap: 10px;
-	position: relative;
-	transform: translateX(-450px); /* 왼쪽으로 20px 이동 */
+	position: absolute;
+	right: 300px;
 }
 
 /* 로그인 버튼 스타일 */
-.login-btn {
+.login-btn, .login-btn2 {
 	padding: 5px 15px;
 	border: 1px solid #ddd;
 	border-radius: 8px;
@@ -60,6 +61,7 @@ header {
 	width: 20px;
 	height: 15px;
 	cursor: pointer;
+	margin-left: auto;
 }
 
 .hamburger-menu span {
@@ -133,14 +135,25 @@ header {
 	</div>
 
 	<div class="menu">
-		<button class="login-btn">로그인/회원가입</button>
-		<div class="hamburger-menu" onclick="toggleMenu()">
-			<span></span> <span></span> <span></span>
-		</div>
-		<div class="dropdown-menu" id="dropdownMenu">
-			<a href="/mypage/checkPassFrm" class="user-name">김지훈님</a> <a href="#">로그아웃</a>
-			<a href="/mypage/rerListFrm">예약 내역</a>
-		</div>
 
+		<c:choose>
+			<c:when test="${empty user_info }">
+				<button class="login-btn">로그인/회원가입</button>
+			</c:when>
+
+			<c:otherwise>
+				<div class="login-btn2" style="pointer-events: none;">
+					<c:out value="${ user_info.user_name}님 안녕하세요!" />
+				</div>
+				<div class="hamburger-menu" onclick="toggleMenu()">
+					<span></span> <span></span> <span></span>
+				</div>
+				<div class="dropdown-menu" id="dropdownMenu">
+					<a href="/mypage/checkPassFrm" class="user-name">${ user_info.user_name}님</a>
+					<a href="/login/logout">로그아웃</a> <a href="/mypage/rerListFrm">예약
+						내역</a>
+				</div>
+			</c:otherwise>
+		</c:choose>
 	</div>
 </header>

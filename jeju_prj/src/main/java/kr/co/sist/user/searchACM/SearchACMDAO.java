@@ -6,8 +6,8 @@ import org.apache.ibatis.exceptions.PersistenceException;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
-import jakarta.annotation.Resource;
 import kr.co.sist.dao.MyBatisHandler;
+import kr.co.sist.user.util.SearchVO;
 
 @Repository
 public class SearchACMDAO {
@@ -88,11 +88,13 @@ public class SearchACMDAO {
 
 	public static void main(String[] args) {
 
-		/*
-		 * SearchACMDAO sacmDAO = new SearchACMDAO();
-		 * 
-		 * System.out.println(sacmDAO.selectRatingReview(1000));
-		 */
+		SearchACMDAO sacmDAO = new SearchACMDAO();
+
+		// System.out.println(sacmDAO.selectRatingReview(1000));
+
+		List<SearchACMDomain> list = sacmDAO.selectByACMType(1);
+
+		System.out.println(list);
 
 	}// main
 
