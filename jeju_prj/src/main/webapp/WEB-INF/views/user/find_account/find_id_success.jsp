@@ -30,26 +30,27 @@
  }
 </style>
 
+
+
 </head>
 
 
 <body>
     <!-- 헤더 -->
-	<c:import url="../common/header.jsp"/> 
+	<c:import url="../common/jsp/header.jsp"/> 
     <!-- 로그인 컨텐츠 -->
     <div class="container" >
         <div  style="text-align: center">
-            <img src="http://localhost/second_prj/common/svg/logo.svg" alt="제주어때 로고" id="logo" style="display: block; margin: 0 auto;">
+            <img src="http://localhost/common/svg/logo.svg" alt="제주어때 로고" id="logo" style="display: block; margin: 0 auto;">
             <p class="text-muted">아이디 찾기 성공!</p>
         </div>
       	<div class="d-grid" style="margin-top: 50px">
-      		<p style="text-align: center"> XXX님의 아이디는 1234 입니다</p>
-	          			<input type="button" class="btn btn-primary btn-lg  frm" value="로그인 페이지로">
-	           
+      		<p style="text-align: center"> ${userName}님의 아이디는 ${userId} 입니다</p>
+<input type="button" class="btn btn-primary btn-lg frm"  value="로그인 하러가기"  onclick="location.href='/login/loginProcess';">	           
         </div>
             <!-- 헤더 -->
     </div>
-	<c:import url="../common/footer.jsp"/> 
+	<c:import url="../common/jsp/footer.jsp"/> 
 </body>
 
 

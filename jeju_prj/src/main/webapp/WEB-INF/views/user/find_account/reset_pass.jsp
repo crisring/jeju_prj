@@ -36,13 +36,12 @@
 <script>
 $(document).ready(function(){
     $('input[value="확인"]').on('click', function(){
-        var newPassword = $('#newPassword').val().trim();
+        var newPassword = $('#password').val().trim();
         var confirmPassword = $('#confirmPassword').val().trim();
         
-        // 비밀번호 유효성 검증 예시: 8자 이상
         if(newPassword.length < 8){
             alert("비밀번호는 8자 이상이어야 합니다.");
-            $('#newPassword').focus();
+            $('#password').focus();
             return;
         }
 
@@ -51,18 +50,19 @@ $(document).ready(function(){
             $('#confirmPassword').focus();
             return;
         }
-
-        // 여기서 서버로 전송하는 로직을 추가하거나, 다음 페이지로 이동하는 로직을 추가할 수 있음.
-        alert("비밀번호가 성공적으로 변경되었습니다.");
+        
+        $("#frm").submit();
     });
 });
+
+
 </script>
 </head>
 
 
 <body>
     <!-- 헤더 -->
-    <c:import url="../common/jsp/header.jsp"/> 
+	<c:import url="../common/jsp/header.jsp"/> 
     <!-- 로그인 컨텐츠 -->
     <div class="container">
         <div  style="text-align: center">
@@ -70,15 +70,18 @@ $(document).ready(function(){
             <h5 class="bld">비밀번호 재설정</h5>
             <p class="text-muted">현재비밀번호와 새 비밀번호를 입력해주세요</p>
         </div>
+           <form action="/member/resetPassProcess" method="post" id="frm" name="frm">
         <div class="d-grid" style="margin-bottom: 50px">
             <label class="form-label bld">새 비밀번호</label>
-            <input type="password" class="form-control" placeholder="새 비밀번호를 입력" id="newPassword" name="newPassword">
+<input type="hidden" name="user_id" id="user_id" value="${user_id}">
+            <input type="password" class="form-control" placeholder="새 비밀번호를 입력" id="password" name="password">
 
             <label class="form-label bld frm">새 비밀번호 확인</label>
             <input type="password" class="form-control" placeholder="새 비밀번호를 확인" id="confirmPassword" name="confirmPassword">
 
             <input type="button" class="btn btn-primary btn-lg frm" value="확인">
         </div>
+           </form>
     </div>
     <c:import url="../common/jsp/footer.jsp"/> 
     

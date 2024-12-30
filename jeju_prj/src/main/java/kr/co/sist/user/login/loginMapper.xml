@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.sist.user.login"><!-- namespace: 자바의 패키지와 비슷 -->
+
+
+	<select id="findId" resultType="String"
+		parameterType="kr.co.sist.user.login.MemberFindVO">
+		select USER_ID
+		from member
+		where USER_NAME =#{user_name}
+		and phone_number = #{phone_number}
+
+	</select>
+	<!-- 아이디 전번,이름에 맞는 사용자를 찾아야함.   -->
+<select id="findPass" resultType="String"
+		parameterType="kr.co.sist.user.login.MemberFindVO">
+		select USER_ID
+		from member
+		where USER_NAME =#{user_name}
+		and phone_number = #{phone_number}
+		and USER_ID = #{user_id}
+
+	</select>
+
+	<update id="resetPass" parameterType="kr.co.sist.user.login.MemberFindVO" >
+		update member
+		set password = #{password}
+		where USER_ID = #{user_id}
+	</update>
+
+	<select id="userLogin" parameterType="kr.co.sist.user.login.LoginVO" resultType="kr.co.sist.user.member.MemberDomain">
+	select user_id,password,user_name,birth,gender,user_ip,join_date,user_status,member_type
+	from member
+	where user_id=#{user_id} 
+	</select>
+
+
+</mapper>

@@ -31,13 +31,23 @@
     .bld {
         font-weight: bold;
     }
+    
+    /* a 태그에 기본 밑줄 제거 및 파란색 제거 (Bootstrap 클래스 사용) */
+    .custom-link {
+        color: inherit; /* 부모 색상 계승, 기본 파란색 링크 제거 */
+        text-decoration: none; /* 밑줄 제거 */
+    }
+    /* 마우스 오버 시 밑줄 표시 */
+    .custom-link:hover {
+        text-decoration: underline;
+    } 
 </style>
 
 <script>
 $(document).ready(function(){
-    $('input[value="로그인"]').on('click', function() {
-        var $id = $('#id');
-        var $pass = $('#pass');
+    $('form').on('submit', function(e) {
+        var $id = $('#user_id');
+        var $pass = $('#password');
 
         var idVal = $.trim($id.val());
         var passVal = $.trim($pass.val());
@@ -46,6 +56,7 @@ $(document).ready(function(){
         if (idVal === '') {
             alert('아이디를 입력해주세요.');
             $id.focus();
+            e.preventDefault(); // 폼 제출 방지
             return;
         }
 
@@ -53,36 +64,49 @@ $(document).ready(function(){
         if (passVal === '') {
             alert('비밀번호를 입력해주세요.');
             $pass.focus();
+            e.preventDefault(); // 폼 제출 방지
             return;
         }
-
-        // 모든 값이 정상 입력되었을 때
-        alert('로그인을 진행합니다.');
-        // 여기서 원하는 동작(예: 폼 전송 또는 페이지 이동)을 구현할 수 있습니다.
+        $("#frm").submit();
     });
 });
 </script>
 
 </head>
 <body>
-    <!-- 헤더 -->
     <div id="wrap">
-	    <c:import url="../common/header.jsp"/> 
+        <!-- 헤더 -->
+        <c:import url="../common/jsp/header.jsp"/> 
+        
         <!-- 로그인 컨텐츠 -->
         <div class="container">
             <div style="text-align: center">
-                <img src="http://localhost/second_prj/common/svg/logo.svg" alt="제주어때 로고" id="logo" style="display: block; margin: 0 auto;">
+                <img src="http://localhost/common/svg/logo.svg" alt="제주어때 로고" id="logo" style="display: block; margin: 0 auto;">
                 <p class="text-muted">로그인</p>
             </div>
-            <div class="d-grid" style="margin-top: 50px">
-                <label class="form-label bld">아이디</label>
-                <input type="text" class="form-control" placeholder="아이디를 입력하세요." name="id" id="id">
-                <label class="form-label frm bld">비밀번호</label>
-                <input type="password" class="form-control" placeholder="비밀번호를 입력하세요" name="pass" id="pass">
-                <input type="button" class="btn btn-primary btn-lg frm" value="로그인">
-            </div>
+            
+            <!-- 로그인 폼 -->
+            <form action="/login/loginProcess" method="post" name="frm" id="frm">
+                <div class="d-grid" style="margin-top: 50px">
+                    <label class="form-label bld">아이디</label>
+                    <input type="text" class="form-control" placeholder="아이디를 입력하세요." name="user_id" id="user_id">
+                    
+                    <label class="form-label frm bld">비밀번호</label>
+                    <input type="password" class="form-control" placeholder="비밀번호를 입력하세요" name="password" id="password">
+                    
+                    <input type="submit" class="btn btn-primary btn-lg frm" value="로그인">
+                </div>
+                
+                <div class="d-flex gap-3 justify-content-center frm">
+                    <a href="/member/agree" class="custom-link">회원가입</a>
+                    <a href="/member/findId" class="custom-link">아이디찾기</a>
+                    <a href="/member/findPass" class="custom-link">비밀번호 찾기</a>
+                </div>   
+            </form>
         </div>
-	    <c:import url="../common/footer.jsp"/> 
+        
+        <!-- 푸터 -->
+        <c:import url="../common/jsp/footer.jsp"/> 
     </div>
 </body>
 </html>

@@ -14,7 +14,7 @@ public class AccommodationDAO {
 	public List<AccommodationDomain> selectAllAcc(SearchAccVO sVO) {
 		List<AccommodationDomain> list = new ArrayList<AccommodationDomain>();
 
-		MyBatisHandler mbh = MyBatisHandler.getInstance();
+		MyBatisHandler mbh = MyBatisHandler.getInstnace();
 
 		SqlSession handler = mbh.getHandler();
 		list = handler.selectList("kr.co.sist.admin.accommodation.selectACM", sVO);
@@ -26,7 +26,7 @@ public class AccommodationDAO {
 	public int getAccommodationCount(SearchAccVO sVO) {
 		int cnt = 0;
 
-		MyBatisHandler mbh = MyBatisHandler.getInstance();
+		MyBatisHandler mbh = MyBatisHandler.getInstnace();
 
 		SqlSession handler = mbh.getHandler();
 		cnt = handler.selectOne("kr.co.sist.admin.accommodation.getAccommodationCount", sVO);

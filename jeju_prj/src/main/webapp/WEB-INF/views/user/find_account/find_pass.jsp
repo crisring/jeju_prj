@@ -35,65 +35,79 @@
 <script>
 $(document).ready(function(){
     $('input[type="button"]').on('click', function() {
-        var $id = $('#id');
-        var $name = $('#name');
-        var $tel = $('#tel');
+        var $userId = $('#user_id');       // 아이디 입력 필드
+        var $userName = $('#user_name');   // 이름 입력 필드
+        var $phoneNumber = $('#phone_number'); // 연락처 입력 필드
 
-        var idVal = $.trim($id.val());
-        var nameVal = $.trim($name.val());
-        var telVal = $.trim($tel.val());
+        var userIdVal = $.trim($userId.val());
+        var userNameVal = $.trim($userName.val());
+        var phoneNumberVal = $.trim($phoneNumber.val());
 
         // 아이디 필드 체크
-        if (idVal === '') {
+        if (userIdVal === '') {
             alert('아이디를 입력해주세요.');
-            $id.focus();
+            $userId.focus();
             return;
         }
 
         // 이름 필드 체크
-        if (nameVal === '') {
+        if (userNameVal === '') {
             alert('이름을 입력해주세요.');
-            $name.focus();
+            $userName.focus();
             return;
         }
 
         // 연락처 필드 체크
-        if (telVal === '') {
+        if (phoneNumberVal === '') {
             alert('연락처를 입력해주세요.');
-            $tel.focus();
+            $phoneNumber.focus();
             return;
         }
 
         // 모든 값이 정상 입력되었을 때
-        alert('비밀번호 찾기를 진행합니다.');
-        // 여기서 원하는 동작(폼 전송, 페이지 이동 등)을 추가할 수 있습니다.
+          $('#hidId').val(userIdVal);
+        $("#passFrm").submit();
     });
-});
+});//ready
+
 </script>
 </head>
 
 <body>
+    
+        <!-- 헤더 -->
+       <c:if test="${not empty error}">
+       
+       <script type="text/javascript"> 
+       alert("${error}");
+       </script>
+       </c:if>
     <!-- 헤더 -->
-	<c:import url="../common/header.jsp"/> 
+    
+    
+	<c:import url="../common/jsp/header.jsp"/> 
     <!-- 로그인 컨텐츠 -->
     <div class="container">
         <div style="text-align: center">
-            <img src="http://localhost/second_prj/common/svg/logo.svg" alt="제주어때 로고" id="logo" style="display: block; margin: 0 auto;">
+            <img src="http://localhost/common/svg/logo.svg" alt="제주어때 로고" id="logo" style="display: block; margin: 0 auto;">
 		    <h5 class="bld">비밀번호 찾기</h5>
         </div>
+        <form action="/member/findPassProcess" method="post" name="passFrm" id="passFrm">
         <div class="d-grid" style="margin-bottom: 50px">
+        <input type="hidden" name="hidId" id="hidId" value="${user_id}">
+        
             <label class="form-label bld">아이디</label>
-            <input type="text" class="form-control" placeholder="아이디를 입력하세요." name="id" id="id">
-
+            <input type="text" class="form-control" placeholder="아이디를 입력하세요." name="user_id" id="user_id">
             <label class="form-label frm bld">이름</label>
-            <input type="password" class="form-control" placeholder="이름을 입력하세요" name="name" id="name">
+            <input type="text" class="form-control" placeholder="이름을 입력하세요" name="user_name" id="user_name">
 
             <label class="form-label frm bld">연락처</label>
-            <input type="password" class="form-control" placeholder="연락처를 입력하세요" name="tel" id="tel">
+            <input type="tel" class="form-control" placeholder="연락처를 입력하세요" name="phone_number" id="phone_number">
 
             <input type="button" class="btn btn-primary btn-lg frm" value="비밀번호 찾기">
         </div>
+        </form>
     </div>
-	<c:import url="../common/footer.jsp"/> 
+	<c:import url="../common/jsp/footer.jsp"/> 
 </body>
 </html>

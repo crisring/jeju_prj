@@ -7,7 +7,6 @@
 <head>
 <meta charset="UTF-8">
 <title>${site_kor}</title>
-<link rel="shortcut icon" href="${defaultURL}common/images/favicon.ico">
 
 <!-- Bootstrap CDN -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
@@ -24,40 +23,35 @@
         height:500px;
         padding: 20px;
         border-radius: 8px;
-        text-align: center;
     }
-    .logo {
-        font-size: 28px;
-        font-weight: bold;
-        color: #ff4c4c;
-        margin-bottom: 10px;
-    }
+    
+ .frm{
+ margin-top: 30px;
+ }
 </style>
 
-<script type="text/javascript">
-function normalLogin() {
-    window.location.href = "/login/loginProcess";
-}
-</script>
+
+
 </head>
+
 
 <body>
     <!-- 헤더 -->
-    <c:import url="../common/jsp/header.jsp"/> 
-    
+	<c:import url="../common/jsp/header.jsp"/> 
     <!-- 로그인 컨텐츠 -->
-    <div class="container">
-        <div style="text-align: center">
+    <div class="container" >
+        <div  style="text-align: center">
             <img src="http://localhost/common/svg/logo.svg" alt="제주어때 로고" id="logo" style="display: block; margin: 0 auto;">
-            <p class="text-muted">로그인/회원가입</p>
+            <p class="text-muted">비밀번호 변경 성공!</p>
         </div>
-        <div class="d-grid" style="margin-top: 50px">
-            <button class="btn btn-warning btn-lg">카카오로 시작하기</button> <br>
-            <button class="btn btn-light btn-lg" onclick="normalLogin()">일반회원 로그인/회원가입</button>
+      	<div class="d-grid" style="margin-top: 50px">
+      		<p style="text-align: center">${user_id}님 성공적으로 비밀번호가 변경되었어요</p>
+<input type="button" class="btn btn-primary btn-lg frm"  value="로그인 하러가기"  onclick="location.href='/login/loginProcess';">	           
         </div>
+            <!-- 헤더 -->
     </div>
-    
-    <!-- 푸터 -->
-    <c:import url="../common/jsp/footer.jsp"/> 
+	<c:import url="../common/jsp/footer.jsp"/> 
 </body>
+
+
 </html>

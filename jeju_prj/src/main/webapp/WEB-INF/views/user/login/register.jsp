@@ -55,28 +55,36 @@
 
         // 개별 체크박스 클릭 이벤트
         $('.required').on('change', function () {
-            const total = $('.required').length; // 전체 체크박스 개수
-            const checked = $('.required:checked').length; // 체크된 체크박스 개수
+            const total = $('.required').length; 
+            const checked = $('.required:checked').length; 
 
-            // 모든 체크박스가 선택되었는지 확인
-            if (total === checked) {
-                $('#selectAll').prop('checked', true);
-            } else {
-                $('#selectAll').prop('checked', false);
+            $('#selectAll').prop('checked', total === checked);
+        });
+
+        // "다음" 버튼 클릭 이벤트
+        $('#nextBtn').on('click', function () {
+            const total = $('.required').length;
+            const checked = $('.required:checked').length;
+
+            if (total !== checked) {
+                alert('필수 항목을 모두 체크해주세요.');
+                return;
             }
+
+            // 모든 필수 항목이 체크된 경우 다음 페이지로 이동
+            location.href = "/member/joinFrm";
         });
     });
 </script>
 </head>
 
-
 <body>
     <!-- 헤더 -->
-    <c:import url="../common/header.jsp"/> 
+    <c:import url="../common/jsp/header.jsp"/> 
     <!-- 약관 컨텐츠 -->
     <div class="container bg-white">
         <div style="text-align: center">
-            <img src="http://localhost/second_prj/common/svg/logo.svg" alt="제주어때 로고" id="logo" style="display: block; margin: 0 auto;">
+            <img src="http://localhost/common/svg/logo.svg" alt="제주어때 로고" id="logo" style="display: block; margin: 0 auto;">
             <p class="text-muted">로그인/회원가입</p>
         </div>
         
@@ -93,15 +101,12 @@
             <div class="form-check my-2">
               <input type="checkbox" class="required form-check-input" id="term1">
               <label class="form-check-label" for="term1">(필수) 이용약관</label>
-              <!-- 보기 버튼 (각 항목마다 고유한 collapse ID) -->
               <button class="btn btn-link btn-sm ms-2 p-0" type="button" data-bs-toggle="collapse" data-bs-target="#term1Content" aria-expanded="false" aria-controls="term1Content">
                 보기
               </button>
-              <!-- 해당 항목에만 적용되는 collapse 영역 -->
               <div class="collapse mt-2" id="term1Content">
                 <div class="card card-body">
                   여기에는 "이용약관" 내용을 삽입합니다.
-                  긴 내용도 가능하며, 다시 "보기" 버튼을 클릭하면 접힙니다.
                 </div>
               </div>
             </div>
@@ -133,12 +138,10 @@
                 </div>
               </div>
             </div>
-            
-            <input type="button" class="btn btn-primary btn-lg frm" value="다음">
-               
-        </div>
+
+            <input type="button" class="btn btn-primary btn-lg frm" value="다음" id="nextBtn">
+       </div>
     </div>
-    <c:import url="../common/footer.jsp"/> 
-    
+    <c:import url="../common/jsp/footer.jsp"/> 
 </body>
 </html>

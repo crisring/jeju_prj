@@ -27,13 +27,23 @@
     .frm {
         margin-top: 30px;
     }
+      .bld {
+        font-weight: bold;
+    }
 </style>
+       <c:if test="${not empty error}">
+       <script type="text/javascript"> 
+       alert("${error}");
+       $("#user_name").focus();
+       </script>
 
+</c:if>
+    
 <script>
 $(document).ready(function(){
     $('#findBtn').on('click', function() {
-        var $name = $('#name');
-        var $tel = $('#tel');
+        var $name = $('#user_name');
+        var $tel = $('#phone_number');
         var nameVal = $.trim($name.val());
         var telVal = $.trim($tel.val());
         
@@ -41,41 +51,46 @@ $(document).ready(function(){
         if (nameVal === '') {
             alert('이름을 입력해주세요.');
             $name.focus();
-            return; // 함수 종료
+            return; 
         }
         
         // 연락처 필드 체크
         if (telVal === '') {
             alert('연락처를 입력해주세요.');
             $tel.focus();
-            return; // 함수 종료
+            return; 
         }
         
         // 두 값 모두 있을 때 원하는 동작
         // 예: 폼 전송 또는 다음 페이지 이동
-        alert('아이디 찾기를 진행합니다.');
+        $("#frm").submit();
     });
+    
+ 
 });
 </script>
 
 </head>
 <body>
     <!-- 헤더 -->
-	<c:import url="../common/header.jsp"/> 
+
+	<c:import url="../common/jsp/header.jsp"/> 
     <!-- 로그인 컨텐츠 -->
     <div class="container">
         <div style="text-align: center">
-            <img src="http://localhost/second_prj/common/svg/logo.svg" alt="제주어때 로고" id="logo" style="display: block; margin: 0 auto;">
+            <img src="http://localhost/common/svg/logo.svg" alt="제주어때 로고" id="logo" style="display: block; margin: 0 auto;">
             <p class="text-muted">아이디찾기</p>
         </div>
+        <form action="/member/findIdProcess" method="post" id="frm" name="frm">
         <div class="d-grid" style="margin-top: 50px">
-            <label class="form-label">이름</label>
-            <input type="text" class="form-control" placeholder="아이디를 입력하세요." name="name" id="name">
-            <label class="form-label frm">연락처</label>
-            <input type="text" class="form-control" placeholder="연락처를 입력하세요" name="tel" id="tel">
+            <label class="form-label bld">이름</label>
+            <input type="text" class="form-control" placeholder="아이디를 입력하세요." name="user_name" id="user_name">
+            <label class="form-label frm bld">연락처</label>
+            <input type="text" class="form-control" placeholder="연락처를 입력하세요" name="phone_number" id="phone_number">
             <input type="button" class="btn btn-primary btn-lg frm" value="아이디 찾기" id="findBtn">
         </div>
+        </form>
     </div>
-	<c:import url="../common/footer.jsp"/> 
+	<c:import url="../common/jsp/footer.jsp"/> 
 </body>
 </html>
