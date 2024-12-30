@@ -98,7 +98,6 @@ public class BoardUtil {
 		} // end if
 
 		return pagination.toString();
-	}
-// pagination
+	} // pagination
 
 }// class

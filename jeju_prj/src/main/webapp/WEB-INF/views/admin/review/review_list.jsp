@@ -1,14 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8" info=""%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>${ site_kor }</title>
-<link rel="shotcut icon" href="${ defaultURL }common/images/favicon.ico" />
-<link rel="stylesheet" type="text/css"
-	href="${ defaultURL }common/css/main_20240911.css">
+<title>리뷰 관리</title>
+
 <!-- bootstrap CDN 시작 -->
 <link
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
@@ -83,27 +83,78 @@ body {
 	text-decoration: underline;
 }
 </style>
+<style type="text/css">
+.pagination {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin: 20px 70px 30px 0px;
+}
+
+.pagination span {
+	margin: 0 5px;
+}
+
+.prev, .next {
+	font-weight: bold;
+	color: #333;
+	cursor: pointer;
+}
+
+.page-links a {
+	text-decoration: none;
+	color: #0056b3;
+	font-weight: bold;
+}
+
+.page-links a:hover {
+	color: #ff5722;
+}
+
+.page-links .active {
+	color: #fff;
+	background-color: #007bff;
+	border-radius: 5px;
+}
+
+.page-links a:focus, .page-links a:hover {
+	outline: none;
+	color: #ff5722;
+}
+
+.page-links .active a {
+	background-color: #004085;
+}
+</style>
+
 <script type="text/javascript">
 	$(function() {
+
 		// 검색 폼 제출 이벤트 처리
-		$("#searchForm").on("submit", function(e) {
-			e.preventDefault(); // 폼의 기본 제출 동작 방지
+		$("#btnSearch").on("click", function() {
 
-			// 검색어 가져오기
-			var keyword = $("#searchKeyword").val();
+			var flag = chkKeyword();
 
-			// AJAX로 검색 요청 보내기 (예시 코드)
-			/* $.ajax({
-			    url: "검색_처리할_URL",
-			    type: "POST",
-			    data: { keyword: keyword },
-			    success: function(response) {
-			        // 검색 결과로 테이블 내용 업데이트
-			        // $("#reviewTableBody").html(response);
-			    }
-			}); */
+			if (flag) {
+				$("#searchFrm").submit();
+			}
+
 		});
 	});//ready
+
+	function chkKeyword() {
+
+		var flag = false;
+		var keyWord = $('#keyWord').val();
+
+		if (keyWord == null) {
+			alert('검색어는 한 자이상 입력해야합니다.');
+			return flag;
+		}
+		flag = true;
+
+		return flag;
+	}
 </script>
 </head>
 <body>
@@ -114,19 +165,23 @@ body {
 
 			<!-- 검색 부분 -->
 			<div class="search-box">
-				<form id="searchForm" class="row g-3 align-items-center">
+				<form id="searchFrm" class="row g-3 align-items-center" method="get"
+					action="/admin/review_list">
 					<div class="col-auto">
-						<input type="text" class="form-control" id="searchKeyword"
-							placeholder="검색할 키워드를 입력하세요">
+						<input type="text" class="form-control" id="keyWord"
+							name="keyWord" placeholder="검색할 키워드를 입력하세요">
 					</div>
 					<div class="col-auto">
-						<button type="button" class="btn btn-success">검색</button>
+						<input type="button" class="btn btn-success" id="btnSearch"
+							value="검색">
 					</div>
 				</form>
 			</div>
 
 			<!-- 총 리뷰 수 표시 -->
-			<div class="review-count">총 리뷰의 수: 1건</div>
+			<div class="review-count">
+				<strong>총 리뷰의 수 : ${totalCount }건</strong>
+			</div>
 
 			<!-- 리뷰 목록 테이블 -->
 			<table class="review-table">
@@ -141,18 +196,35 @@ body {
 					</tr>
 				</thead>
 				<tbody id="reviewTableBody">
-					<tr>
-						<td>1</td>
-						<td><a href="review_detail.jsp">숙소명</a></td>
-						<td>내용</td>
-						<td>id</td>
-						<td>등록일</td>
-						<td>3점</td>
-					</tr>
+					<c:forEach var="review" items="${reviewList }" varStatus="i">
+						<tr>
+
+							<td>${i.count }</td>
+							<td><a href="/admin/review_detail/${review.review_id}">${review.acm_name}</a></td>
+
+							<td><c:choose>
+									<c:when test="${fn:length(review.content) > 30}">
+            							${fn:substring(review.content, 0, 30)}...
+       								 </c:when>
+									<c:otherwise>
+            							${review.content}
+       								 </c:otherwise>
+								</c:choose></td>
+							<td>${review.user_id }</td>
+							<td>${review.created_at }</td>
+							<td>${review.rating	}</td>
+						</tr>
+					</c:forEach>
 				</tbody>
 			</table>
 		</div>
+
+		<br> <span class="pagination"><c:out
+				value="${ pagination }" escapeXml="false" /></span>
 	</div>
+
+
+
 	<jsp:include page="../common/footer.jsp" />
 </body>
 </html>

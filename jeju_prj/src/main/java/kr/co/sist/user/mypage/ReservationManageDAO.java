@@ -86,7 +86,7 @@ public class ReservationManageDAO {
 	 * @param rsr_id
 	 * @return
 	 */
-	public int updateReservation(int rsr_id) {
+	public int updateReservation(int rsr_id) throws PersistenceException {
 		int rowCnt = 0;
 
 		MyBatisHandler mbh = MyBatisHandler.getInstance();

@@ -60,7 +60,7 @@
 						<span>리뷰관리</span> <i class="arrow"></i>
 					</div>
 					<ul class="nav-submenu">
-						<li><a href="http://localhost/project2/admin/review_list.jsp">리뷰목록</a></li>
+						<li><a href="/admin/review_list">리뷰목록</a></li>
 					</ul>
 				</div>
 

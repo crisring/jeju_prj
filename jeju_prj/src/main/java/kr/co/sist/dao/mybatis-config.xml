@@ -34,6 +34,10 @@
 		<typeAlias type="kr.co.sist.admin.dashboard.DashboardDomain"
 			alias="dashboardDomain" />
 
+		<!-- 리뷰 관리를 위한 Domain -->
+		<typeAlias type="kr.co.sist.admin.review.ReviewManageDomain"
+			alias="reviewManageDomain" />
+
 		<!-- 숙소리스트 검색을 위한 SearchVO -->
 		<typeAlias type="kr.co.sist.admin.acc.SearchAccVO"
 			alias="searchAccVO" />
@@ -44,6 +48,9 @@
 
 		<typeAlias type="kr.co.sist.admin.acc.AccmmodationVO"
 			alias="accommodationVO" />
+
+
+
 	</typeAliases>
 
 
@@ -78,6 +85,10 @@
 		<!-- 대시보드 -->
 		<mapper
 			resource="kr/co/sist/admin/dashboard/dashboardMapper.xml" />
+
+		<!-- 리뷰관리 -->
+		<mapper
+			resource="kr/co/sist/admin/review/reviewManageMapper.xml" />
 
 		<!-- 숙소관리 -->
 		<mapper resource="kr/co/sist/admin/acc/acmMapper.xml" />

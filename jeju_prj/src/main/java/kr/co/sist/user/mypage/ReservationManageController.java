@@ -105,7 +105,7 @@ public class ReservationManageController {
 			@RequestParam("rating") int rating, @RequestParam("acm_id") int acm_id, Model model) throws Exception {
 
 		// 파일 크기 제한 (5MB 이하)
-		int maxSize = 1024 * 1024 * 5; // 최대 5MB
+		int maxSize = 1024 * 1024 * 5;
 		for (MultipartFile file : mf) {
 			if (maxSize < file.getSize()) {
 				model.addAttribute("msg", "업로드 실패하였습니다! 업로드 파일의 크기는 최대 5MB까지만 가능합니다.");
@@ -117,30 +117,33 @@ public class ReservationManageController {
 
 		for (MultipartFile file : mf) {
 			String originalFilename = file.getOriginalFilename();
-			File uploadFile = new File(uploadDir + "/" + originalFilename);
 
-			// 파일 이름 중복 처리 (중복되면 '_1', '_2' 추가)
-			int cnt = 1;
+			// 파일명과 확장자 분리
 			String fileName = originalFilename;
 			String fileExt = "";
 
-			if (originalFilename.contains(".")) {
-				fileExt = originalFilename.substring(originalFilename.lastIndexOf("."));
-				fileName = originalFilename.substring(0, originalFilename.lastIndexOf("."));
+			if (originalFilename != null && originalFilename.contains(".")) {
+				int lastDotIndex = originalFilename.lastIndexOf(".");
+				fileExt = originalFilename.substring(lastDotIndex);
+				fileName = originalFilename.substring(0, lastDotIndex);
 			}
 
+			// 중복 파일명 처리
+			int cnt = 1;
+			String finalFileName = fileName + fileExt;
+			File uploadFile = new File(uploadDir + "/" + finalFileName);
+
 			while (uploadFile.exists()) {
-				// 중복 파일 처리
-				fileName = originalFilename.substring(0, originalFilename.lastIndexOf(".")) + "_" + cnt + fileExt;
-				uploadFile = new File(uploadDir + "/" + fileName);
+				finalFileName = fileName + "_" + cnt + fileExt;
+				uploadFile = new File(uploadDir + "/" + finalFileName);
 				cnt++;
 			}
 
 			// 파일 업로드 수행
 			file.transferTo(uploadFile);
 
-			// 파일 이름을 배열에 추가
-			fileNames.add(fileName);
+			// 최종 파일명(확장자 포함)을 리스트에 추가
+			fileNames.add(finalFileName);
 		}
 
 		ReviewVO rVO = new ReviewVO();
@@ -149,9 +152,7 @@ public class ReservationManageController {
 		rVO.setUser_id(userId);
 		rVO.setRating(rating);
 		rVO.setAcm_id(acm_id);
-
-		// 이미지 이름 배열을 ReviewVO에 설정
-		rVO.setImg_names(fileNames.toArray(new String[0])); // ArrayList -> Array로 변환
+		rVO.setImg_names(fileNames.toArray(new String[0]));
 
 		boolean flag = rsrms.addReview(rVO);
 
@@ -162,7 +163,6 @@ public class ReservationManageController {
 		}
 
 		return "user/mypage/reviewProcess";
-	}
-// reviewWriteProc
+	}// reviewWriteProc
 
 }

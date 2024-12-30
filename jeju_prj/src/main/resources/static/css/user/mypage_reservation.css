@@ -85,6 +85,20 @@
 	margin: 0 auto;
 }
 
+#noRSR {
+	border: 1px solid #F5F7FA;
+	width: 800px;
+	height: 280px;
+	margin-top: 15px;
+	margin-left: 30px;
+	box-shadow: 5px 5px 5px 5px rgba(0, 0, 0, 0.1);
+	border-radius: 15px;
+	overflow: hidden;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
 @media screen and (max-width: 1200px) {
 	#wrap {
 		position: relative;
@@ -157,4 +171,72 @@
 
 .cancel-link:hover, .review-link:hover, review-complete:hover {
 	background-color: #0056b3;
+}
+
+.pagination {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin: 20px 70px 30px 0px;
+}
+
+.pagination span {
+	margin: 0 5px;
+}
+
+.prev, .next {
+	font-weight: bold;
+	color: #333;
+	cursor: pointer;
+}
+
+.page-links a {
+	text-decoration: none;
+	color: #0056b3;
+	font-weight: bold;
+}
+
+.page-links a:hover {
+	color: #ff5722;
+}
+
+.page-links .active {
+	color: #fff;
+	background-color: #007bff;
+	border-radius: 5px;
+}
+
+.page-links a:focus, .page-links a:hover {
+	outline: none;
+	color: #ff5722;
+}
+
+.page-links .active a {
+	background-color: #004085;
+}
+
+#container {
+	text-align: center;
+	color: #333;
+}
+
+#container .btn {
+	display: inline-block;
+	background-color: #007bff;
+	color: white;
+	font-size: 16px;
+	padding: 10px 20px;
+	border: none;
+	border-radius: 5px;
+	text-decoration: none;
+	cursor: pointer;
+	transition: background-color 0.3s;
+}
+
+#container .btn:hover {
+	background-color: #0056b3;
+}
+
+.review-image {
+	width: 75%;
 }

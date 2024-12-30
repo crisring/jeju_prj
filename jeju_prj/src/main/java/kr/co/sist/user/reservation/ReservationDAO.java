@@ -30,7 +30,7 @@ public class ReservationDAO {
 		int rowCnt = 0;
 		MyBatisHandler mbh = MyBatisHandler.getInstance();
 		// commit 막아놓기 -> 나중에 풀기
-		SqlSession handler = mbh.getHandler(false);
+		SqlSession handler = mbh.getHandler(true);
 
 		try {
 			rowCnt = handler.insert("kr.co.sist.reservationMapper.insertReservation", rVO);

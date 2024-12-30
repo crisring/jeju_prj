@@ -26,11 +26,12 @@
 		a.ACM_NAME AS acm_name,
 		A.ACM_ID AS acm_id,
 		ROW_NUMBER() OVER (ORDER BY
-		rsr.check_out_date)
+		rsr.check_out_date, rsr.rsr_id)
 		AS rnum
 		FROM
 		RESERVATION rsr
-		JOIN ROOM r ON
+		JOIN ROOM r
+		ON
 		rsr.ROOM_ID = r.ROOM_ID
 		JOIN
 		ACCOMMODATION a ON r.ACM_ID = a.ACM_ID
@@ -39,7 +40,6 @@
 		rsr.RSR_ID = rev.RSR_ID
 	</sql>
 
-	<!-- 총 게시물의 수 얻기 -->
 	<!-- 예약내역 검색 숙소이미지, 체크인, 체크아웃, 예약자명, 룸 금액, 리뷰 있는지 없는지, 상태 = 결제완료 -->
 	<select id="selectAllReservation" resultType="reservationDomain"
 		parameterType="string">
@@ -65,7 +65,7 @@
 
 	</select>
 
-
+	<!-- 총 게시물의 수 얻기 -->
 	<select id="totalCnt" resultType="int" parameterType="String">
 		SELECT
 		COUNT(RSR_ID) cnt

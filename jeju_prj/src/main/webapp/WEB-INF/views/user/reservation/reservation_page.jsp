@@ -139,12 +139,13 @@
 					<h3 class="section-title">예약자 정보</h3>
 					<div class="info-group">
 						<label for="name" class="label">예약자 이름</label> <input type="text"
-							id="rsr_name" name="rsr_name" placeholder="홍길동">
+							id="rsr_name" name="rsr_name" placeholder="홍길동"
+							value="${user_info.user_name }">
 					</div>
 					<div class="info-group">
 						<label for="phone" class="label">휴대폰 번호</label> <input type="text"
 							id="rsr_phone_number" name="rsr_phone_number"
-							placeholder="010-1234-5678">
+							placeholder="010-1234-5678" value="${user_info.phone_number }">
 					</div>
 					<div class="info-group">
 						<label for="guests" class="label">입실 인원</label> <select

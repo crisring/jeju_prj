@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.sist.reviewManageMapper">
+
+	<!-- admin_id를 가지고, 가진 숙소를 찾고, 그 숙소들의 리뷰를 전부 가져온다. -->
+	<select id="selectAllReview" resultType="reviewManageDomain"
+		parameterType="searchVO">
+		select
+		review_id, acm_name, content, user_id, created_at,
+		rating
+		from
+		(SELECT
+		r.REVIEW_ID review_id, a.acm_name acm_name, r.content
+		content,
+		r.user_id user_id, r.CREATED_AT created_at, r.RATING rating,
+		ROW_NUMBER() OVER (ORDER BY r.review_id) AS rnum
+		FROM ACCOMMODATION a
+		JOIN REVIEW r ON
+		a.acm_id = r.acm_id
+		WHERE
+		a.admin_id = #{admin_id})
+		where
+		(rnum between #{startNum} and #{endNum})
+
+		<if test="keyWord != null and keyWord != ''">
+			AND INSTR(content, #{keyWord}) > 0
+		</if>
+
+	</select>
+
+	<!-- 총 게시물의 수 얻기 -->
+	<select id="totalCnt" resultType="int" parameterType="searchVO">
+		SELECT
+		COUNT(*) AS total_reviews
+		FROM
+		ACCOMMODATION a
+		JOIN
+		REVIEW r
+		ON
+		a.acm_id =
+		r.acm_id
+		WHERE
+		a.admin_id = #{admin_id}
+
+		<if test="keyWord != null and keyWord != ''">
+			AND INSTR(content, #{keyWord}) > 0
+		</if>
+
+	</select>
+
+	<!-- 리뷰 번호를 가지고, 상세 리뷰 페이지 검색 -->
+	<select id="selectOneReview" parameterType="int"
+		resultType="reviewManageDomain">
+		select USER_ID,
+		CREATED_AT, RATING, CONTENT from review
+		where review_id = #{review_id}
+
+	</select>
+
+	<!-- 리뷰 번호를 가지고, 리뷰 이미지 검색 -->
+	<select id="selectReviewImg" parameterType="int"
+		resultType="String">
+		select IMG_NAME from REVIEW_IMG
+		where review_id =
+		#{review_id}
+
+	</select>
+
+	<!-- 리뷰번호를 가지고, 리뷰 삭제 -->
+	<delete id="deleteReview" parameterType="int">
+
+		delete from review
+		where
+		review_id = #{review_id}
+
+	</delete>
+
+</mapper>
