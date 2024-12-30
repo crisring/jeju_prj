@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import kr.co.sist.user.member.MemberDomain;
 import kr.co.sist.user.member.MemberVO;
 import kr.co.sist.user.util.BoardUtil;
 import kr.co.sist.user.util.SearchVO;
@@ -41,14 +42,14 @@ public class ReservationManageController {
 	public String rsrListFrm(HttpSession session, SearchVO sVO, HttpServletRequest request, Model model) {
 
 		// 세션에서 값을 가져오기
-		MemberVO mVO = (MemberVO) session.getAttribute("user_info");
-		model.addAttribute("user_info", mVO);
+		MemberDomain md = (MemberDomain) session.getAttribute("user_info");
+		model.addAttribute("user_info", md);
 
-		if (mVO == null) {
+		if (md == null) {
 			return "user/mypage/mypage_reservation_error";
 		}
 
-		String user_id = mVO.getUser_id();
+		String user_id = md.getUser_id();
 
 		// 1. 총 레코드 수 구하기
 		int totalCount = rsrms.totalCount(user_id);

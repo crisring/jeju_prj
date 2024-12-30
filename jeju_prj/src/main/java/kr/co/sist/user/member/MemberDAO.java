@@ -15,7 +15,7 @@ public class MemberDAO {
 	 * @return
 	 */
 	public String selectMember(String id) throws PersistenceException {
-		MyBatisHandler mbh = MyBatisHandler.getInstnace();
+		MyBatisHandler mbh = MyBatisHandler.getInstance();
 		SqlSession handler = mbh.getHandler();
 		String result = "";
 		try {
@@ -36,7 +36,7 @@ public class MemberDAO {
 	 */
 	public int insertMember(MemberVO mVO) throws PersistenceException {
 		int insertCnt = 0;
-		MyBatisHandler mbh = MyBatisHandler.getInstnace();
+		MyBatisHandler mbh = MyBatisHandler.getInstance();
 		SqlSession handler = mbh.getHandler();
 		try {
 			insertCnt = handler.insert("kr.co.sist.user.member.insertMember", mVO);
@@ -45,7 +45,7 @@ public class MemberDAO {
 			} // end if
 		} finally {
 			mbh.closeHandler(handler);
-		}//end finally
+		} // end finally
 
 		return insertCnt;
 	}// insertMember

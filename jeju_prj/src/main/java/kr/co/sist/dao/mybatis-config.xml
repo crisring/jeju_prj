@@ -7,6 +7,12 @@
 
 	<typeAliases>
 		<!-- user -->
+
+		<!-- 회원가입시 사용하는 MemberVO -->
+		<typeAlias type="kr.co.sist.user.member.MemberVO"
+			alias="memberVO" />
+
+
 		<!-- 메인페이지 Domain -->
 		<typeAlias type="kr.co.sist.user.searchACM.SearchACMDomain"
 			alias="searchACMDomain" />
@@ -27,6 +33,7 @@
 		<!-- 예약페이지 VO -->
 		<typeAlias type="kr.co.sist.user.reservation.ReservationVO"
 			alias="reservationVO" />
+
 
 
 		<!-- admin -->
@@ -75,6 +82,12 @@
 		<!-- 메인페이지 검색 -->
 		<mapper
 			resource="kr/co/sist/user/reservation/reservationMapper.xml" />
+
+		<!-- member -->
+		<mapper resource="kr/co/sist/user/member/memberMapper.xml" />
+
+		<!-- login -->
+		<mapper resource="kr/co/sist/user/login/loginMapper.xml" />
 
 		<!-- 마이페이지 -->
 		<mapper resource="kr/co/sist/user/mypage/RSRManageMapper.xml" />

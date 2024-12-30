@@ -18,7 +18,7 @@ public class MyBatisHandler {
 
 	}// constructor
 
-	public static MyBatisHandler getInstnace() {
+	public static MyBatisHandler getInstance() {
 		if (mbh == null) {
 			mbh = new MyBatisHandler();
 		} // if
@@ -28,7 +28,7 @@ public class MyBatisHandler {
 	private static SqlSessionFactory createMybatis() {
 		if (ssf == null) {
 
-			String configPath = "kr/co/sist/dao/mybatis_config.xml";
+			String configPath = "kr/co/sist/dao/mybatis-config.xml";
 			try {
 				// 1.설정파일과 연결
 				Reader reader = Resources.getResourceAsReader(configPath);

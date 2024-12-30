@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
@@ -15,8 +14,7 @@ import jakarta.servlet.http.HttpSession;
 import kr.co.sist.user.member.MemberDomain;
 import kr.co.sist.user.member.MemberVO;
 
-
-@SessionAttributes("userInfo")
+@SessionAttributes("user_info")
 @Controller
 public class LoginController {
 	@Autowired
@@ -28,30 +26,30 @@ public class LoginController {
 		return "user/login/user_login";
 	}// loginFrm
 
-	@RequestMapping(value = "/login/loginProcess", method = {RequestMethod.GET, RequestMethod.POST})
+	@RequestMapping(value = "/login/loginProcess", method = { RequestMethod.GET, RequestMethod.POST })
 	public String loginFrmProcess(LoginVO lVO, Model model) {
-	    try {
-	        MemberDomain member = ls.searchLogin(lVO);
-	        
-	        // 🔑 @SessionAttributes("userInfo")에 의해 세션에 자동 저장
-	        model.addAttribute("userInfo", member);
-	        System.out.println(member);
-	        return "redirect:/";
-	    } catch (RuntimeException e) {
-	        model.addAttribute("error", "아이디와 비밀번호를 정확히 입력해주세요.");
-	        return "user/login/normal_login";
-	    }
+		try {
+			MemberDomain member = ls.searchLogin(lVO);
+
+			// 🔑 @SessionAttributes("userInfo")에 의해 세션에 자동 저장
+			model.addAttribute("user_info", member);
+			return "redirect:/";
+		} catch (RuntimeException e) {
+			model.addAttribute("error", "아이디와 비밀번호를 정확히 입력해주세요.");
+			return "user/login/normal_login";
+		}
 	}
+
 	@GetMapping("/login/logout")
 	public String logout(HttpSession session, SessionStatus status) {
-	    // @SessionAttributes 초기화
-	    status.setComplete();
-	    
-	    // HttpSession 초기화
-	    session.invalidate();
+		// @SessionAttributes 초기화
+		status.setComplete();
 
-	    System.out.println("사용자 로그아웃 완료");
-	    return "redirect:/";
+		// HttpSession 초기화
+		session.invalidate();
+
+		System.out.println("사용자 로그아웃 완료");
+		return "redirect:/";
 	}
 
 	@GetMapping("/member/findId")

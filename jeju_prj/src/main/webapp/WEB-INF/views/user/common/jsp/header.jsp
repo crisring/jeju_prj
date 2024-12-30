@@ -138,7 +138,11 @@ header {
 
 		<c:choose>
 			<c:when test="${empty user_info }">
-				<button class="login-btn">로그인/회원가입</button>
+				<input type="button" class="login-btn" value="로그인/회원가입"
+					onclick="location.href='/login/loginFrm'">
+
+
+
 			</c:when>
 
 			<c:otherwise>

@@ -14,11 +14,11 @@ public class LoginDAO {
 
 	public MemberDomain selectLogin(LoginVO lVO) throws PersistenceException {
 		MemberDomain mVO = null;
-		MyBatisHandler mbh = MyBatisHandler.getInstnace();
+		MyBatisHandler mbh = MyBatisHandler.getInstance();
 
 		SqlSession handler = mbh.getHandler();
 		try {
-			mVO = handler.selectOne("kr.co.sist.user.login.userLogin",lVO);
+			mVO = handler.selectOne("kr.co.sist.user.login.userLogin", lVO);
 
 		} finally {
 			mbh.closeHandler(handler);
@@ -36,7 +36,7 @@ public class LoginDAO {
 	 */
 	public String selectId(MemberFindVO mfVO) throws PersistenceException {
 		String findId = "";
-		MyBatisHandler mbh = MyBatisHandler.getInstnace();
+		MyBatisHandler mbh = MyBatisHandler.getInstance();
 		SqlSession handler = mbh.getHandler();
 		try {
 
@@ -52,7 +52,7 @@ public class LoginDAO {
 
 	public String selectPass(MemberFindVO mfVO) throws PersistenceException {
 		String userId = null; // String으로 수정
-		MyBatisHandler mbh = MyBatisHandler.getInstnace();
+		MyBatisHandler mbh = MyBatisHandler.getInstance();
 		SqlSession handler = mbh.getHandler();
 		try {
 			userId = handler.selectOne("kr.co.sist.user.login.findPass", mfVO);
@@ -65,7 +65,7 @@ public class LoginDAO {
 
 	public int updatePass(MemberVO mVO) throws PersistenceException {
 		int rowCnt = 0;
-		MyBatisHandler mbh = MyBatisHandler.getInstnace();
+		MyBatisHandler mbh = MyBatisHandler.getInstance();
 		SqlSession handler = mbh.getHandler();
 		try {
 			System.out.println("Updating password for user_id: " + mVO.getUser_id());

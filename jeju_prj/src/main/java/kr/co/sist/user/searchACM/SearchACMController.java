@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jakarta.servlet.http.HttpSession;
-import kr.co.sist.user.member.MemberVO;
 import kr.co.sist.user.util.SearchVO;
 
 @SessionAttributes("user_info")
@@ -32,10 +31,6 @@ public class SearchACMController {
 	 */
 	@RequestMapping(value = "/", method = { GET, POST })
 	public String main(HttpSession session, Model model) {
-
-		MemberVO mVO = new MemberVO("cafeoz", "16ozoz", "박은찬", "192.168.10.209", "일반회원", "010-1234-1234");
-
-		session.setAttribute("user_info", mVO); // 임시로 세션에 설정
 
 		model.addAttribute("user_info", session.getAttribute("user_info"));
 

@@ -12,7 +12,7 @@
 	<a href="/mypage/rerListFrm" class="btn btn-outline-secondary"
 		onclick="setActive(this)">예약내역</a> <a href="#"
 		class="btn btn-outline-secondary" onclick="setActive(this)">내정보관리</a>
-	<a href="#" class="btn btn-outline-secondary" onclick="setActive(this)">리뷰관리</a>
+	<a href="" class="btn btn-outline-secondary" onclick="setActive(this)">리뷰관리</a>
 </div>
 
 <!-- sidebar 관련 CSS -->
