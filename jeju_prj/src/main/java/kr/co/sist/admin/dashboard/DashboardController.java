@@ -20,9 +20,9 @@ public class DashboardController {
 	@GetMapping("/admin/dashboard")
 	public String adminMain(HttpSession session, Model model) {
 
-		String admin_id = (String) session.getAttribute("admin_id");
+		String admin_id1 = (String) session.getAttribute("admin_id");
 
-		List<DashboardDomain> list = ds.calculateMonthlySales(admin_id);
+		List<DashboardDomain> list = ds.calculateMonthlySales(admin_id1);
 		model.addAttribute("monthlyList", list);
 
 		List<DashboardDomain> list2 = ds.calculateWeeklySales();
