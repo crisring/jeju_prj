@@ -7,7 +7,6 @@
 
 	<typeAliases>
 		<!-- user -->
-
 		<!-- 회원가입시 사용하는 MemberVO -->
 		<typeAlias type="kr.co.sist.user.member.MemberVO"
 			alias="memberVO" />
@@ -37,6 +36,10 @@
 
 
 		<!-- admin -->
+		<!-- 관리자 로그인시 사용하는 VO -->
+		<typeAlias type="kr.co.sist.admin.login.AdminLoginVO"
+			alias="adminLoginVO" />
+
 		<!-- 대시보드 결과 Domain -->
 		<typeAlias type="kr.co.sist.admin.dashboard.DashboardDomain"
 			alias="dashboardDomain" />
@@ -53,8 +56,22 @@
 		<typeAlias type="kr.co.sist.admin.acc.AccommodationDomain"
 			alias="aDomain" />
 
-		<typeAlias type="kr.co.sist.admin.acc.AccmmodationVO"
+		<typeAlias type="kr.co.sist.admin.acc.AccommodationVO"
 			alias="accommodationVO" />
+
+		<!-- -->
+		<typeAlias type="kr.co.sist.admin.member.MemberShipDomain"
+			alias="memberDomain" />
+		<typeAlias type="kr.co.sist.admin.room.AdminRoomDomain"
+			alias="adminRoomDomain" />
+		<typeAlias type="kr.co.sist.admin.room.RoomVO"
+			alias="roomVO" />
+		<typeAlias
+			type="kr.co.sist.admin.reservation.AdminReservationDomain"
+			alias="resDomain" />
+		<typeAlias type="kr.co.sist.admin.reservation.SearchResVO"
+			alias="searchResVO" />
+
 
 
 
@@ -95,6 +112,9 @@
 
 
 		<!-- admin -->
+		<!-- 로그인 -->
+		<mapper resource="kr/co/sist/admin/login/adminLoginMapper.xml" />
+
 		<!-- 대시보드 -->
 		<mapper
 			resource="kr/co/sist/admin/dashboard/dashboardMapper.xml" />
@@ -105,6 +125,11 @@
 
 		<!-- 숙소관리 -->
 		<mapper resource="kr/co/sist/admin/acc/acmMapper.xml" />
+
+		<mapper resource="kr/co/sist/admin/member/memberMapper.xml" />
+		<mapper resource="kr/co/sist/admin/room/roomMapper.xml" />
+		<mapper
+			resource="kr/co/sist/admin/reservation/adminReservationMapper.xml" />
 
 	</mappers>
 </configuration>

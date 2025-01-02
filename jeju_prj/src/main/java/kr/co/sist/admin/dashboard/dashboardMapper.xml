@@ -5,25 +5,31 @@
 <mapper namespace="kr.co.sist.dashboardMapper">
 
 	<!-- 월간 매출현황 -->
-	<select id="selectMonthlySales" resultType="dashboardDomain">
+	<select id="selectMonthlySales" resultType="dashboardDomain"
+		parameterType="String">
 		SELECT
 		TO_CHAR(rsr.RSR_DATE, 'YYYY-MM') AS
 		reservation_month,
 		SUM( CASE
 		WHEN
-		r.discount_price IS NOT NULL
-		THEN
+		r.discount_price IS NOT NULL THEN
 		r.discount_price
 		ELSE r.price
 		END ) AS
 		total_revenue
-		FROM
-		reservation rsr
+		FROM reservation rsr
 		JOIN room r ON
 		r.room_id = rsr.room_id
-		GROUP BY
-		TO_CHAR(rsr.RSR_DATE, 'YYYY-MM')
-		ORDER BY reservation_month
+		JOIN ACCOMMODATION a ON
+		a.acm_id =
+		r.acm_id
+		WHERE
+		a.admin_id =
+		#{admin_id}
+		GROUP BY TO_CHAR(rsr.RSR_DATE,
+		'YYYY-MM')
+		ORDER BY
+		reservation_month
 
 	</select>
 

@@ -12,7 +12,7 @@ import kr.co.sist.dao.MyBatisHandler;
 public class DashboardDAO {
 
 	// 월간 매출 현황
-	public List<DashboardDomain> getMonthlySales() throws PersistenceException {
+	public List<DashboardDomain> getMonthlySales(String admin_id) throws PersistenceException {
 
 		List<DashboardDomain> list = null;
 
@@ -20,7 +20,7 @@ public class DashboardDAO {
 		SqlSession handler = mbh.getHandler();
 
 		try {
-			list = handler.selectList("kr.co.sist.dashboardMapper.selectMonthlySales");
+			list = handler.selectList("kr.co.sist.dashboardMapper.selectMonthlySales", admin_id);
 		} finally {
 			mbh.closeHandler(handler);
 		}
@@ -112,4 +112,13 @@ public class DashboardDAO {
 
 		return list;
 	}// selectPopularACM
+
+	public static void main(String[] args) {
+
+		DashboardDAO dDAO = new DashboardDAO();
+		List<DashboardDomain> list = dDAO.getMonthlySales("admin");
+		System.out.println(list);
+
+	}
+
 }// class

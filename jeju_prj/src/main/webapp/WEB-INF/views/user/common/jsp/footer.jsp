@@ -120,7 +120,7 @@ footer {
 			</p>
 			<div class="contact">
 				<div class="phone">📞 1670-6250</div>
-				<a href="/admin/dashboard" class="kakao-btn" id="kakao-btn">카카오
+				<a href="/admin/loginFrm" class="kakao-btn" id="kakao-btn">카카오
 					문의</a>
 			</div>
 		</div>

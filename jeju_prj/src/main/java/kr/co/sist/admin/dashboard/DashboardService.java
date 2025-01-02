@@ -9,16 +9,17 @@ import org.springframework.stereotype.Service;
 @Service
 public class DashboardService {
 
-	@Autowired
+	@Autowired(required = false)
 	private DashboardDAO dDAO;
 
 	// 월간 매출 현황
-	public List<DashboardDomain> calculateMonthlySales() {
+	public List<DashboardDomain> calculateMonthlySales(String admin_id) {
 
 		List<DashboardDomain> list = null;
 
 		try {
-			list = dDAO.getMonthlySales();
+			list = dDAO.getMonthlySales(admin_id);
+			System.out.println(list);
 		} catch (PersistenceException pe) {
 			pe.printStackTrace();
 		}

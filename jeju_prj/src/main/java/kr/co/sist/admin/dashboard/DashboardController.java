@@ -6,17 +6,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.SessionAttributes;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
+@SessionAttributes("admin_id")
 public class DashboardController {
 
 	@Autowired
 	DashboardService ds;
 
 	@GetMapping("/admin/dashboard")
-	public String adminMain(Model model) {
+	public String adminMain(HttpSession session, Model model) {
 
-		List<DashboardDomain> list = ds.calculateMonthlySales();
+		String admin_id = (String) session.getAttribute("admin_id");
+
+		List<DashboardDomain> list = ds.calculateMonthlySales(admin_id);
 		model.addAttribute("monthlyList", list);
 
 		List<DashboardDomain> list2 = ds.calculateWeeklySales();

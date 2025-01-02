@@ -98,7 +98,8 @@ h2 {
 	    // 숨겨진 input 요소에서 데이터 읽기
 	    const labelsData = [...document.querySelectorAll('input[name="reservation_month"]')];
 	    const valuesData = [...document.querySelectorAll('input[name="month_total_revenue"]')];
-
+	    
+	    
 	    const chartData = processChartData(labelsData, valuesData);
 
 	    // 차트 데이터가 유효하지 않으면 종료
@@ -370,7 +371,7 @@ h2 {
 	    }
 
 	    return chartData;
-	}
+	}// processChartData
 	
 	// 캔버스 요소 검사
 	function chkElement(chartElement){
