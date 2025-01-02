@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -23,7 +24,7 @@ public class AdminLoginController {
 		return "admin/login/adminLoginFrm";
 	}// loginFrm
 
-	@PostMapping("admin/loginProcess")
+	@PostMapping("/admin/loginProcess")
 	@ResponseBody
 	public String loginFrmProc(@RequestBody AdminLoginVO alVO, HttpSession session) {
 		// 로그인 처리
@@ -36,4 +37,10 @@ public class AdminLoginController {
 
 		return jsonObj;
 	}
+	
+	@GetMapping("/admin/logout")
+	public String logout(SessionStatus ss) {
+		ss.setComplete();
+		return "redirect:/admin/loginFrm";
+	}//logout
 }

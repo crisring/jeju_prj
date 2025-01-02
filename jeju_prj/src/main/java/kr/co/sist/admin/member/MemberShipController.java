@@ -16,13 +16,19 @@ public class MemberShipController {
 	
 	@GetMapping("/admin/member_list")
 	public String membershipList(String keyword, Model model) {
-		List<MemberShipDomain> list=new ArrayList<MemberShipDomain>();
-		
-		list=mss.searchAllMember(keyword);
-		
-		model.addAttribute("list", list);
-		
-		return "admin/member/member_list";
+		List<MemberShipDomain> list = new ArrayList<MemberShipDomain>();
+	    
+	    // keyword null 체크 추가
+	    if (keyword == null) {
+	        keyword = "";  // 또는 적절한 기본값
+	    }
+	    
+	    list = mss.searchAllMember(keyword);
+	    
+	    model.addAttribute("list", list);
+	    model.addAttribute("keyword", keyword);  // 뷰에서 검색어 유지를 위해 추가
+	    
+	    return "admin/member/member_list";
 	}//membershipList
 	
 	@GetMapping("/member/member_detail")

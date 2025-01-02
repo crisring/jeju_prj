@@ -30,7 +30,7 @@ public class AdminInterceptor implements HandlerInterceptor {
 	        PrintWriter out = response.getWriter();
 	        out.println("<script>");
 	        out.println("alert('세션이 만료되었습니다. 다시 로그인해주세요.');");
-	        out.println("location.href='/admin/login';");  // 로그인 페이지 경로
+	        out.println("location.href='/admin/loginFrm';");  // 로그인 페이지 경로
 	        out.println("</script>");
 	        out.flush();
 	        return false;

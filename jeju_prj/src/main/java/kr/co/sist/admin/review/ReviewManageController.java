@@ -16,7 +16,7 @@ import kr.co.sist.user.util.BoardUtil;
 import kr.co.sist.user.util.SearchVO;
 
 @Controller
-@SessionAttributes("admin_info")
+@SessionAttributes("admin_id")
 @RequestMapping("/admin")
 public class ReviewManageController {
 
@@ -29,7 +29,7 @@ public class ReviewManageController {
 	@GetMapping("/review_list")
 	public String reviewList(SearchVO sVO, HttpServletRequest request, HttpSession session, Model model) {
 
-		String admin_id = "admin2";
+		String admin_id = (String)session.getAttribute("admin_id");
 		sVO.setAdmin_id(admin_id);
 
 		// 1. 총 레코드 수 구하기

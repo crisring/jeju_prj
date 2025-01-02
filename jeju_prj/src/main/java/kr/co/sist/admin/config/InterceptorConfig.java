@@ -17,15 +17,15 @@ public class InterceptorConfig implements WebMvcConfigurer {
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		
-//		List<String> addPaths=new ArrayList<>();
-//		addPaths.add("/admin/**");
-//		List<String> excludePaths=new ArrayList<>();
-//		excludePaths.add("/admin/login/loginFrm");
-//		excludePaths.add("/admin/login/loginProcess");
-//		
-//		registry.addInterceptor(adminInterceptor)
-//		.addPathPatterns(addPaths)
-//		.excludePathPatterns(excludePaths);
+		List<String> addPaths=new ArrayList<>();
+		addPaths.add("/admin/**");
+		List<String> excludePaths=new ArrayList<>();
+		excludePaths.add("/admin/loginFrm");
+		excludePaths.add("/admin/loginProcess");
+		
+		registry.addInterceptor(adminInterceptor)
+		.addPathPatterns(addPaths)
+		.excludePathPatterns(excludePaths);
 		
 	}
 	
