@@ -105,10 +105,10 @@ textarea {
 </style>
 <script type="text/javascript">
 $(function(){
-	// 이미지 미리보기 함수
+    // 이미지 미리보기 함수
     function handleImagePreview(files) {
         var $preview = $('#imagePreview');
-
+        
         $.each(files, function(i, file) {
             if (file.type.startsWith('image/')) {
                 var reader = new FileReader();
@@ -126,6 +126,7 @@ $(function(){
                     // 이미지 생성
                     $('<img>', {
                         src: e.target.result,
+                        'data-file': file.name,
                         css: {
                             maxWidth: '200px'
                         }
@@ -135,6 +136,7 @@ $(function(){
                     $('<button>', {
                         text: '×',
                         class: 'delete-btn',
+                        type: 'button',  // 추가
                         css: {
                             position: 'absolute',
                             top: '5px',
@@ -147,7 +149,6 @@ $(function(){
                             cursor: 'pointer'
                         },
                         click: function(e) {
-                            e.preventDefault();
                             $container.remove();
                             updateFileInput();
                         }
@@ -163,33 +164,23 @@ $(function(){
     // FileList 업데이트 함수
     function updateFileInput() {
         const dataTransfer = new DataTransfer();
-        const imgs = $('#imagePreview img');
         const currentFiles = $('#images')[0].files;
+        const displayedImages = $('#imagePreview img');
         
-        // 현재 표시된 이미지들과 매칭되는 파일들을 유지
-        const imgSrcs = Array.from(imgs).map(img => img.src);
         Array.from(currentFiles).forEach((file, index) => {
-            if (imgSrcs.length > index) {
+            if(index < displayedImages.length) {
                 dataTransfer.items.add(file);
             }
         });
-
+        
         $('#images')[0].files = dataTransfer.files;
     }
 
     // input file 변경 이벤트
     $('#images').change(function() {
-        const existingFiles = Array.from(this.files);
-        handleImagePreview(existingFiles);
+        handleImagePreview(this.files);
     });
-
-    // 이미지 업로드 영역 클릭 이벤트
-    $('#imageUpload').click(function() {
-        $('#images').val(''); // input 초기화하여 같은 파일도 다시 선택 가능하게 함
-        $('#images').trigger('click');
-    });
-	
-});//ready
+});
 </script>
 </head>
 <body>
@@ -200,10 +191,12 @@ $(function(){
 	<div class="container">
 		<h1>객실 추가</h1>
 
-		<form id="accommodationForm">
+		<form id="add_room" name="add_room" method="post"
+			enctype="multipart/form-data" action="/admin/add_room_process">
+			<input type="hidden" name="acm_id" value="${acm_id}">
 			<div class="form-group">
-				<label for="name">객실명 *</label> <input type="text" id="name"
-					name="name" required>
+				<label for="room_name">객실명 *</label> <input type="text"
+					id="room_name" name="room_name" required>
 				<div class="error-message" id="nameError">숙소명을 입력해주세요.</div>
 			</div>
 
@@ -211,56 +204,55 @@ $(function(){
 				<label for="price">가격</label> <input type="text" id="price"
 					name="price">
 			</div>
+
 			<div class="form-group">
-				<label for="discountPrice">할인가</label> <input type="text"
-					id="discountPrice" name="discountPrice">
+				<label for="discount_price">할인가</label> <input type="text"
+					id="discount_price" name="discount_price">
 			</div>
 
 			<div class="form-group">
-				<label for="checkIn">입실시간</label> <input type="time" id="checkIn"
-					name="checkIn" value="15:00">
+				<label for="check_in">입실시간</label> <input type="time" id="check_in"
+					name="check_in" value="15:00">
 			</div>
 
 			<div class="form-group">
-				<label for="checkOut">퇴실시간</label> <input type="time" id="checkOut"
-					name="checkOut" value="11:00">
+				<label for="check_out">퇴실시간</label> <input type="time"
+					id="check_out" name="check_out" value="11:00">
 			</div>
 
 			<div class="form-group">
-				<label for="information">객실정보</label> * <input type="text"
-					name="time" placeholder="숙박시간 | 체크인 15:00 - 체크아웃 11:00"> *
-				<input type="text" name="count" placeholder="기준인원 | 2인기준 최대 3인">
-				<input type="hidden" name="default"
-					value="인원 추가시 비용이 발생되며, 현장에서 결제 바랍니다">
+				<label for="information">객실정보</label> <input type="text"
+					name="check_info" placeholder="숙박시간 | 체크인 15:00 - 체크아웃 11:00">
+				<input type="text" name="capacity_info"
+					placeholder="기준인원 | 2인기준 최대 3인"> <input type="text"
+					name="beds_info" placeholder="싱글침대 1개">
 			</div>
 
 			<div class="form-group">
-				<label for="maxNum">최대인원</label> <select id="maxNum" name="maxNum">
-					<option value="1">1
-					<option value="2">2
-					<option value="3">3
-					<option value="4">4
-					<option value="5">5
-					<option value="6">6
-					<option value="7">7
-					<option value="8">8
-					<option value="9">9
-					<option value="10">10
-					<option value="11">11
-					<option value="12">12
+				<label for="max_person">최대인원</label> <select id="max_person"
+					name="max_person">
+					<option value="1">1</option>
+					<option value="2">2</option>
+					<option value="3">3</option>
+					<option value="4">4</option>
+					<option value="5">5</option>
+					<option value="6">6</option>
+					<option value="7">7</option>
+					<option value="8">8</option>
+					<option value="9">9</option>
+					<option value="10">10</option>
+					<option value="11">11</option>
+					<option value="12">12</option>
 				</select> <span>명</span>
 			</div>
 
 			<div class="form-group">
 				<label>객실 이미지</label> <input type="file" id="images" name="images"
-					multiple accept="image/*" style="display: none;">
-				<div class="image-upload" id="imageUpload" style="cursor: pointer;">
-					<p>클릭하여 사진을 선택하세요</p>
-				</div>
+					multiple accept="image/*">
 				<div id="imagePreview"></div>
 			</div>
 
-			<button <%-- type="submit" --%> class="submit-btn">등록하기</button>
+			<button type="submit" class="submit-btn">등록하기</button>
 		</form>
 	</div>
 	<jsp:include page="../common/footer.jsp" />

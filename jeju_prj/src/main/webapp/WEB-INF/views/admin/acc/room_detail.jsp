@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8" info=""%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -104,14 +105,22 @@ textarea {
 }
 </style>
 <script type="text/javascript">
- // 기존 이미지 삭제 함수 수정
-    function deleteExistingImage(btn) {
-        if(confirm('이미지를 삭제하시겠습니까?')) {
-            $(btn).closest('.img-container').remove();
-        }
+//기존 이미지 삭제 함수 수정
+function deleteExistingImage(btn) {
+    if(confirm('이미지를 삭제하시겠습니까?')) {
+        $(btn).closest('.img-container').remove();
     }
+}
+
 $(function(){
-	// 이미지 미리보기 함수
+    // 입/퇴실 시간 설정
+    const checkIn = "${room.check_in}";
+    const checkOut = "${room.check_out}";
+    
+    $("#check_in").val(checkIn);
+    $("#check_out").val(checkOut);
+    
+    // 이미지 미리보기 함수
     function handleImagePreview(files) {
         var $preview = $('#imagePreview');
 
@@ -170,7 +179,7 @@ $(function(){
     function updateFileInput() {
         const dataTransfer = new DataTransfer();
         const imgs = $('#imagePreview img');
-        const currentFiles = $('#images')[0].files;
+        const currentFiles = $('#newImages')[0].files;
         
         // 현재 표시된 이미지들과 매칭되는 파일들을 유지
         const imgSrcs = Array.from(imgs).map(img => img.src);
@@ -180,43 +189,124 @@ $(function(){
             }
         });
 
-        $('#images')[0].files = dataTransfer.files;
+        $('#newImages')[0].files = dataTransfer.files;
     }
 
     // input file 변경 이벤트
-    $('#images').change(function() {
+    $('#newImages').change(function() {
         const existingFiles = Array.from(this.files);
         handleImagePreview(existingFiles);
     });
 
     // 이미지 업로드 영역 클릭 이벤트
     $('#imageUpload').click(function() {
-        $('#images').val(''); // input 초기화하여 같은 파일도 다시 선택 가능하게 함
-        $('#images').trigger('click');
+        $('#newImages').val(''); // input 초기화하여 같은 파일도 다시 선택 가능하게 함
+        $('#newImages').trigger('click');
     });
     
-
-    // 폼 제출 이벤트 핸들러 추가
-    $('#accommodationForm').submit(function(e) {
+    // 폼 제출 이벤트 핸들러
+    $('#room_update').submit(function(e) {
         e.preventDefault();
         
-        // 폼 데이터 생성
-        const formData = new FormData(this);
+        // 유효성 검사
+        // 객실명
+        if($("#room_name").val().trim() === "") {
+            alert("객실명을 입력해주세요.");
+            $("#room_name").focus();
+            return false;
+        }
         
-        // 현재 표시된 이미지들의 정보만 포함
+        // 가격
+        if($("#price").val().trim() === "") {
+            alert("가격을 입력해주세요.");
+            $("#price").focus();
+            return false;
+        }
+        
+        // 할인가
+        if($("#discount_price").val().trim() === "") {
+            alert("할인가를 입력해주세요.");
+            $("#discount_price").focus();
+            return false;
+        }
+        
+        // 입실시간
+        if($("#check_in").val().trim() === "") {
+            alert("입실시간을 입력해주세요.");
+            $("#check_in").focus();
+            return false;
+        }
+        
+        // 퇴실시간
+        if($("#check_out").val().trim() === "") {
+            alert("퇴실시간을 입력해주세요.");
+            $("#check_out").focus();
+            return false;
+        }
+        
+        // 객실정보
+        if($("input[name='check_info']").val().trim() === "") {
+            alert("객실정보를 입력해주세요.");
+            $("input[name='check_info']").focus();
+            return false;
+        }
+        
+        if($("input[name='capacity_info']").val().trim() === "") {
+            alert("수용정보를 입력해주세요.");
+            $("input[name='capacity_info']").focus();
+            return false;
+        }
+        
+        if($("input[name='beds_info']").val().trim() === "") {
+            alert("침대정보를 입력해주세요.");
+            $("input[name='beds_info']").focus();
+            return false;
+        }
+        
+        // 이미지 유효성 검사 (최소 1개 이상의 이미지가 있어야 함)
+        const existingImagesCount = $('#existingImagePreview .img-container').length;
+        const newImagesCount = $('#imagePreview .img-container').length;
+        
+        if(existingImagesCount + newImagesCount === 0) {
+            alert("최소 1개 이상의 객실 이미지가 필요합니다.");
+            return false;
+        }
+        
+     	// 가격에서 쉼표와 '원' 제거하여 숫자만 추출
+        let price = $('#price').val().replace(/,/g, '').replace('원', '');
+        let discountPrice = $('#discount_price').val().replace(/,/g, '').replace('원', '');
+        
+        // 숫자만 남은 값으로 input value 재설정
+        $('#price').val(price);
+        $('#discount_price').val(discountPrice);
+        
+        // 현재 표시된 기존 이미지들의 정보만 포함
         const remainingImages = [];
         $('#existingImagePreview .img-container input[name="existingImages"]').each(function() {
             remainingImages.push($(this).val());
         });
         
         // 기존 이미지 목록 업데이트
-        formData.delete('existingImages'); // 기존 데이터 삭제
+        $('input[name="existingImages"]').remove();  // 기존 hidden input 제거
         remainingImages.forEach(img => {
-            formData.append('existingImages', img);
+            $('<input>').attr({
+                type: 'hidden',
+                name: 'existingImages',
+                value: img
+            }).appendTo(this);
         });
-     
+        
+        // 시간 값 그대로 사용 (이미 HH:mm 형식이므로 변환 불필요)
+        let checkIn = $('#check_in').val();
+        let checkOut = $('#check_out').val();
+        
+        // 시간 값이 비어있다면 기본값 설정
+        if(!checkIn) $('#check_in').val("${room.check_in}");
+        if(!checkOut) $('#check_out').val("${room.check_out}");
+        
+        // 모든 유효성 검사 통과 시 폼 제출
+        this.submit();
     });
-	
 });//ready
 </script>
 </head>
@@ -228,85 +318,83 @@ $(function(){
 	<div class="container">
 		<h1>객실 상세정보</h1>
 
-		<form id="accommodationForm">
+		<form id="room_update" name="room_update" action="/admin/room_update"
+			method="post" enctype="multipart/form-data">
+			<input type="hidden" name="room_id" value="${room.room_id}">
 			<div class="form-group">
-				<label for="name">객실명 *</label> <input type="text" id="name"
-					name="name" value="디럭스트윈" required>
+				<label for="name">객실명 *</label> <input type="text" id="room_name"
+					name="room_name" value="${ room.room_name }" required>
 				<div class="error-message" id="nameError">숙소명을 입력해주세요.</div>
 			</div>
 
 			<div class="form-group">
 				<label for="price">가격</label> <input type="text" id="price"
-					name="price" value="72,000">
+					name="price"
+					value="<fmt:formatNumber value='${room.price}' pattern='#,###'/>원">
 			</div>
 			<div class="form-group">
-				<label for="discountPrice">할인가</label> <input type="text"
-					id="discountPrice" name="discountPrice" value="62,000">
-			</div>
-
-			<div class="form-group">
-				<label for="checkIn">입실시간</label> <input type="time" id="checkIn"
-					name="checkIn" value="15:00">
+				<label for="discount_price">할인가</label> <input type="text"
+					id="discount_price" name="discount_price"
+					value="<fmt:formatNumber value='${room.discount_price}' pattern='#,###'/>원">
 			</div>
 
 			<div class="form-group">
-				<label for="checkOut">퇴실시간</label> <input type="time" id="checkOut"
-					name="checkOut" value="11:00">
+				<label for="check_in">입실시간</label> <input type="time" id="check_in"
+					name="check_in">
+			</div>
+
+			<div class="form-group">
+				<label for="check_out">퇴실시간</label> <input type="time"
+					id="check_out" name="check_out" value="11:00">
 			</div>
 
 			<div class="form-group">
 				<label for="information">객실정보</label> * <input type="text"
-					name="time" value="숙박시간 | 체크인 15:00 - 체크아웃 11:00"> * <input
-					type="text" name="count" value="기준인원 | 2인기준 최대 3인"> * <input
-					type="text" name="default" value="인원 추가시 비용이 발생되며, 현장에서 결제 바랍니다"
-					readonly="readonly">
+					name="check_info" value="${room.check_info}"> * <input
+					type="text" name="capacity_info" value="${room.capacity_info}">
+				* <input type="text" name="beds_info" value="${room.beds_info}">
 			</div>
 
 			<div class="form-group">
-				<label for="maxNum">최대인원</label> <select id="maxNum" name="maxNum">
-					<option value="1">1
-					<option value="2">2
-					<option value="3">3
-					<option value="4" selected="selected">4
-					<option value="5">5
-					<option value="6">6
-					<option value="7">7
-					<option value="8">8
-					<option value="9">9
-					<option value="10">10
-					<option value="11">11
-					<option value="12">12
+				<label for="max_person">최대인원</label> <select id="max_person"
+					name="max_person">
+					<option value="1" ${room.max_person == 1 ? 'selected' : ''}>1</option>
+					<option value="2" ${room.max_person == 2 ? 'selected' : ''}>2</option>
+					<option value="3" ${room.max_person == 3 ? 'selected' : ''}>3</option>
+					<option value="4" ${room.max_person == 4 ? 'selected' : ''}>4</option>
+					<option value="5" ${room.max_person == 5 ? 'selected' : ''}>5</option>
+					<option value="6" ${room.max_person == 6 ? 'selected' : ''}>6</option>
+					<option value="7" ${room.max_person == 7 ? 'selected' : ''}>7</option>
+					<option value="8" ${room.max_person == 8 ? 'selected' : ''}>8</option>
+					<option value="9" ${room.max_person == 9 ? 'selected' : ''}>9</option>
+					<option value="10" ${room.max_person == 10 ? 'selected' : ''}>10</option>
+					<option value="11" ${room.max_person == 11 ? 'selected' : ''}>11</option>
+					<option value="12" ${room.max_person == 12 ? 'selected' : ''}>12</option>
 				</select> <span>명</span>
 			</div>
 
 			<div class="form-group">
 				<label>객실 이미지</label>
-				<%-- Controller에서 받아온 이미지 데이터 예시
-		    @GetMapping("/room/detail")
-		    public String getRoomDetail(Model model) {
-		        List<RoomImageDTO> images = roomService.getRoomImages(roomId);
-		        model.addAttribute("roomImages", images);
-		        return "room_detail";
-		    }
-		    --%>
 
 				<%-- 기존 이미지 표시 영역 --%>
 				<div id="existingImagePreview">
-					<%-- 테스트용 가데이터 --%>
-					<div class="img-container"
-						style="display: inline-block; position: relative; margin: 5px;">
-						<img
-							src="http://192.168.10.218/project2/admin/common/images/rat.png"
-							style="max-width: 200px;" alt="객실 이미지"> <input
-							type="hidden" name="existingImages" value="room_sample.jpg">
-						<button class="delete-btn"
-							style="position: absolute; top: 5px; right: 5px; background-color: rgba(255, 0, 0, 0.7); color: white; border: none; border-radius: 50%; padding: 5px 10px; cursor: pointer;"
-							onclick="deleteExistingImage(this)">×</button>
-					</div>
+					<c:if test="${not empty room.img_name}">
+						<c:forEach var="img" items="${room.img_name}">
+							<div class="img-container"
+								style="display: inline-block; position: relative; margin: 5px;">
+								<img src="/common/admin/images/${img}" style="max-width: 200px;"
+									alt="객실 이미지"> <input type="hidden" name="existingImages"
+									value="${img}">
+								<button class="delete-btn"
+									style="position: absolute; top: 5px; right: 5px; background-color: rgba(255, 0, 0, 0.7); color: white; border: none; border-radius: 50%; padding: 5px 10px; cursor: pointer;"
+									onclick="deleteExistingImage(this)">×</button>
+							</div>
+						</c:forEach>
+					</c:if>
 				</div>
 
 				<%-- 새로운 이미지 업로드 영역 --%>
-				<input type="file" id="images" name="images" multiple
+				<input type="file" id="newImages" name="newImages" multiple
 					accept="image/*" style="display: none;">
 				<div class="image-upload" id="imageUpload" style="cursor: pointer;">
 					<p>클릭하여 사진을 선택하세요</p>
@@ -314,16 +402,8 @@ $(function(){
 				<div id="imagePreview"></div>
 			</div>
 
-			<%-- 
-		@PostMapping("/room/update")
-		public String updateRoom(
-		    @RequestParam("existingImages") List<String> existingImages,  // 기존 이미지 파일명들
-		    @RequestParam("images") List<MultipartFile> newImages,        // 새로 추가된 이미지 파일들
-		 이런식으로 받는곳에서 따로따로 받아서 기존이미지는 기존이미지 목록과 비교하여 처리
-		 새이미지는 추가
-		 --%>
-
-			<button <%-- type="submit" --%> class="submit-btn">등록하기</button>
+			<input type="button" value="수정하기" class="submit-btn"
+				onclick="$('#room_update').submit();">
 		</form>
 	</div>
 	<jsp:include page="../common/footer.jsp" />

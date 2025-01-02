@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8" info=""%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -110,6 +111,12 @@ body {
 table a {
 	text-decoration: none;
 }
+
+.file-name {
+	display: block;
+	margin-bottom: 8px;
+	font-size: 14px;
+}
 </style>
 
 <script type="text/javascript">
@@ -124,39 +131,37 @@ table a {
 
 	//객실 삭제 ajax
 	function deleteSelectedRooms() {
-		var selectedIds = [];
-		$('.room-checkbox:checked').each(function() {
-			selectedIds.push($(this).val());
-		});
-
-		if (selectedIds.length === 0) {
-			alert('삭제할 객실을 선택해주세요.');
-			return;
-		}
-
-		if (confirm('선택한 객실을 삭제하시겠습니까?')) {
-			$.ajax({
-				url : 'deleteRooms',
-				type : 'POST',
-				data : {
-					roomIds : selectedIds
-				},
-				traditional : true,
-				success : function(response) {
-					if (response.success) {
-						alert('선택한 객실이 삭제되었습니다.');
-						location.reload(); // 페이지 새로고침
-					} else {
-						alert('객실 삭제 중 오류가 발생했습니다.');
-					}
-				},
-				error : function() {
-					alert('서버 통신 중 오류가 발생했습니다.');
-				}
-			});
-		}
+	    const selectedRooms = [];
+	    $('.room-checkbox:checked').each(function() {
+	        selectedRooms.push($(this).val());
+	    });
+	
+	    if(selectedRooms.length === 0) {
+	        alert('삭제할 객실을 선택해주세요.');
+	        return;
+	    }
+	
+	    if(confirm('선택한 객실을 삭제하시겠습니까?')) {
+	        $.ajax({
+	            url: '/admin/removeRoom',
+	            type: 'POST',
+	            data: { roomIds: selectedRooms },
+	            traditional: true,
+	            success: function(response) {
+	                if(response.success) {
+	                    alert('선택한 객실이 삭제되었습니다.');
+	                    location.reload();
+	                } else {
+	                    alert('객실 삭제 중 오류가 발생했습니다.');
+	                }
+	            },
+	            error: function() {
+	                alert('서버 통신 중 오류가 발생했습니다.');
+	            }
+	        });
+	    }
 	}
-
+	
 	// 페이지 로드 시 실행
 	$(function() {
 		// 초기 지도 설정
@@ -165,8 +170,8 @@ table a {
 		var latitude = ${accommodation.latitude};  // 숙소의 위도
 		var longitude = ${accommodation.longitude};  // 숙소의 경도
 		 */
-		var latitude = '${accommodation.latitude}' || 33.450701; // 기본값 설정
-		var longitude = '${accommodation.longitude}' || 126.570667;
+		var latitude = '${acc.latitude}'; // 기본값 설정
+		var longitude = '${acc.longitude}';
 
 		var mapContainer = document.getElementById('map'), mapOption = {
 			/* 초기 중심좌표를 숙소의 좌표를 받아와서 설ㅈㅇ
@@ -202,11 +207,9 @@ table a {
 			var latlng = mouseEvent.latLng;
 			marker.setPosition(latlng);
 
-			/*
 			// hidden 필드 업데이트 < 위도와 경도를 읽어서 저장할수 있게
 			$('#latitude').val(latlng.getLat());
 			$('#longitude').val(latlng.getLng());
-			 */
 
 			geocoder.coord2Address(latlng.getLng(), latlng.getLat(), function(
 					result, status) {
@@ -216,6 +219,98 @@ table a {
 				}
 			});
 		});
+		
+		// 기존 메인 이미지 삭제
+	    $(document).on("click", ".remove-existing-main", function () {
+	        $("#current_image").remove(); // 기존 이미지 제거
+	        $(this).siblings(".file-name").remove(); // 이미지 이름 제거
+	        $(this).siblings("input[name='main_img']").remove(); // 기존 이미지 hidden input 제거
+	        $(this).remove(); // X 버튼 제거
+	        $("#mainFile").val('').show(); // 파일 선택 필드 표시
+	        $(".preview").hide(); // 미리보기 숨김
+	    });
+
+	    // 메인 이미지 파일 선택 시 미리보기
+	    $(document).on('change', '#mainFile', function () {
+	        const file = this.files[0];
+	        if (file) {
+	            const reader = new FileReader();
+	            reader.onload = function (e) {
+	                $("#preview_main_img").attr('src', e.target.result).show();
+	                $(".file-name").text("선택된 파일: " + file.name);
+	                $(".preview").show();
+	            }
+	            reader.readAsDataURL(file);
+	        }
+	    });
+
+	 // 서브 이미지 삭제
+	    $(document).on("click", ".remove-sub-image", function() {
+	        const item = $(this).closest(".sub-image-item");
+	        item.remove();  // 해당 항목 전체 삭제
+	        
+	        // 만약 서브이미지가 하나도 없다면 새로운 입력 폼 추가
+	        if($("#subImageContainer").find(".sub-image-item").length === 0) {
+	            const newItem = $(`
+	                <div class="sub-image-item mb-3">
+	                    <div class="row">
+	                        <div class="col-md-6">
+	                            <input type="file" class="form-control" name="subFiles" accept="image/*">
+	                            <div class="mt-2">
+	                                <img class="preview-sub-img" src="" alt="미리보기" style="max-width: 150px; display: none;">
+	                            </div>
+	                        </div>
+	                        <div class="col-md-5">
+	                            <input type="text" class="form-control" name="content" placeholder="이미지 설명">
+	                        </div>
+	                        <div class="col-md-1">
+	                            <button type="button" class="btn btn-danger btn-sm remove-sub-image">×</button>
+	                        </div>
+	                    </div>
+	                </div>
+	            `);
+	            $("#subImageContainer").append(newItem);
+	        }
+	    });
+
+	    // 서브 이미지 추가 버튼 클릭
+	    $("#addSubImageBtn").on("click", function () {
+	        const container = $("#subImageContainer");
+	        const newItem = $(`
+	            <div class="sub-image-item mb-3">
+	                <div class="row">
+	                    <div class="col-md-6">
+	                        <input type="file" class="form-control" name="subFiles" accept="image/*">
+	                        <div class="mt-2">
+	                            <img class="preview-sub-img" src="" alt="미리보기" style="max-width: 150px; display: none;">
+	                        </div>
+	                    </div>
+	                    <div class="col-md-5">
+	                        <input type="text" class="form-control" name="content" placeholder="이미지 설명">
+	                    </div>
+	                    <div class="col-md-1">
+	                        <button type="button" class="btn btn-danger btn-sm remove-sub-image">×</button>
+	                    </div>
+	                </div>
+	            </div>
+	        `);
+	        container.append(newItem);
+	    });
+
+	 	// 서브 이미지 파일 선택 시 미리보기 (이벤트 위임 방식으로 수정)
+	    $(document).on("change", "input[name='subFiles']", function() {
+	        const file = this.files[0];
+	        const previewImg = $(this).siblings(".mt-2").find(".preview-sub-img");
+	        if(file) {
+	            const reader = new FileReader();
+	            reader.onload = function(e) {
+	                previewImg.attr("src", e.target.result).show();
+	            };
+	            reader.readAsDataURL(file);
+	        } else {
+	            previewImg.hide();
+	        }
+	    });
 	});
 </script>
 </head>
@@ -224,36 +319,31 @@ table a {
 	<div class="container">
 		<h1 style="font-family: monospace, sans-serif;">숙소 상세정보</h1>
 		<div class="detail-container">
-			<form id="accForm" action="updateAccommodation" method="post"
+			<form id="accForm" action="/admin/acc_modify" method="post"
 				enctype="multipart/form-data">
 				<!-- hidden fields -->
 				<input type="hidden" id="latitude" name="latitude"
-					value="${accommodation.latitude}"> <input type="hidden"
-					id="longitude" name="longitude" value="${accommodation.longitude}">
-				<input type="hidden" name="accId" value="${accommodation.accId}">
+					value="${acc.latitude}"> <input type="hidden"
+					id="longitude" name="longitude" value="${acc.longitude}"> <input
+					type="hidden" name="acm_id" value="${acc.acm_id}">
 
 				<div class="form-group">
-					<label for="accName">숙소명 *</label> <input type="text" id="accName"
-						name="accName" value="${accommodation.accName}" required>
+					<label for="acm_name">숙소명 *</label> <input type="text"
+						id="acm_name" name="acm_name" value="${acc.acm_name}" required>
 				</div>
 
 				<div class="form-group">
-					<label for="accType">숙소유형</label> <select id="accType"
-						name="accType">
-						<option value="호텔 리조트"
-							${accommodation.accType == '호텔 리조트' ? 'selected' : ''}>호텔
+					<label for="acm_type">숙소유형</label> <select id="acm_type"
+						name="acm_type_id">
+						<option value="1" ${acc.acm_type_id == '1' ? 'selected' : ''}>호텔
 							리조트</option>
-						<option value="펜션 풀빌라"
-							${accommodation.accType == '펜션 풀빌라' ? 'selected' : ''}>펜션
+						<option value="2" ${acc.acm_type_id == '2' ? 'selected' : ''}>펜션
 							풀빌라</option>
-						<option value="게하 한옥"
-							${accommodation.accType == '게하 한옥' ? 'selected' : ''}>게하
+						<option value="3" ${acc.acm_type_id == '3' ? 'selected' : ''}>게하
 							한옥</option>
-						<option value="캠핑 글램핑"
-							${accommodation.accType == '캠핑 글램핑' ? 'selected' : ''}>캠핑
+						<option value="4" ${acc.acm_type_id == '4' ? 'selected' : ''}>캠핑
 							글램핑</option>
-						<option value="홈 빌라"
-							${accommodation.accType == '홈 빌라' ? 'selected' : ''}>홈
+						<option value="5" ${acc.acm_type_id == '5' ? 'selected' : ''}>홈
 							빌라</option>
 					</select>
 				</div>
@@ -269,13 +359,13 @@ table a {
 
 				<div class="form-group">
 					<label for="address">주소</label> <input type="text" id="address"
-						name="address" value="${accommodation.address}" readonly>
+						name="address" value="${acc.address}" readonly>
 				</div>
 
 				<div class="form-group">
-					<label for="addressDetail">상세주소</label> <input type="text"
-						id="addressDetail" name="addressDetail"
-						value="${accommodation.addressDetail}">
+					<label for="detail_address">상세주소</label> <input type="text"
+						id="detail_address" name="detail_address"
+						value="${acc.detail_address}">
 				</div>
 
 				<div class="form-group">
@@ -285,61 +375,61 @@ table a {
 							<div class="col-md-4">
 								<div class="form-check">
 									<input class="form-check-input" type="checkbox" id="wifi"
-										name="facilities" value="무선와이파이"
-										${accommodation.facilities.contains('무선와이파이') ? 'checked' : ''}>
-									<label class="form-check-label" for="wifi">무선와이파이</label>
+										name="fcl_names" value="무선 와이파이"
+										${acc.fcl_names.contains('무선 와이파이') ? 'checked' : ''}>
+									<label class="form-check-label" for="wifi">무선 와이파이</label>
 								</div>
 								<div class="form-check">
 									<input class="form-check-input" type="checkbox" id="aircon"
-										name="facilities" value="에어컨"
-										${accommodation.facilities.contains('에어컨') ? 'checked' : ''}>
-									<label class="form-check-label" for="aircon">에어컨</label>
+										name="fcl_names" value="에어컨"
+										${acc.fcl_names.contains('에어컨') ? 'checked' : ''}> <label
+										class="form-check-label" for="aircon">에어컨</label>
 								</div>
 								<div class="form-check">
 									<input class="form-check-input" type="checkbox" id="noSmoking"
-										name="facilities" value="금연"
-										${accommodation.facilities.contains('금연') ? 'checked' : ''}>
-									<label class="form-check-label" for="noSmoking">금연</label>
+										name="fcl_names" value="금연"
+										${acc.fcl_names.contains('금연') ? 'checked' : ''}> <label
+										class="form-check-label" for="noSmoking">금연</label>
 								</div>
 							</div>
 							<div class="col-md-4">
 								<div class="form-check">
 									<input class="form-check-input" type="checkbox" id="tv"
-										name="facilities" value="TV"
-										${accommodation.facilities.contains('TV') ? 'checked' : ''}>
-									<label class="form-check-label" for="tv">TV</label>
+										name="fcl_names" value="TV"
+										${acc.fcl_names.contains('TV') ? 'checked' : ''}> <label
+										class="form-check-label" for="tv">TV</label>
 								</div>
 								<div class="form-check">
 									<input class="form-check-input" type="checkbox" id="parking"
-										name="facilities" value="주차장"
-										${accommodation.facilities.contains('주차장') ? 'checked' : ''}>
-									<label class="form-check-label" for="parking">주차장</label>
+										name="fcl_names" value="주차장"
+										${acc.fcl_names.contains('주차장') ? 'checked' : ''}> <label
+										class="form-check-label" for="parking">주차장</label>
 								</div>
 								<div class="form-check">
 									<input class="form-check-input" type="checkbox" id="lounge"
-										name="facilities" value="라운지"
-										${accommodation.facilities.contains('라운지') ? 'checked' : ''}>
-									<label class="form-check-label" for="lounge">라운지</label>
+										name="fcl_names" value="라운지"
+										${acc.fcl_names.contains('라운지') ? 'checked' : ''}> <label
+										class="form-check-label" for="lounge">라운지</label>
 								</div>
 							</div>
 							<div class="col-md-4">
 								<div class="form-check">
 									<input class="form-check-input" type="checkbox" id="bbq"
-										name="facilities" value="바베큐"
-										${accommodation.facilities.contains('바베큐') ? 'checked' : ''}>
-									<label class="form-check-label" for="bbq">바베큐</label>
+										name="fcl_names" value="바베큐"
+										${acc.fcl_names.contains('바베큐') ? 'checked' : ''}> <label
+										class="form-check-label" for="bbq">바베큐</label>
 								</div>
 								<div class="form-check">
 									<input class="form-check-input" type="checkbox" id="restaurant"
-										name="facilities" value="레스토랑"
-										${accommodation.facilities.contains('레스토랑') ? 'checked' : ''}>
-									<label class="form-check-label" for="restaurant">레스토랑</label>
+										name="fcl_names" value="레스토랑"
+										${acc.fcl_names.contains('레스토랑') ? 'checked' : ''}> <label
+										class="form-check-label" for="restaurant">레스토랑</label>
 								</div>
 								<div class="form-check">
 									<input class="form-check-input" type="checkbox" id="shower"
-										name="facilities" value="샤워실"
-										${accommodation.facilities.contains('샤워실') ? 'checked' : ''}>
-									<label class="form-check-label" for="shower">샤워실</label>
+										name="fcl_names" value="샤워실"
+										${acc.fcl_names.contains('샤워실') ? 'checked' : ''}> <label
+										class="form-check-label" for="shower">샤워실</label>
 								</div>
 							</div>
 						</div>
@@ -349,71 +439,77 @@ table a {
 				<div class="form-group">
 					<label for="description">숙소설명</label>
 					<textarea class="form-control" id="description" name="description"
-						rows="5">${accommodation.description}</textarea>
+						rows="5">${acc.description}</textarea>
 				</div>
 
+				<!-- 메인이미지 -->
 				<div class="form-group">
-					<label for="mainImage">대표이미지</label> <input type="file"
-						class="form-control" id="mainImage" name="mainImage"
-						accept="image/*">
-					<c:if test="${not empty accommodation.mainImage}">
-						<div class="mt-2">
-							<img src="${accommodation.mainImage}" alt="현재 대표이미지"
+					<label for="mainFile">대표이미지</label>
+					<div class="main-image-container">
+						<c:if test="${not empty acc.main_img}">
+							<!-- 기존 대표 이미지 표시 -->
+							<div class="mb-2">
+								<img id="current_image"
+									src="/common/admin/images/${acc.main_img}" alt="대표이미지"
+									style="max-width: 200px;">
+								<div class="text-secondary file-name mt-1">현재 이미지:
+									${acc.main_img}</div>
+								<input type="hidden" name="main_img" value="${acc.main_img}">
+								<button type="button"
+									class="btn btn-danger btn-sm remove-existing-main">×</button>
+							</div>
+						</c:if>
+						<input type="file" class="form-control mt-3" id="mainFile"
+							name="mainFile" accept="image/*"
+							style="display: ${not empty acc.main_img ? 'none' : 'block'};">
+						<div class="preview mt-2" style="display: none;">
+							<span class="text-secondary file-name"></span> <img
+								id="preview_main_img" src="" alt="미리보기"
 								style="max-width: 200px;">
 						</div>
-					</c:if>
+					</div>
 				</div>
 
+				<!-- 서브이미지 -->
 				<div class="form-group">
 					<label>서브이미지</label>
 					<div id="subImageContainer">
-						<c:choose>
-							<c:when test="${not empty accommodation.subImages}">
-								<c:forEach var="subImage" items="${accommodation.subImages}"
-									varStatus="status">
-									<div class="sub-image-item mb-3">
-										<div class="row">
-											<div class="col-md-6">
-												<input type="file" class="form-control" name="subImages"
-													accept="image/*">
-												<c:if test="${not empty subImage.imagePath}">
-													<div class="mt-2">
-														<img src="${subImage.imagePath}" alt="서브이미지"
-															style="max-width: 150px;">
-													</div>
-												</c:if>
-											</div>
-											<div class="col-md-6">
-												<input type="text" class="form-control" name="subImageDescs"
-													value="${subImage.description}" placeholder="이미지 설명">
-											</div>
-										</div>
+						<c:forEach var="subImg" items="${acc.sub_img_names}"
+							varStatus="status">
+							<div class="sub-image-item mb-3">
+								<div class="row">
+									<div class="col-md-6">
+										<!-- 파일 input은 처음에 숨김 -->
+										<input type="file" class="form-control" name="subFiles"
+											accept="image/*" style="display: none;">
+										<!-- 현재 이미지 이름 표시 -->
+										<div class="text-secondary mb-2">현재 파일: ${subImg}</div>
+										<!-- 현재 이미지 표시 -->
+										<img src="/common/admin/images/${subImg}" alt="서브이미지"
+											style="max-width: 150px;"> <input type="hidden"
+											name="existingSubFiles" value="${subImg}">
 									</div>
-								</c:forEach>
-							</c:when>
-							<c:otherwise>
-								<div class="sub-image-item mb-3">
-									<div class="row">
-										<div class="col-md-6">
-											<input type="file" class="form-control" name="subImages"
-												accept="image/*">
-										</div>
-										<div class="col-md-6">
-											<input type="text" class="form-control" name="subImageDescs"
-												placeholder="이미지 설명">
-										</div>
+									<div class="col-md-5">
+										<input type="text" class="form-control" name="content"
+											value="${acc.contents[status.index]}" placeholder="이미지 설명">
+									</div>
+									<div class="col-md-1">
+										<button type="button"
+											class="btn btn-danger btn-sm remove-sub-image">×</button>
 									</div>
 								</div>
-							</c:otherwise>
-						</c:choose>
+							</div>
+						</c:forEach>
 					</div>
+					<button type="button" class="btn btn-outline-secondary btn-sm mt-2"
+						id="addSubImageBtn">+ 서브이미지 추가</button>
 				</div>
 
 				<div class="form-group">
 					<label for="phone">숙소전화번호</label> <input type="text"
-						class="form-control" id="phone" name="phone"
-						value="${accommodation.phone}" placeholder="010-XXXX-XXXX"
-						pattern="[0-9]{3}-[0-9]{4}-[0-9]{4}">
+						class="form-control" id="admin_phone_number"
+						name="admin_phone_number" value="${acc.admin_phone_number}"
+						placeholder="010-XXXX-XXXX" pattern="[0-9]{3}-[0-9]{4}-[0-9]{4}">
 				</div>
 
 				<div class="form-group">
@@ -422,7 +518,8 @@ table a {
 						<div>
 							<%-- <button type="button" class="btn btn-success" onclick="location.href='addRoom?accId=${accommodation.accId}'">객실 추가</button> --%>
 							<button type="button" class="btn btn-success"
-								onclick="location.href='add_room.jsp'">객실 추가</button>
+								onclick="location.href='/admin/add_room?acm_id=${ acc.acm_id }'">객실
+								추가</button>
 							<button type="button" class="btn btn-danger"
 								onclick="deleteSelectedRooms()">삭제</button>
 						</div>
@@ -439,44 +536,31 @@ table a {
 									<th>입실시간</th>
 									<th>퇴실시간</th>
 									<th>객실정보</th>
-									<th>편의시설</th>
 								</tr>
 							</thead>
 							<tbody>
-								<!-- 임시 데이터 -->
-								<tr>
-									<td><input type="checkbox" name="roomIds" value="1"
-										class="room-checkbox"></td>
-									<td>1</td>
-									<td><a href="room_detail.jsp">슈페리어 트윈</a></td>
-									<td>72,000</td>
-									<td>16:00</td>
-									<td>11:00</td>
-									<td>싱글침대2개...</td>
-									<td>침대,TV,에어컨...</td>
-								</tr>
-								<tr>
-									<td><input type="checkbox" name="roomIds" value="2"
-										class="room-checkbox"></td>
-									<td>2</td>
-									<td>슈페리어 할리우드</td>
-									<td>115,000</td>
-									<td>16:00</td>
-									<td>11:00</td>
-									<td>싱글침대2개...</td>
-									<td>침대,TV,에어컨...</td>
-								</tr>
-								<tr>
-									<td><input type="checkbox" name="roomIds" value="3"
-										class="room-checkbox"></td>
-									<td>3</td>
-									<td>슈페리어 할리우드</td>
-									<td>115,000</td>
-									<td>16:00</td>
-									<td>11:00</td>
-									<td>싱글침대2개...</td>
-									<td>침대,TV,에어컨...</td>
-								</tr>
+								<c:forEach var="room" items="${room}">
+									<c:if test="${room.dlt_flag eq 'N'}">
+										<tr>
+											<td><input type="checkbox" name="dlt_flag"
+												value="${room.room_id}" class="room-checkbox"></td>
+											<td>${room.room_id}</td>
+											<td><a href="/admin/room_detail?room_id=${room.room_id}">${room.room_name}</a></td>
+											<td><c:choose>
+													<c:when test="${room.discount_price != null}">
+														<fmt:formatNumber pattern="#,###"
+															value="${room.discount_price}" />원
+                    								</c:when>
+													<c:otherwise>
+														<fmt:formatNumber pattern="#,###" value="${room.price}" />원
+                    								</c:otherwise>
+												</c:choose></td>
+											<td>${room.check_in}</td>
+											<td>${room.check_out}</td>
+											<td>${room.max_person}인기준</td>
+										</tr>
+									</c:if>
+								</c:forEach>
 							</tbody>
 						</table>
 					</div>

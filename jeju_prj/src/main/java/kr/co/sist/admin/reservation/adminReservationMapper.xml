@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.sist.admin.reservation">
+
+<select id="selectReservation" resultType="resDomain" parameterType="searchResVO">
+    SELECT 
+        r.rsr_id, r.room_id, r.number_people, r.rsr_name,
+        r.user_id, r.rsr_status, r.rsr_phone_number,
+        r.rsr_date, r.check_in_date, r.check_out_date,
+        rm.price, a.address, a.longitude, a.latitude, rm.acm_id,
+        a.acm_name, a.main_img, a.admin_id
+    FROM 
+        reservation r
+    JOIN 
+        room rm ON r.room_id = rm.room_id
+    JOIN 
+        accommodation a ON rm.acm_id = a.acm_id
+    <where>
+        a.admin_id = #{admin_id}
+        <if test="keyword != null and keyword != ''">
+            AND r.user_id = #{keyword}
+        </if>
+    </where>
+    ORDER BY r.rsr_id DESC
+</select>
+
+<select id="selectOneReservation" resultType="resDomain" parameterType="int">
+SELECT 
+        r.rsr_id, r.room_id, r.number_people, r.rsr_name, 
+        r.user_id, r.rsr_status, r.rsr_phone_number,
+        r.rsr_date, r.check_in_date, r.check_out_date,
+        rm.price, a.address, a.longitude, a.latitude, rm.acm_id,
+        a.acm_name, a.main_img, a.admin_phone_number
+    FROM 
+        reservation r
+    JOIN 
+        room rm ON r.room_id = rm.room_id
+    JOIN 
+        accommodation a ON rm.acm_id = a.acm_id
+    WHERE 
+    	r.rsr_id=#{rsr_id}
+
+</select>
+
+<delete id="deleteReservation" parameterType="int">
+delete from reservation
+where rsr_id=#{ rsr_id } 
+</delete>
+
+<update id="updateReservationStatus" parameterType="list">
+    UPDATE reservation 
+    SET rsr_status = 
+    CASE rsr_id 
+    <foreach collection="list" item="vo">
+        WHEN #{vo.rsr_id} THEN #{vo.rsr_status}
+    </foreach>
+    END
+    WHERE rsr_id IN
+    <foreach collection="list" item="vo" open="(" separator="," close=")">
+        #{vo.rsr_id}
+    </foreach>
+</update>
+
+
+
+<!-- <select id="selectACM" resultType="aDomain" parameterType="searchAccVO">
+    SELECT acm_id, main_img, acm_name, acm_type, admin_phone_number, address
+    FROM (
+        SELECT a.*, ROWNUM rnum
+        FROM (
+            SELECT a.acm_id, a.main_img, a.acm_name, t.acm_type, a.admin_phone_number, a.address
+            FROM ACCOMMODATION a
+            JOIN ACCOMMODATION_TYPE t ON a.acm_type_id = t.acm_type_id
+            <where>
+                <if test="acm_name != null and acm_name != ''">
+                    AND INSTR(a.acm_name, #{acm_name}) > 0
+                </if>
+                <if test="acm_type_id != 0">
+                    AND a.acm_type_id = #{acm_type_id}
+                </if>
+            </where>
+            ORDER BY a.acm_id DESC
+        ) a
+        WHERE ROWNUM &lt;= #{endRow}
+    )
+    WHERE rnum >= #{startRow}
+</select> -->
+
+
+
+</mapper>

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.sist.admin.room">
+
+<select id="selectAllRoom" resultType="adminRoomDomain" parameterType="int">
+select	ROOM_ID,ROOM_NAME,PRICE,DISCOUNT_PRICE,CHECK_IN,CHECK_OUT,MAX_PERSON,DLT_FLAG
+from	room
+where	acm_id=#{acm_id}
+</select>
+									
+<!-- 객실 기본 정보 조회 -->
+<select id="selectOneRoom" resultType="adminRoomDomain" parameterType="int">
+    SELECT
+    R.ROOM_ID,
+    R.ROOM_NAME,
+    R.PRICE,
+    R.DISCOUNT_PRICE,
+    R.CHECK_IN,
+    R.CHECK_OUT,
+    R.DLT_FLAG,
+    R.MAX_PERSON,
+    RI.CHECK_INFO,
+    RI.CAPACITY_INFO,
+    RI.BEDS_INFO
+    FROM ROOM R
+    LEFT JOIN ROOM_INFO RI ON R.ROOM_ID = RI.ROOM_ID
+    WHERE R.ROOM_ID=#{room_id}
+</select>
+
+<!-- 객실 이미지 조회 -->
+<select id="selectRoomImages" resultType="string" parameterType="int">
+    SELECT IMG_NAME
+    FROM ROOM_IMG
+    WHERE ROOM_ID=#{room_id}
+</select>
+
+<!-- 객실 정보 업데이트 -->
+<update id="updateRoom" parameterType="adminRoomDomain">
+    UPDATE ROOM 
+    SET ROOM_NAME = #{room_name},
+        PRICE = #{price},
+        DISCOUNT_PRICE = #{discount_price},
+        CHECK_IN = #{check_in},
+        CHECK_OUT = #{check_out},
+        MAX_PERSON = #{max_person}
+    WHERE ROOM_ID = #{room_id}
+</update>
+
+<!-- 객실 상세정보 업데이트 -->
+<update id="updateRoomInfo" parameterType="adminRoomDomain">
+    UPDATE ROOM_INFO 
+    SET CHECK_INFO = #{check_info},
+        CAPACITY_INFO = #{capacity_info},
+        BEDS_INFO = #{beds_info}
+    WHERE ROOM_ID = #{room_id}
+</update>
+
+<!-- 객실 이미지 삭제 -->
+<delete id="deleteRoomImages" parameterType="int">
+    DELETE FROM ROOM_IMG 
+    WHERE ROOM_ID = #{room_id}
+</delete>
+
+<!-- 객실 이미지 추가 -->
+<insert id="insertRoomImage" parameterType="map">
+    INSERT INTO ROOM_IMG(ROOM_ID, IMG_NAME)
+    VALUES(#{room_id}, #{img_name})
+</insert>
+
+<insert id="insertRoomInfo" parameterType="RoomVO">
+    INSERT INTO room_info (
+        room_id, check_info, capacity_info, beds_info
+    ) VALUES (
+        #{room_id}, #{check_info}, #{capacity_info}, #{beds_info}
+    )
+</insert>
+
+<insert id="insertRoom" parameterType="RoomVO">
+    INSERT INTO room (
+        acm_id, max_person, price, discount_price,
+        room_name, check_in, check_out
+    ) VALUES (
+        #{acm_id}, #{max_person}, #{price}, #{discount_price},
+        #{room_name}, #{check_in}, #{check_out}
+    )
+    <selectKey keyProperty="room_id" resultType="int" order="AFTER">
+        SELECT MAX(room_id) FROM room
+    </selectKey>
+</insert>
+
+<update id="updateDltFlag" parameterType="int">
+    UPDATE room 
+    SET dlt_flag = 'Y'
+    WHERE room_id = #{room_id}
+</update>
+		
+
+</mapper>

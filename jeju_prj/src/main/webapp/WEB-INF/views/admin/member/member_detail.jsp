@@ -63,41 +63,49 @@ body {
 				<table class="table table-striped-columns">
 					<tr>
 						<th>이름</th>
-						<td><input type="text" name="name" value="홍길동"></td>
+						<td><input type="text" name="name"
+							value="${ member.user_name }"></td>
 					</tr>
 					<tr>
 						<th>아이디</th>
-						<td><input type="text" name="userId" value="test"></td>
+						<td><input type="text" name="userId"
+							value="${ member.user_id }"></td>
 					</tr>
 					<tr>
 						<th>전화번호</th>
-						<td><input type="text" name="phone" value="010-1234-5678"></td>
+						<td><input type="text" name="phone"
+							value="${ member.phone_number }"></td>
 					</tr>
 					<tr>
 						<th>생년월일</th>
-						<td><input type="text" name="birth" value="20000313"
+						<td><input type="text" name="birth" value="${ member.decrypt_birth }"
 							readonly="readonly"></td>
 					</tr>
 					<tr>
 						<th>성별</th>
 						<td><select name="gender">
-								<option value="M">남자
-								<option value="F">여자
+								<option value="M" ${member.gender == 'M' ? 'selected' : ''}>남자</option>
+								<option value="F" ${member.gender == 'F' ? 'selected' : ''}>여자</option>
 						</select></td>
 					</tr>
 					<tr>
 						<th>회원상태</th>
 						<td><select name="state">
-								<option value="일반회원">활동
-								<option value="탈퇴회원">탈퇴
-								<option value="블랙리스트">블랙리스트
+								<option value="활동"
+									${member.user_status == '활동' ? 'selected' : ''}>활동</option>
+								<option value="정상"
+									${member.user_status == '정상' ? 'selected' : ''}>정상</option>
+								<option value="탈퇴"
+									${member.user_status == '탈퇴' ? 'selected' : ''}>탈퇴</option>
+								<option value="블랙리스트"
+									${member.user_status == '블랙리스트' ? 'selected' : ''}>블랙리스트</option>
 						</select></td>
 					</tr>
 					<tr>
 						<th>가입구분</th>
 						<td><select name="sign">
-								<option value="normal">일반회원
-								<option value="kakao">카카오회원
+								<option value="normal" ${member.member_type == 'normal' ? 'selected' : ''}>일반회원
+								<option value="kakao" ${member.member_type == 'kakao' ? 'selected' : ''}>카카오회원
 						</select></td>
 					</tr>
 					<tr>

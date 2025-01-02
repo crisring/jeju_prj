@@ -138,37 +138,16 @@ body {
 		<h1>예약 상세 정보</h1>
 		<div class="rd-container">
 			<div class="left-section">
-				<%
-				// TODO: DB에서 예약 정보 가져오기
-				// ReservationDTO reservation = reservationService.getReservationDetail(reservationId);
-
-				// 테스트용 가데이터
-				String imageUrl = "ferris_wheel_house.jpg";
-				String accommodationName = "Ferris wheel house";
-				String roomName = "홍길동";
-				String checkIn = "2022-06-04";
-				String checkOut = "2022-06-05";
-				int guests = 2;
-				int price = 74000;
-				String address = "울산광역시 남구 삼산동 1617-1";
-				String reservationStatus = "예약완료";
-				String guestName = "홍길동";
-				String guestPhone = "010-1111-2222";
-				String hostPhone = "010-1234-5678";
-				double latitude = 35.5383773; // 테스트용 위도
-				double longitude = 129.3113596; // 테스트용 경도
-				%>
-
 				<table class="info-table">
 					<tr>
-						<td colspan="2"><img src="<%=imageUrl%>" alt="숙소 이미지"
+						<td colspan="2"><img src="/common/admin/images/${ res.main_img }" alt="숙소 이미지"
 							class="accommodation-image"></td>
 					</tr>
 					<tr>
 						<th colspan="2">숙소 이름</th>
 					</tr>
 					<tr>
-						<td colspan="2"><%=accommodationName%></td>
+						<td colspan="2"><c:out value="${ res.acm_name }"/></td>
 					</tr>
 
 					<tr>
@@ -176,8 +155,8 @@ body {
 						<th>체크아웃</th>
 					</tr>
 					<tr>
-						<td><%=checkIn%></td>
-						<td><%=checkOut%></td>
+						<td><c:out value="${ res.check_in_date }"/></td>
+						<td><c:out value="${ res.check_out_date }"/></td>
 					</tr>
 
 					<tr>
@@ -185,8 +164,8 @@ body {
 						<th>가격</th>
 					</tr>
 					<tr>
-						<td><%=guests%>명</td>
-						<td><%=price%>원</td>
+						<td><c:out value="${ res.number_people }"/>명</td>
+						<td><c:out value="${ res.price }"/>원</td>
 					</tr>
 
 
@@ -194,7 +173,7 @@ body {
 						<th colspan="2">예약상태</th>
 					</tr>
 					<tr>
-						<td colspan="2"><%=reservationStatus%></td>
+						<td colspan="2"><c:out value="${ res.rsr_status }"/></td>
 					</tr>
 
 					<tr>
@@ -202,20 +181,20 @@ body {
 						<th>예약자 연락처</th>
 					</tr>
 					<tr>
-						<td><%=guestName%></td>
-						<td><%=guestPhone%></td>
+						<td><c:out value="${ res.rsr_name }"/></td>
+						<td><c:out value="${ res.rsr_phone_number }"/></td>
 					</tr>
 
 					<tr>
 						<th colspan="2">숙소 연락처</th>
 					</tr>
 					<tr>
-						<td colspan="2"><%=hostPhone%></td>
+						<td colspan="2"><c:out value="${ res.admin_phone_number }"/></td>
 					</tr>
 
 				</table>
 				<div class="button-wrapper">
-					<a href="reservation_list.jsp" class="back-button">뒤로가기</a>
+					<a href="/admin/res_list" class="back-button">뒤로가기</a>
 				</div>
 			</div>
 
@@ -228,7 +207,7 @@ body {
 						<th>주소</th>
 					</tr>
 					<tr>
-						<td><%=address%></td>
+						<td><c:out value="${ res.address }"/></td>
 					</tr>
 				</table>
 			</div>
@@ -239,9 +218,9 @@ body {
 		var container = document.getElementById('map');
 		var options = {
 			center : new kakao.maps.LatLng(
-	<%=latitude%>
+	${res.latitude}
 		,
-	<%=longitude%>
+	${ res.longitude }
 		),
 			level : 3
 		};
@@ -250,9 +229,9 @@ body {
 
 		// 마커 생성
 		var markerPosition = new kakao.maps.LatLng(
-	<%=latitude%>
+	${res.latitude}
 		,
-	<%=longitude%>
+	${ res.longitude }
 		);
 		var marker = new kakao.maps.Marker({
 			position : markerPosition
