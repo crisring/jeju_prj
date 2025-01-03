@@ -50,7 +50,41 @@ body {
 </style>
 <script type="text/javascript">
 	$(function() {
-
+		$("#memberFrm").on("submit", function(e) {
+		       e.preventDefault(); // 기본 submit 동작 중지
+		       
+		       // 필수 입력값 체크
+		       if($("#memberFrm input[name='user_name']").val().trim() == "") {
+		           alert("이름을 입력해주세요.");
+		           $("#memberFrm input[name='user_name']").focus();
+		           return false;
+		       }
+		       
+		       if($("#memberFrm input[name='user_id']").val().trim() == "") {
+		           alert("아이디를 입력해주세요.");
+		           $("#memberFrm input[name='user_id']").focus();
+		           return false;
+		       }
+		       
+		       if($("#memberFrm input[name='phone_number']").val().trim() == "") {
+		           alert("전화번호를 입력해주세요.");
+		           $("#memberFrm input[name='phone_number']").focus();
+		           return false;
+		       }
+		       
+		       // 전화번호 형식 체크 (선택적)
+		       var phonePattern = /^[0-9]{2,3}-[0-9]{3,4}-[0-9]{4}$/;
+		       if(!phonePattern.test($("#memberFrm input[name='phone_number']").val())) {
+		           alert("전화번호 형식이 올바르지 않습니다.\n(예: 010-1234-5678)");
+		           $("#memberFrm input[name='phone_number']").focus();
+		           return false;
+		       }
+		       
+		       // 모든 검증 통과시 폼 제출
+		       if(confirm("회원정보를 수정하시겠습니까?")) {
+		           this.submit();
+		       }
+		   });
 	});//ready
 </script>
 </head>
@@ -59,27 +93,28 @@ body {
 	<div class="container">
 		<div class="mb-container">
 			<h1>회원 정보</h1>
-			<form name="memberFrm">
+			<form name="memberFrm" id="memberFrm" action="/admin/update_member"
+				method="post">
 				<table class="table table-striped-columns">
 					<tr>
 						<th>이름</th>
-						<td><input type="text" name="name"
+						<td><input type="text" name="user_name"
 							value="${ member.user_name }"></td>
 					</tr>
 					<tr>
 						<th>아이디</th>
-						<td><input type="text" name="userId"
+						<td><input type="text" name="user_id"
 							value="${ member.user_id }"></td>
 					</tr>
 					<tr>
 						<th>전화번호</th>
-						<td><input type="text" name="phone"
+						<td><input type="text" name="phone_number"
 							value="${ member.phone_number }"></td>
 					</tr>
 					<tr>
 						<th>생년월일</th>
-						<td><input type="text" name="birth" value="${ member.decrypt_birth }"
-							readonly="readonly"></td>
+						<td><input type="text"
+							value="${ member.decrypt_birth }" readonly="readonly"></td>
 					</tr>
 					<tr>
 						<th>성별</th>
@@ -90,7 +125,7 @@ body {
 					</tr>
 					<tr>
 						<th>회원상태</th>
-						<td><select name="state">
+						<td><select name="user_status">
 								<option value="활동"
 									${member.user_status == '활동' ? 'selected' : ''}>활동</option>
 								<option value="정상"
@@ -103,14 +138,18 @@ body {
 					</tr>
 					<tr>
 						<th>가입구분</th>
-						<td><select name="sign">
-								<option value="normal" ${member.member_type == 'normal' ? 'selected' : ''}>일반회원
-								<option value="kakao" ${member.member_type == 'kakao' ? 'selected' : ''}>카카오회원
+						<td><select name="member_type">
+								<option value="normal"
+									${member.member_type == 'normal' ? 'selected' : ''}>일반회원
+								
+								<option value="kakao"
+									${member.member_type == 'kakao' ? 'selected' : ''}>카카오회원
+								
 						</select></td>
 					</tr>
 					<tr>
 						<td colspan="2" style="text-align: center">
-							<button type="button" class="btn btn-info">수정</button>
+							<button type="submit" class="btn btn-info">수정</button>
 							<button type="button" class="btn btn-secondary"
 								onclick="javascript:history.back()">취소</button>
 						</td>
