@@ -41,8 +41,8 @@
 						<span>숙소관리</span> <i class="arrow"></i>
 					</div>
 					<ul class="nav-submenu">
-						<li><a href="/admin/searchACM">숙소목록</a></li>
-						<li><a href="/admin/add_acc.jsp">숙소등록</a></li>
+						<li><a href="/admin/acc_list">숙소목록</a></li>
+						<li><a href="/admin/add_acc">숙소등록</a></li>
 					</ul>
 				</div>
 
@@ -51,7 +51,7 @@
 						<span>예약관리</span> <i class="arrow"></i>
 					</div>
 					<ul class="nav-submenu">
-						<li><a href="/admin/reservation_list.jsp">예약목록 조회</a></li>
+						<li><a href="/admin/res_list">예약목록 조회</a></li>
 					</ul>
 				</div>
 
@@ -71,7 +71,7 @@
 						<span>회원관리</span> <i class="arrow"></i>
 					</div>
 					<ul class="nav-submenu">
-						<li><a href="http://localhost/project2/admin/member_list.jsp">회원목록</a></li>
+						<li><a href="/admin/member_list">회원목록</a></li>
 					</ul>
 				</div>
 			</nav>
@@ -82,13 +82,13 @@
 			<!-- Top Navigation -->
 			<div class="top-nav">
 				<div class="user-menu">
-					<c:if test="${not empty sessionScope.adminId}">
-						<span>${sessionScope.adminId}</span>
+					<c:if test="${not empty sessionScope.admin_id}">
+						<span>${sessionScope.admin_id}</span>
 						<a href="/admin/logout" class="logout-link">로그아웃</a>
 					</c:if>
-					admin아이디 부분
 				</div>
 			</div>
+
 
 
 			<script>

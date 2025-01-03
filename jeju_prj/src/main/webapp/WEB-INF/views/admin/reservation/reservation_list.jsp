@@ -188,10 +188,6 @@ document.querySelectorAll('.rsv-state').forEach(select => {
 </script>
 </head>
 <body>
-	<%
-    // 임시 세션 설정
-    session.setAttribute("admin_id", "admin2");
-	%>
 	<jsp:include page="../common/header.jsp" />
 	<div class="container">
 		<h1 style="font-family: monospace, sans-serif;">예약목록</h1>
