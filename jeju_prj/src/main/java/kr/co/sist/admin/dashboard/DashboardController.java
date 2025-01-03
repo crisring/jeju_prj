@@ -20,24 +20,28 @@ public class DashboardController {
 	@GetMapping("/admin/dashboard")
 	public String adminMain(HttpSession session, Model model) {
 
-		String admin_id1 = (String) session.getAttribute("admin_id");
+		String admin_id = (String) session.getAttribute("admin_id");
 
-		List<DashboardDomain> list = ds.calculateMonthlySales(admin_id1);
+		if (admin_id == null) {
+			return "admin/login/admin_login_error";
+		}
+
+		List<DashboardDomain> list = ds.calculateMonthlySales(admin_id);
 		model.addAttribute("monthlyList", list);
 
-		List<DashboardDomain> list2 = ds.calculateWeeklySales();
+		List<DashboardDomain> list2 = ds.calculateWeeklySales(admin_id);
 		model.addAttribute("weeklyList", list2);
 
-		List<DashboardDomain> list3 = ds.calculateACCTypeSales();
+		List<DashboardDomain> list3 = ds.calculateACCTypeSales(admin_id);
 		model.addAttribute("ACCTypeList", list3);
 
-		DashboardDomain dd = ds.calculateCancelRate();
+		DashboardDomain dd = ds.calculateCancelRate(admin_id);
 		model.addAttribute("cancelRate", dd);
 
 		DashboardDomain dd2 = ds.searchMemberCount();
 		model.addAttribute("memberCnt", dd2);
 
-		List<DashboardDomain> list4 = ds.calculatePopularACM();
+		List<DashboardDomain> list4 = ds.calculatePopularACM(admin_id);
 		model.addAttribute("popularACM", list4);
 
 		return "admin_index";

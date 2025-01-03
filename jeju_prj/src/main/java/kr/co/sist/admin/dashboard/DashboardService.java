@@ -19,7 +19,6 @@ public class DashboardService {
 
 		try {
 			list = dDAO.getMonthlySales(admin_id);
-			System.out.println(list);
 		} catch (PersistenceException pe) {
 			pe.printStackTrace();
 		}
@@ -28,12 +27,12 @@ public class DashboardService {
 	}// calculateMonthlySales
 
 	// 주간 매출 현황
-	public List<DashboardDomain> calculateWeeklySales() {
+	public List<DashboardDomain> calculateWeeklySales(String admin_id) {
 
 		List<DashboardDomain> list = null;
 
 		try {
-			list = dDAO.getWeeklySales();
+			list = dDAO.getWeeklySales(admin_id);
 		} catch (PersistenceException pe) {
 			pe.printStackTrace();
 		}
@@ -42,12 +41,12 @@ public class DashboardService {
 	}// calculateWeeklySales
 
 	// 숙소 유형별 매출 현황
-	public List<DashboardDomain> calculateACCTypeSales() {
+	public List<DashboardDomain> calculateACCTypeSales(String admin_id) {
 
 		List<DashboardDomain> list = null;
 
 		try {
-			list = dDAO.getACCTypeSales();
+			list = dDAO.getACCTypeSales(admin_id);
 		} catch (PersistenceException pe) {
 			pe.printStackTrace();
 		}
@@ -56,12 +55,12 @@ public class DashboardService {
 	}// calculateACCTypeSales
 
 	// 취소율 현황
-	public DashboardDomain calculateCancelRate() {
+	public DashboardDomain calculateCancelRate(String admin_id) {
 
 		DashboardDomain dd = null;
 
 		try {
-			dd = dDAO.getCancelRate();
+			dd = dDAO.getCancelRate(admin_id);
 		} catch (PersistenceException pe) {
 			pe.printStackTrace();
 		}
@@ -84,12 +83,12 @@ public class DashboardService {
 	}// searchMemberCount
 
 	// 인기 숙소 매출 현황
-	public List<DashboardDomain> calculatePopularACM() {
+	public List<DashboardDomain> calculatePopularACM(String admin_id) {
 
 		List<DashboardDomain> list = null;
 
 		try {
-			list = dDAO.selectPopularACM();
+			list = dDAO.selectPopularACM(admin_id);
 		} catch (PersistenceException pe) {
 			pe.printStackTrace();
 		}

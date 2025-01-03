@@ -7,7 +7,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -17,7 +16,6 @@ import kr.co.sist.user.util.SearchVO;
 
 @Controller
 @SessionAttributes("admin_id")
-@RequestMapping("/admin")
 public class ReviewManageController {
 
 	@Autowired
@@ -26,10 +24,10 @@ public class ReviewManageController {
 	@Autowired
 	BoardUtil bu;
 
-	@GetMapping("/review_list")
+	@GetMapping("/admin/review_list")
 	public String reviewList(SearchVO sVO, HttpServletRequest request, HttpSession session, Model model) {
 
-		String admin_id = (String)session.getAttribute("admin_id");
+		String admin_id = (String) session.getAttribute("admin_id");
 		sVO.setAdmin_id(admin_id);
 
 		// 1. 총 레코드 수 구하기
@@ -73,7 +71,7 @@ public class ReviewManageController {
 		return "admin/review/review_list";
 	}// reviewList
 
-	@GetMapping("/review_detail/{review_id}")
+	@GetMapping("/admin/review_detail/{review_id}")
 	public String reviewDetail(@PathVariable("review_id") int review_id, Model model) {
 
 		ReviewManageDomain rmd = rms.searchOneReview(review_id);

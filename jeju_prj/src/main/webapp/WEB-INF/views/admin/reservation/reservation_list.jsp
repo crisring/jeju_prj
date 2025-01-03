@@ -188,10 +188,6 @@ document.querySelectorAll('.rsv-state').forEach(select => {
 </script>
 </head>
 <body>
-	<%
-    // 임시 세션 설정
-    session.setAttribute("admin_id", "admin2");
-	%>
 	<jsp:include page="../common/header.jsp" />
 	<div class="container">
 		<h1 style="font-family: monospace, sans-serif;">예약목록</h1>
@@ -229,8 +225,8 @@ document.querySelectorAll('.rsv-state').forEach(select => {
 							<tr>
 								<td>${ i.count }</td>
 								<td><a href="/admin/res_detail?rsr_id=${ res.rsr_id }">${ res.acm_name }</a></td>
-								<td><img src="/common/admin/images/${ res.main_img }" alt="숙소 이미지"
-									class="thumbnail"></td>
+								<td><img src="/common/admin/images/${ res.main_img }"
+									alt="숙소 이미지" class="thumbnail"></td>
 								<td>${res.user_id }</td>
 								<td>${ res.rsr_date }</td>
 								<td>${ res.check_in_date }</td>

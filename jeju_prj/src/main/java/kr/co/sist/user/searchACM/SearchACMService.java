@@ -1,5 +1,7 @@
 package kr.co.sist.user.searchACM;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.apache.ibatis.exceptions.PersistenceException;
@@ -37,16 +39,21 @@ public class SearchACMService {
 						accommodation.setReviewCnt(ratingAndReview.getReviewCnt());
 					}
 				}
+
+				// 3. 평점 순으로 내림차순 정렬 (높은 평점부터 순서대로)
+				Collections.sort(list, new Comparator<SearchACMDomain>() {
+					@Override
+					public int compare(SearchACMDomain o1, SearchACMDomain o2) {
+						return Double.compare(o2.getRating(), o1.getRating()); // 내림차순
+					}
+				});
 			}
 
 		} catch (PersistenceException pe) {
 			pe.printStackTrace();
-
 		}
 
 		return list;
 	}// displayPopularTypes
-
-	// public List<search> displayDetail(SearchVO sVO)
 
 }

@@ -107,6 +107,22 @@ footer {
 <script type="text/javascript">
 	$(function() {
 
+		// 엔터 키가 눌리면 로그인 버튼 클릭 처리
+		$('#admin_id, #password').on('keypress', function(e) {
+
+			var admin_id = $('#admin_id').val().trim();
+			var password = $('#password').val().trim();
+
+			if (e.key === 'Enter') {
+				e.preventDefault();
+
+				if (chkNull(admin_id, password)) {
+					login(admin_id, password);
+				}
+
+			}
+		});
+
 		// 로그인 버튼 클릭 이벤트 등록
 		$('#btnLogin').click(function() {
 

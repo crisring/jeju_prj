@@ -119,9 +119,13 @@ header {
 	document.addEventListener("click", function(event) {
 		const dropdown = document.getElementById("dropdownMenu");
 		const hamburger = document.querySelector(".hamburger-menu");
-		if (!hamburger.contains(event.target)
-				&& !dropdown.contains(event.target)) {
-			dropdown.style.display = "none";
+
+		// dropdown과 hamburger가 존재하는 경우에만 처리
+		if (dropdown && hamburger) {
+			if (!hamburger.contains(event.target)
+					&& !dropdown.contains(event.target)) {
+				dropdown.style.display = "none";
+			}
 		}
 	});
 </script>

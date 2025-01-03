@@ -298,7 +298,6 @@ a:hover {
 	}
 </script>
 
-
 </head>
 
 <jsp:include page="user/common/jsp/header.jsp" />
@@ -593,6 +592,7 @@ a:hover {
 	</section>
 	<br>
 </body>
+
 
 <jsp:include page="user/common/jsp/footer.jsp" />
 

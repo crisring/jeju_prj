@@ -37,10 +37,15 @@ public class AdminLoginController {
 
 		return jsonObj;
 	}
-	
+
 	@GetMapping("/admin/logout")
-	public String logout(SessionStatus ss) {
-		ss.setComplete();
+	public String logout(HttpSession session, SessionStatus status) {
+		// @SessionAttributes 초기화
+		status.setComplete();
+
+		// HttpSession 초기화
+		session.invalidate();
+
 		return "redirect:/admin/loginFrm";
-	}//logout
+	}
 }

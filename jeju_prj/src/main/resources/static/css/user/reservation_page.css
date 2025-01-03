@@ -4,7 +4,7 @@
 main {
 	font-family: Arial, sans-serif;
 	margin: 0;
-	padding: 20px 350px; /* 양 옆에 여백 추가 */
+	padding: 10px 350px; /* 양 옆에 여백 추가 */
 }
 
 .hotel-summary {
@@ -24,7 +24,7 @@ main {
 
 /* 각 섹션 스타일 */
 section {
-	flex: 1;
+	width: 96%;
 	border: 1px solid #ddd;
 	border-radius: 10px;
 	padding: 20px;

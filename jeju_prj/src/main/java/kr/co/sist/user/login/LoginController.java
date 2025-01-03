@@ -48,7 +48,6 @@ public class LoginController {
 		// HttpSession 초기화
 		session.invalidate();
 
-		System.out.println("사용자 로그아웃 완료");
 		return "redirect:/";
 	}
 

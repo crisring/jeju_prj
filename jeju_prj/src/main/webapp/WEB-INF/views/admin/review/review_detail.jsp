@@ -87,6 +87,16 @@ body {
 	width: 30%;
 	margin-left: 30px;
 }
+
+.single-star {
+	color: #ffc107;
+	font-size: 20px;
+	display: inline-block;
+}
+
+.single-star[data-rating="0"] {
+	visibility: hidden;
+}
 </style>
 <script type="text/javascript">
 	$(function() {
@@ -140,7 +150,8 @@ body {
 							<th>리뷰등록일</th>
 							<td>${review.created_at }</td>
 							<th>평점</th>
-							<td>${review.rating }</td>
+							<td><span class="single-star" data-rating="${review.rating}">★
+							</span>${review.rating}</td>
 						</tr>
 					</thead>
 					<tbody>
