@@ -26,7 +26,7 @@ public class MemberService {
 
 		try {
 
-			mVO.setUser_status("정상");
+			mVO.setUser_status("활동");
 			mVO.setMember_type("일반회원");
 			setEncryption(mVO);
 

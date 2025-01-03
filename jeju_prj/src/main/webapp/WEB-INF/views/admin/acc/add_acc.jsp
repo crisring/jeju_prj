@@ -377,8 +377,7 @@ $(function(){
 						name="admin_phone_number" placeholder="010-XXXX-XXXX"
 						pattern="[0-9]{3}-[0-9]{4}-[0-9]{4}">
 				</div>
-				<%-- <input type="hidden" value="${ admin_id }" name="admin_id"/> --%>
-				<input type="text" name="admin_id">
+				<input type="hidden" value="${sessionScope.admin_id}" name="admin_id"/>
 
 				<button type="submit" class="btn btn-primary w-100">등록하기</button>
 			</form>

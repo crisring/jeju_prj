@@ -128,8 +128,6 @@ body {
 						<td><select name="user_status">
 								<option value="활동"
 									${member.user_status == '활동' ? 'selected' : ''}>활동</option>
-								<option value="정상"
-									${member.user_status == '정상' ? 'selected' : ''}>정상</option>
 								<option value="탈퇴"
 									${member.user_status == '탈퇴' ? 'selected' : ''}>탈퇴</option>
 								<option value="블랙리스트"
@@ -139,11 +137,12 @@ body {
 					<tr>
 						<th>가입구분</th>
 						<td><select name="member_type">
-								<option value="normal"
-									${member.member_type == 'normal' ? 'selected' : ''}>일반회원
+
+								<option value="일반회원"
+									${member.member_type == '일반회원' ? 'selected' : ''}>일반회원
 								
-								<option value="kakao"
-									${member.member_type == 'kakao' ? 'selected' : ''}>카카오회원
+								<option value="카카오회원"
+									${member.member_type == '카카오' ? 'selected' : ''}>카카오회원
 								
 						</select></td>
 					</tr>
