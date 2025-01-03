@@ -35,4 +35,23 @@ public class MemberShipService {
 		
 		return msDomain;
 	}//searchOneMember
+	
+	public boolean modifyMember(MemberShipVO msVO) throws Exception {
+	    boolean result = false;
+	    
+	    // 1. null 체크 및 기본 유효성 검증
+	    if(msVO == null || msVO.getUser_id() == null) {
+	        throw new Exception("필수 정보가 누락되었습니다.");
+	    }
+	    
+	    try {
+	        result = msDAO.updateMember(msVO) == 1;  // 1행이 수정되면 true
+	        
+	    } catch(PersistenceException pe) {
+	        pe.printStackTrace();
+	        throw pe;
+	    }
+	    
+	    return result;
+	}
 }

@@ -20,6 +20,16 @@ from member
 where user_id=#{user_id}
 </select>
 
+<update id="updateMember" parameterType="kr.co.sist.admin.member.MemberShipVO">
+    UPDATE member 
+    SET user_name = #{user_name},
+        phone_number = #{phone_number},
+        gender = #{gender},
+        user_status = #{user_status},
+        member_type = #{member_type}
+    WHERE user_id = #{user_id}
+  </update>
+
 
 <!-- <select id="selectACM" resultType="aDomain" parameterType="searchAccVO">
     SELECT acm_id, main_img, acm_name, acm_type, admin_phone_number, address

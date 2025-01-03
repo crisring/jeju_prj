@@ -17,11 +17,8 @@ public class AdminInterceptor implements HandlerInterceptor {
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
 		boolean flag=false;
-		System.out.println("요청 URI : "+request.getRequestURI());
-		System.out.println("1. preHandle");
 		//세션의 값 받기
 		Object admin_id=WebUtils.getSessionAttribute(request, "admin_id");
-		System.out.println("얻어진 세션 : " + admin_id);
 		flag=admin_id != null; // 세션에 아이디가 존재하는 경우
 		
 		if(!flag) {
@@ -41,14 +38,11 @@ public class AdminInterceptor implements HandlerInterceptor {
 	@Override
 	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
 			ModelAndView modelAndView) throws Exception {
-		System.out.println("2. postHandle");
 	}
 
 	@Override
 	public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
 			throws Exception {
-		System.out.println("3. afterCompletion");
-		System.out.println(response.getStatus());
 	}
 
 }

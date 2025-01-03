@@ -65,4 +65,21 @@ public class MemberShipDAO {
 		
 		return msDomain;
 	}
+	
+	public int updateMember(MemberShipVO msVO) throws PersistenceException {
+	    int cnt = 0;
+	    
+	    MyBatisHandler mbh = MyBatisHandler.getInstance();
+	    SqlSession handler = mbh.getHandler();
+	    
+	    try {
+	        cnt = handler.update("kr.co.sist.admin.membership.updateMember", msVO);
+	        handler.commit();
+	    } finally {
+	        mbh.closeHandler(handler);
+	    }
+	    
+	    return cnt;
+	}
+	
 }

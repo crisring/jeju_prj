@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class MemberShipController {
@@ -42,5 +44,23 @@ public class MemberShipController {
 		return "admin/member/member_detail";
 	}
 	
+	@PostMapping("/admin/update_member")
+	public String modifyMember(MemberShipVO msVO, RedirectAttributes redirect) {
+		try {
+	        boolean result = mss.modifyMember(msVO);
+	        
+	        if(result) {
+	            redirect.addFlashAttribute("message", "회원정보가 성공적으로 수정되었습니다.");
+	        } else {
+	            redirect.addFlashAttribute("message", "회원정보 수정에 실패했습니다.");
+	        }
+	        
+	    } catch(Exception e) {
+	        e.printStackTrace();
+	        redirect.addFlashAttribute("message", "회원정보 수정 중 오류가 발생했습니다.");
+	    }
+	    
+	    return "redirect:/admin/member_list";
+	}
 	
 }
