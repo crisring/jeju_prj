@@ -48,4 +48,5 @@ public class AdminLoginController {
 
 		return "redirect:/admin/loginFrm";
 	}
+
 }

@@ -82,12 +82,13 @@
 			<!-- Top Navigation -->
 			<div class="top-nav">
 				<div class="user-menu">
-					<c:if test="${not empty admin_id}">
-						<span>${admin_id}님</span>
+					<c:if test="${not empty sessionScope.admin_id}">
+						<span>${sessionScope.admin_id}</span>
 						<a href="/admin/logout" class="logout-link">로그아웃</a>
 					</c:if>
 				</div>
 			</div>
+
 
 
 			<script>
