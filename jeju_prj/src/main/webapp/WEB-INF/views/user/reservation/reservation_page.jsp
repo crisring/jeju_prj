@@ -1,10 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
 <!DOCTYPE html>
 <html lang="ko">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <head>
 <meta charset="utf-8">
 <title>예약 확인 및 결제</title>
@@ -23,13 +25,16 @@
 <script type="text/javascript">
 	$(function() {
 		$('#btnPay').on('click', function() {
-			if (chkTerms()) {
+			var user_id = $("#user_id").val();
+
+			if (user_id == null || user_id === '') {
+				alert("로그인을 먼저해주세요!");
+			} else if (chkTerms()) {
 				if (confirm('결제하시겠습니까?')) {
 					$('#rsrFrm').submit();
 				}
 			}
-		});
-
+		}); // click
 	});
 
 	/* 약관 체크 검사 */
@@ -131,7 +136,8 @@
 				<input type="hidden" name="check_in_date" value="${startDate }" />
 				<input type="hidden" name="check_out_date" value="${finishDate }" />
 				<input type="hidden" name="room_id" value="${rd.room_id }" /> <input
-					type="hidden" name="user_id" value="${user_info.user_id }" />
+					type="hidden" name="user_id" id="user_id"
+					value="${user_info.user_id }" />
 
 
 				<!-- 예약자 정보 -->

@@ -298,7 +298,6 @@ a:hover {
 	}
 </script>
 
-
 </head>
 
 <jsp:include page="user/common/jsp/header.jsp" />
@@ -432,19 +431,21 @@ a:hover {
 	</section>
 
 
-	<section class="promo-banner">
-		<div class="promo-content">
-			<div class="promo-text">
-				<h2>제주로 떠나볼까요? 첫 예약 시 10% 할인!</h2>
-				<p class="promo-description">제주어때 회원가입 후 첫 예약 시 10% 할인 혜택을
-					제공합니다.</p>
-				<a href="#" class="promo-button">로그인/회원가입</a>
+	<c:if test="${user_info eq null }">
+		<section class="promo-banner">
+			<div class="promo-content">
+				<div class="promo-text">
+					<h2>제주로 떠나볼까요? 첫 예약 시 10% 할인!</h2>
+					<p class="promo-description">제주어때 회원가입 후 첫 예약 시 10% 할인 혜택을
+						제공합니다.</p>
+					<a href="/login/loginFrm" class="promo-button"
+						style="margin-top: 10px;">로그인/회원가입</a>
+				</div>
+				<img src="common/user/images/elite_img_PC.png" alt="제주 여행 할인 배너"
+					class="promo-image">
 			</div>
-			<img src="common/user/images/elite_img_PC.png" alt="제주 여행 할인 배너"
-				class="promo-image">
-		</div>
-	</section>
-
+		</section>
+	</c:if>
 
 	<section class="hotel-banner">
 		<h2>인기 제주도 호텔/리조트</h2>
@@ -591,6 +592,7 @@ a:hover {
 	</section>
 	<br>
 </body>
+
 
 <jsp:include page="user/common/jsp/footer.jsp" />
 

@@ -164,10 +164,9 @@ body {
 }
 </style>
 <script type="text/javascript">
-function deleteAcc(no) {
+function deleteAcc(acm_id) {
     if(confirm('정말 삭제하시겠습니까?')) {
-        /* location.href = 'deleteAcc.do?no=' + no + '&cmd=AD004'; */
-        location.href = 'delete_acc.jsp';
+        location.href = '/admin/acc_remove?acm_id=' + acm_id;
     }
 }
 </script>
@@ -181,22 +180,22 @@ function deleteAcc(no) {
 		<h1 style="font-family: monospace, sans-serif;">숙소 목록</h1>
 		<div class="acc-container">
 			<!-- 검색 섹션 -->
-			<form action="/admin/searchACM" method="get">
+			<form action="/admin/acc_list" method="get">
 				<div class="search-section">
 					<div class="search-group">
 						<input type="text" name="acm_name" class="search-input"
-							placeholder="검색어를 입력하세요">
+							placeholder="검색어를 입력하세요"  value="${param.acm_name}">
 						<button type="submit" class="search-button-acc">검색</button>
 						<select name="acm_type_id" class="acc-type">
-							<option value="0">숙소유형</option>
-							<option value="1">호텔 리조트</option>
-							<option value="2">펜션 풀빌라</option>
-							<option value="3">게하 한옥</option>
-							<option value="4">캠핑 글램핑</option>
-							<option value="5">홈 빌라</option>
+							<option value="0" ${param.acm_type_id == '0' ? 'selected' : ''}>숙소유형</option>
+							<option value="1" ${param.acm_type_id == '1' ? 'selected' : ''}>호텔 리조트</option>
+							<option value="2" ${param.acm_type_id == '2' ? 'selected' : ''}>펜션 풀빌라</option>
+							<option value="3" ${param.acm_type_id == '3' ? 'selected' : ''}>게하 한옥</option>
+							<option value="4" ${param.acm_type_id == '4' ? 'selected' : ''}>캠핑 글램핑</option>
+							<option value="5" ${param.acm_type_id == '5' ? 'selected' : ''}>홈 빌라</option>
 						</select>
 					</div>
-					<button class="new-button" onclick="location.href='add_acc.jsp'">신규등록</button>
+					<button type="button" class="new-button" onclick="location.href='/admin/add_acc'">신규등록</button>
 				</div>
 			</form>
 
@@ -219,7 +218,7 @@ function deleteAcc(no) {
 							<td>${(currentPage-1) * 10 + i.count}</td>
 							<td><img src="/common/admin/images/${acc.main_img}"
 								alt="숙소 이미지" class="thumbnail"></td>
-							<td><a href="acc_detail.jsp">${acc.acm_name}</a></td>
+							<td><a href="/admin/acc_detail?acm_id=${acc.acm_id}">${acc.acm_name}</a></td>
 							<td>${acc.acm_type}</td>
 							<td>${acc.admin_phone_number}</td>
 							<td>${acc.address}</td>
@@ -230,33 +229,32 @@ function deleteAcc(no) {
 					</c:forEach>
 				</tbody>
 			</table>
+			<c:set var="typeId"
+				value="${empty param.acm_type_id ? '0' : param.acm_type_id}" />
+
 			<nav aria-label="Page navigation">
 				<ul class="pagination justify-content-center">
-					<!-- 이전 페이지 -->
 					<c:if test="${currentPage > 1}">
 						<li class="page-item"><a class="page-link"
-							href="/admin/searchACM?acm_name=${param.acm_name}&acm_type_id=${param.acm_type_id}&page=${currentPage-1}">이전</a>
+							href="/admin/acc_list?acm_name=${param.acm_name}&acm_type_id=${typeId}&page=${currentPage-1}">이전</a>
 						</li>
 					</c:if>
 
-					<!-- 페이지 번호 -->
 					<c:forEach begin="1" end="${totalPages}" var="pageNum">
 						<li class="page-item ${pageNum == currentPage ? 'active' : ''}">
 							<a class="page-link"
-							href="/admin/searchACM?acm_name=${param.acm_name}&acm_type_id=${param.acm_type_id}&page=${pageNum}">${pageNum}</a>
+							href="/admin/acc_list?acm_name=${param.acm_name}&acm_type_id=${typeId}&page=${pageNum}">${pageNum}</a>
 						</li>
 					</c:forEach>
 
-					<!-- 다음 페이지 -->
 					<c:if test="${currentPage < totalPages}">
 						<li class="page-item"><a class="page-link"
-							href="/admin/searchACM?acm_name=${param.acm_name}&acm_type_id=${param.acm_type_id}&page=${currentPage+1}">다음</a>
+							href="/admin/acc_list?acm_name=${param.acm_name}&acm_type_id=${typeId}&page=${currentPage+1}">다음</a>
 						</li>
 					</c:if>
 				</ul>
 			</nav>
 		</div>
-
 	</div>
 	<jsp:include page="../common/footer.jsp" />
 </body>

@@ -12,7 +12,7 @@ import kr.co.sist.dao.MyBatisHandler;
 public class DashboardDAO {
 
 	// 월간 매출 현황
-	public List<DashboardDomain> getMonthlySales() throws PersistenceException {
+	public List<DashboardDomain> getMonthlySales(String admin_id) throws PersistenceException {
 
 		List<DashboardDomain> list = null;
 
@@ -20,7 +20,7 @@ public class DashboardDAO {
 		SqlSession handler = mbh.getHandler();
 
 		try {
-			list = handler.selectList("kr.co.sist.dashboardMapper.selectMonthlySales");
+			list = handler.selectList("kr.co.sist.dashboardMapper.selectMonthlySales", admin_id);
 		} finally {
 			mbh.closeHandler(handler);
 		}
@@ -29,7 +29,7 @@ public class DashboardDAO {
 	}// getMonthlySales
 
 	// 주간 매출 현황
-	public List<DashboardDomain> getWeeklySales() throws PersistenceException {
+	public List<DashboardDomain> getWeeklySales(String admin_id) throws PersistenceException {
 
 		List<DashboardDomain> list = null;
 
@@ -37,7 +37,7 @@ public class DashboardDAO {
 		SqlSession handler = mbh.getHandler();
 
 		try {
-			list = handler.selectList("kr.co.sist.dashboardMapper.selectWeeklySales");
+			list = handler.selectList("kr.co.sist.dashboardMapper.selectWeeklySales", admin_id);
 		} finally {
 			mbh.closeHandler(handler);
 		}
@@ -46,7 +46,7 @@ public class DashboardDAO {
 	}// getWeeklySales
 
 	// 숙소 유형별 매출 현황
-	public List<DashboardDomain> getACCTypeSales() throws PersistenceException {
+	public List<DashboardDomain> getACCTypeSales(String admin_id) throws PersistenceException {
 
 		List<DashboardDomain> list = null;
 
@@ -54,7 +54,7 @@ public class DashboardDAO {
 		SqlSession handler = mbh.getHandler();
 
 		try {
-			list = handler.selectList("kr.co.sist.dashboardMapper.selectACCTypeSales");
+			list = handler.selectList("kr.co.sist.dashboardMapper.selectACCTypeSales", admin_id);
 		} finally {
 			mbh.closeHandler(handler);
 		}
@@ -63,7 +63,7 @@ public class DashboardDAO {
 	}// getACCTypeSales
 
 	// 취소율 현황
-	public DashboardDomain getCancelRate() throws PersistenceException {
+	public DashboardDomain getCancelRate(String admin_id) throws PersistenceException {
 
 		DashboardDomain dd = null;
 
@@ -71,7 +71,7 @@ public class DashboardDAO {
 		SqlSession handler = mbh.getHandler();
 
 		try {
-			dd = handler.selectOne("kr.co.sist.dashboardMapper.selectCancelRate");
+			dd = handler.selectOne("kr.co.sist.dashboardMapper.selectCancelRate", admin_id);
 		} finally {
 			mbh.closeHandler(handler);
 		}
@@ -97,7 +97,7 @@ public class DashboardDAO {
 	}// selectMember
 
 	// 인기 상위 top3 숙소 매출 현황
-	public List<DashboardDomain> selectPopularACM() throws PersistenceException {
+	public List<DashboardDomain> selectPopularACM(String admin_id) throws PersistenceException {
 
 		List<DashboardDomain> list = null;
 
@@ -105,11 +105,20 @@ public class DashboardDAO {
 		SqlSession handler = mbh.getHandler();
 
 		try {
-			list = handler.selectList("kr.co.sist.dashboardMapper.selectPopularACM");
+			list = handler.selectList("kr.co.sist.dashboardMapper.selectPopularACM", admin_id);
 		} finally {
 			mbh.closeHandler(handler);
 		}
 
 		return list;
 	}// selectPopularACM
+
+	public static void main(String[] args) {
+
+		DashboardDAO dDAO = new DashboardDAO();
+		DashboardDomain list = dDAO.getCancelRate("admin");
+		System.out.println(list);
+
+	}
+
 }// class

@@ -7,7 +7,6 @@
 <head>
 <meta charset="UTF-8">
 <title>${site_kor}</title>
-<link rel="shortcut icon" href="${defaultURL}common/images/favicon.ico">
 
 <!-- Bootstrap CDN -->
 <link

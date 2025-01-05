@@ -10,6 +10,7 @@ import lombok.ToString;
 public class SearchAccVO {
 
 	private String acm_name;
+	private String admin_id;
 
 	private int acm_type_id, startRow, endRow, currentPage;
 }

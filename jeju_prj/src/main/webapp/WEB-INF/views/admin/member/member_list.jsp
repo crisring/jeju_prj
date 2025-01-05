@@ -56,10 +56,17 @@ body {
 	$(function() {
 		// 검색 폼 제출 이벤트 처리
 		$("#searchForm").on("submit", function(e) {
-			e.preventDefault(); // 폼의 기본 제출 동작 방지
-
+	        e.preventDefault();
+	        var keyword = $("#keyword").val();
+	        
+	        if(keyword == null || keyword.trim() == '') {
+	            alert("검색어를 입력하세요");
+	            return false;
+	        }
+	        
+	        this.submit();
+	    });
 			// 검색어 가져오기
-			var keyword = $("#searchKeyword").val();
 
 			// AJAX로 검색 요청 보내기 (예시 코드)
 			/* $.ajax({
@@ -71,7 +78,6 @@ body {
 			        // $("#reviewTableBody").html(response);
 			    }
 			}); */
-		});
 	});//ready
 </script>
 </head>
@@ -83,13 +89,15 @@ body {
 
 			<!-- 검색 부분 -->
 			<div class="search-box">
-				<form id="searchForm" class="row g-3 align-items-center">
+				<form id="searchForm" name="searchForm"
+					class="row g-3 align-items-center" action="/admin/member_list"
+					method="get">
 					<div class="col-auto">
-						<input type="text" class="form-control" id="searchKeyword"
-							placeholder="이름 검색">
+						<input type="text" name="keyword" class="form-control"
+							id="keyword" placeholder="이름 검색" value="${param.keyword }">
 					</div>
 					<div class="col-auto">
-						<button type="button" class="btn btn-success">검색</button>
+						<button type="submit" id="btn" class="btn btn-success">검색</button>
 					</div>
 				</form>
 			</div>
@@ -109,39 +117,21 @@ body {
 					</tr>
 				</thead>
 				<tbody class="table-group-divider">
-					<tr>
-						<td>1</td>
-						<td><a href="member_detail.jsp">user001</a></td>
-						<td>홍길동</td>
-						<td>1990-01-01</td>
-						<td>남</td>
-						<td>010-1234-5678</td>
-						<td>활동</td>
-						<td>일반회원</td>
-						<td>2024-01-01</td>
-					</tr>
-					<tr>
-						<td>2</td>
-						<td><a href="#void">user002</a></td>
-						<td>김철수</td>
-						<td>1985-05-15</td>
-						<td>남</td>
-						<td>010-2345-6789</td>
-						<td>활동</td>
-						<td>카카오회원</td>
-						<td>2024-01-02</td>
-					</tr>
-					<tr>
-						<td>3</td>
-						<td><a href="#void">user003</a></td>
-						<td>이영희</td>
-						<td>1992-12-25</td>
-						<td>여</td>
-						<td>010-3456-7890</td>
-						<td>탈퇴</td>
-						<td>일반회원</td>
-						<td>2024-01-03</td>
-					</tr>
+					<c:forEach var="member" items="${list}" varStatus="status">
+						<tr>
+							<td>${status.index + 1}</td>
+							<!-- 1부터 시작하는 번호 -->
+							<td><a
+								href="/member/member_detail?user_id=${ member.user_id }">${member.user_id}</a></td>
+							<td>${member.user_name}</td>
+							<td>${member.decrypt_birth}</td>
+							<td>${member.gender}</td>
+							<td>${member.phone_number}</td>
+							<td>${member.user_status}</td>
+							<td>${member.member_type}</td>
+							<td>${member.join_date}</td>
+						</tr>
+					</c:forEach>
 				</tbody>
 			</table>
 		</div>

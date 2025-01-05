@@ -41,8 +41,8 @@
 						<span>숙소관리</span> <i class="arrow"></i>
 					</div>
 					<ul class="nav-submenu">
-						<li><a href="/admin/searchACM">숙소목록</a></li>
-						<li><a href="/admin/add_acc.jsp">숙소등록</a></li>
+						<li><a href="/admin/acc_list">숙소목록</a></li>
+						<li><a href="/admin/add_acc">숙소등록</a></li>
 					</ul>
 				</div>
 
@@ -51,7 +51,7 @@
 						<span>예약관리</span> <i class="arrow"></i>
 					</div>
 					<ul class="nav-submenu">
-						<li><a href="/admin/reservation_list.jsp">예약목록 조회</a></li>
+						<li><a href="/admin/res_list">예약목록 조회</a></li>
 					</ul>
 				</div>
 
@@ -71,7 +71,7 @@
 						<span>회원관리</span> <i class="arrow"></i>
 					</div>
 					<ul class="nav-submenu">
-						<li><a href="http://localhost/project2/admin/member_list.jsp">회원목록</a></li>
+						<li><a href="/admin/member_list">회원목록</a></li>
 					</ul>
 				</div>
 			</nav>
@@ -82,66 +82,71 @@
 			<!-- Top Navigation -->
 			<div class="top-nav">
 				<div class="user-menu">
-					<c:if test="${not empty sessionScope.adminId}">
-						<span>${sessionScope.adminId}</span>
+					<c:if test="${not empty sessionScope.admin_id}">
+						<span>${sessionScope.admin_id}</span>
 						<a href="/admin/logout" class="logout-link">로그아웃</a>
 					</c:if>
-					admin아이디 부분
 				</div>
 			</div>
 
 
+
 			<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Toggle submenu with closing others
-        const navHeaders = document.querySelectorAll('.nav-header');
-        navHeaders.forEach(header => {
-            header.addEventListener('click', function() {
-                // 다른 모든 nav-item의 active 클래스 제거
-                navHeaders.forEach(otherHeader => {
-                    if (otherHeader !== header) {
-                        otherHeader.parentElement.classList.remove('active');
-                    }
-                });
-                // 클릭된 nav-item의 active 토글
-                this.parentElement.classList.toggle('active');
-            });
-        });
-        
-        // 페이지와 메뉴 매핑
-        const pageMenuMap = {
-            'acc_list.jsp': '숙소목록',
-            'add_acc.jsp': '숙소등록',
-            'reservation_list.jsp':'예약목록 조회',
-            'review_list.jsp':'리뷰목록',
-            'member_list.jsp':'회원목록'
-            
-            // 여기에 다른 페이지와 메뉴 이름 매핑 추가
-            // 'some_page.jsp': '해당메뉴이름',
-        };
-        
-        // Highlight current page and keep submenu open
-        const currentPath = window.location.pathname;
-        const currentFile = currentPath.split('/').pop();
-        const menuLinks = document.querySelectorAll('.nav-submenu a');
-        
-        menuLinks.forEach(link => {
-            if (pageMenuMap[currentFile] === link.textContent) {
-                // 메뉴 아이템 활성화
-                link.parentElement.classList.add('active');
-                // 부모 nav-item 찾아서 active 클래스 추가
-                let parentNavItem = link.closest('.nav-item');
-                if (parentNavItem) {
-                    navHeaders.forEach(header => {
-                        if (header.parentElement !== parentNavItem) {
-                            header.parentElement.classList.remove('active');
-                        }
-                    });
-                    parentNavItem.classList.add('active');
-                }
-            }
-        });
-    });
+			document.addEventListener('DOMContentLoaded', function() {
+			    // Toggle submenu with closing others
+			    const navHeaders = document.querySelectorAll('.nav-header');
+			    navHeaders.forEach(header => {
+			        header.addEventListener('click', function() {
+			            // Remove active class from all other nav-items
+			            navHeaders.forEach(otherHeader => {
+			                if (otherHeader !== header) {
+			                    otherHeader.parentElement.classList.remove('active');
+			                }
+			            });
+			            // Toggle active class for clicked nav-item
+			            this.parentElement.classList.toggle('active');
+			        });
+			    });
+			    
+			    // Page and menu mapping using controller URLs
+			    const pageMenuMap = {
+			        '/admin/acc_list': '숙소목록',
+			        '/admin/add_acc': '숙소등록',
+			        '/admin/res_list': '예약목록 조회',
+			        '/admin/review_list': '리뷰목록',
+			        '/admin/member_list': '회원목록'
+			    };
+			    
+			    // Get current path and activate corresponding menu
+			    const currentPath = window.location.pathname;
+			    
+			    // Find and activate the corresponding menu item
+			    const menuLinks = document.querySelectorAll('.nav-submenu a');
+			    menuLinks.forEach(link => {
+			        // Check if the link's href matches the current path
+			        if (link.getAttribute('href') === currentPath) {
+			            // Activate menu item
+			            link.parentElement.classList.add('active');
+			            
+			            // Find and activate parent nav-item
+			            const parentNavItem = link.closest('.nav-item');
+			            if (parentNavItem) {
+			                // Close other nav-items
+			                navHeaders.forEach(header => {
+			                    if (header.parentElement !== parentNavItem) {
+			                        header.parentElement.classList.remove('active');
+			                    }
+			                });
+			                // Open current nav-item
+			                parentNavItem.classList.add('active');
+			            }
+			        }
+			    });
+
+			    // Debug information (optional, can be removed in production)
+			    console.log('Current path:', currentPath);
+			    console.log('Available menu items:', Object.keys(pageMenuMap));
+			});
 </script>
 </body>
 </html>

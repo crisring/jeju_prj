@@ -134,109 +134,127 @@ body {
 }
 </style>
 <script type="text/javascript">
-function deleteAcc(no) {
+function searchReservation() {
+    const keyword = document.getElementById('keyword').value;
+    
+    if(keyword == null || keyword.trim() == '') {
+        alert("검색어를 입력하세요");
+        return;
+    }
+    
+    const form = document.getElementById('reservationForm');
+    document.getElementById('formAction').value = 'search';
+    form.action = '/admin/res_list';
+    form.method = 'get';
+    form.submit();
+}
+
+function deleteReservation(no) {
     if(confirm('정말 삭제하시겠습니까?')) {
-        /* location.href = 'deleteAcc.do?no=' + no + '&cmd=AD004'; */
-        location.href = 'delete_acc.jsp';
+        const form = document.getElementById('reservationForm');
+        document.getElementById('formAction').value = 'delete';
+        
+        // form의 action과 method 설정
+        form.action = '/admin/delete_res';
+        form.method = 'post';
+        
+        // 예약 ID를 hidden input으로 추가
+        const hiddenInput = document.createElement('input');
+        hiddenInput.type = 'hidden';
+        hiddenInput.name = 'rsr_id';
+        hiddenInput.value = no;
+        form.appendChild(hiddenInput);
+        
+        form.submit();
     }
 }
+
+function updateReservations() {
+    if(confirm('변경사항을 저장하시겠습니까?')) {
+        const form = document.getElementById('reservationForm');
+        document.getElementById('formAction').value = 'update';
+        form.action = '/admin/update_res_status';
+        form.method = 'post';
+        form.submit();
+    }
+}
+
+// 예약상태 변경 시 원래 상태 저장 (취소 시 복구용)
+document.querySelectorAll('.rsv-state').forEach(select => {
+    select.addEventListener('focus', function() {
+        this.setAttribute('data-original-value', this.value);
+    });
+});
 </script>
 </head>
 <body>
-	<%
-	request.setAttribute("contentPage", "http://localhost/project2/admin/acc_list.jsp");
-	%>
 	<jsp:include page="../common/header.jsp" />
 	<div class="container">
 		<h1 style="font-family: monospace, sans-serif;">예약목록</h1>
 		<div class="acc-container">
-			<!-- 검색 섹션 -->
-			<div class="search-section">
-				<div class="search-group">
-					<input type="text" class="search-input" placeholder="아이디로 검색">
-					<button class="search-button-acc">검색</button>
-				</div>
-				<button class="new-button">수정</button>
-			</div>
-
 			<!-- 숙소 목록 테이블 -->
-			<table class="table">
-				<thead>
-					<tr>
-						<th>예약번호</th>
-						<th>숙소명(객실명)</th>
-						<th>이미지</th>
-						<th>예약아이디</th>
-						<th>예약날짜</th>
-						<th>체크인</th>
-						<th>체크아웃</th>
-						<th>인원수</th>
-						<th>예약상태</th>
-						<th></th>
-					</tr>
-				</thead>
-				<tbody class="table-group-divider">
-					<tr>
-						<td>1</td>
-						<!-- "acc_detail.do?accId=${ acc.Id }" accId를 받아서 action으로 넘겨야됨 -->
-						<td><a href="reservation_detail.jsp">Ferris(디럭스 트윈)</a></td>
-						<td><img src="" alt="숙소 이미지" class="thumbnail"></td>
-						<td>user1</td>
-						<td>2024-11-28</td>
-						<td>2024-12-25</td>
-						<td>2024-12-27</td>
-						<td>2</td>
-						<td><select class="rsv-state">
-								<option value="결제완료">결제완료
-								<option value="예약확정" selected="selected">예약확정
-								<option value="예약취소">예약취소
-								<option value="이용완료">이용완료
-						</select></td>
-						<td>
-							<button class="delete-button" onclick="deleteAcc(${acc.no})">삭제</button>
-						</td>
-					</tr>
-					<tr>
-						<td>2</td>
-						<!-- "acc_detail.do?accId=${ acc.Id }" accId를 받아서 action으로 넘겨야됨 -->
-						<td><a href="#void">제주호텔(바다뷰 패밀리)</a></td>
-						<td><img src="" alt="숙소 이미지" class="thumbnail"></td>
-						<td>user2</td>
-						<td>2024-11-25</td>
-						<td>2024-12-15</td>
-						<td>2024-12-19</td>
-						<td>4</td>
-						<td><select class="rsv-state">
-								<option value="결제완료">결제완료
-								<option value="예약확정">예약확정
-								<option value="예약취소" selected="selected">예약취소
-								<option value="이용완료">이용완료
-						</select></td>
-						<td>
-							<button class="delete-button" onclick="deleteAcc(${acc.no})">삭제</button>
-						</td>
-					</tr>
-					<%-- 
-                아래껀 바꿔야됨 이건 숙소리스트에서 가져온것 이런식으로 해야됨
-                <c:forEach var="acc" items="${accList}">
-                    <tr>
-                        <td>${acc.no}</td>
-                        <td><img src="${acc.imageUrl}" alt="숙소 이미지" class="thumbnail"></td>
-                        <td>${acc.name}</td>
-                        <td>${acc.type}</td>
-                        <td>${acc.description}</td>
-                        <td>${acc.phone}</td>
-                        <td>${acc.address}</td>
-                        <td>
-                            <button class="delete-button" onclick="deleteAcc(${acc.no})">삭제</button>
-                        </td>
-                    </tr>
-                </c:forEach> --%>
-				</tbody>
-			</table>
-		</div>
+			<form id="reservationForm" action="/admin/res_list" method="post">
+				<div class="search-section">
+					<div class="search-group">
+						<input type="text" name="keyword" id="keyword"
+							class="search-input" placeholder="아이디로 검색" value="${ keyword }">
+						<button type="button" onclick="searchReservation()"
+							class="search-button-acc">검색</button>
+					</div>
+					<button type="button" onclick="updateReservations()"
+						class="new-button">수정</button>
+				</div>
 
-	</div>
-	<jsp:include page="../common/footer.jsp" />
+				<table class="table">
+					<thead>
+						<tr>
+							<th>예약번호</th>
+							<th>숙소명(객실명)</th>
+							<th>이미지</th>
+							<th>예약아이디</th>
+							<th>예약날짜</th>
+							<th>체크인</th>
+							<th>체크아웃</th>
+							<th>인원수</th>
+							<th>예약상태</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody class="table-group-divider">
+						<c:forEach var="res" items="${resList}" varStatus="i">
+							<tr>
+								<td>${ i.count }</td>
+								<td><a href="/admin/res_detail?rsr_id=${ res.rsr_id }">${ res.acm_name }</a></td>
+								<td><img src="/common/admin/images/${ res.main_img }"
+									alt="숙소 이미지" class="thumbnail"></td>
+								<td>${res.user_id }</td>
+								<td>${ res.rsr_date }</td>
+								<td>${ res.check_in_date }</td>
+								<td>${ res.check_out_date }</td>
+								<td>${ res.number_people }</td>
+								<td><select name="rsr_status" class="rsv-state">
+										<option value="결제완료"
+											${res.rsr_status eq '결제완료' ? 'selected' : ''}>결제완료</option>
+										<option value="예약확정"
+											${res.rsr_status eq '예약확정' ? 'selected' : ''}>예약확정</option>
+										<option value="예약취소"
+											${res.rsr_status eq '예약취소' ? 'selected' : ''}>예약취소</option>
+										<option value="이용완료"
+											${res.rsr_status eq '이용완료' ? 'selected' : ''}>이용완료</option>
+								</select> <input type="hidden" name="rsr_id" value="${ res.rsr_id }"></td>
+								<td>
+									<button type="button" class="delete-button"
+										onclick="deleteReservation(${ res.rsr_id })">삭제</button>
+								</td>
+							</tr>
+						</c:forEach>
+					</tbody>
+				</table>
+
+				<!-- 동작 구분을 위한 hidden input -->
+				<input type="hidden" name="action" id="formAction" value="">
+			</form>
+		</div>
+		<jsp:include page="../common/footer.jsp" />
 </body>
 </html>
