@@ -119,7 +119,6 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import jakarta.servlet.http.HttpServletRequest;
-import kr.co.sist.user.ACMdetail.ReviewDomain;
 import kr.co.sist.user.member.MemberDomain;
 import kr.co.sist.user.mypage.ReviewVO;
 import kr.co.sist.user.util.BoardUtil;

@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 
 import jakarta.persistence.PersistenceException;
 import kr.co.sist.dao.MyBatisHandler;
-import kr.co.sist.user.ACMdetail.ReviewDomain;
 import kr.co.sist.user.mypage.ReviewVO;
 import kr.co.sist.user.util.SearchVO;
 

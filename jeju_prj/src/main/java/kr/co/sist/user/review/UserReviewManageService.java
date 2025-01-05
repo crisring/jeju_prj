@@ -6,7 +6,6 @@ import org.apache.ibatis.exceptions.PersistenceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import kr.co.sist.user.ACMdetail.ReviewDomain;
 import kr.co.sist.user.mypage.ReviewVO;
 import kr.co.sist.user.util.SearchVO;
 
