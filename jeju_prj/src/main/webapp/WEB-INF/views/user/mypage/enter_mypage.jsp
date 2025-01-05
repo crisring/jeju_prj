@@ -42,29 +42,42 @@
 }
 </style>
 
+
+<c:if test="${not empty error }">
+<script type="text/javascript">
+alert("${error}")
+</script>
+</c:if>
+
 <script>
-	$(document).ready(function() {
-		$('input[value="들어가기"]').on('click', function() {
-			var $name = $('#name');
-			var nameVal = $.trim($name.val());
-
-			if (nameVal === '') {
-				alert('비밀번호를 입력해주세요.');
-				$name.focus();
-				return;
-			}
-
-			// 비밀번호가 정상적으로 입력되었을 경우
-			// 여기서 원하는 동작 (ex: 페이지 이동, 폼 전송 등)
-			alert('마이페이지로 들어갑니다.');
-		});
-	});
+$(document).ready(function() {
+    $("#frm").on('submit', function(e) {
+        e.preventDefault(); // 폼 기본 제출을 막음
+        
+        var $password = $('#password');
+        var passwordVal = $.trim($password.val());
+        
+        if (passwordVal === '') {
+            alert('비밀번호를 입력해주세요.');
+            $password.focus();
+            return false;
+        }
+        
+        // 폼 수동 제출
+        this.submit();
+    });
+    
+    // 메인으로 버튼 클릭 이벤트
+    $("#back").on('click', function() {
+        location.href = "/";  // 메인 페이지 경로로 수정하세요
+    });
+});
 </script>
 
 </head>
 <body>
-	<!-- 헤더 -->
-	<jsp:include page="../common/jsp/header.jsp" />
+		<!-- 헤더 -->
+		<jsp:include page="../common/jsp/header.jsp" />
 
 	<!-- 로그인 컨텐츠 -->
 	<div class="container">
@@ -73,21 +86,25 @@
 				id="logo" style="display: block; margin: 0 auto;">
 			<h5 class="bld">마이페이지</h5>
 			<p class="text-muted">
-				XXX회원님 마이페이지에 들어가기전 <br>비밀번호를 입력해주세요.
+				<strong>${user_info.user_id }</strong> 회원님 마이페이지에 들어가기전 <br>비밀번호를 입력해주세요.
 			</p>
 		</div>
-		<div style="margin-bottom: 50px">
-			<label class="form-label bld">비밀번호</label> <input type="password"
-				class="form-control" placeholder="비밀번호 입력" name="name" id="name">
-			<div style="text-align: center;">
-				<input type="button" class="btn btn-info btn-lg frm" value="메인으로">
-				<input type="button" class="btn btn-primary btn-lg frm" value="들어가기">
-			</div>
-		</div>
-	</div>
-	<!-- footer -->
 
-	<jsp:include page="../common/jsp/footer.jsp" />
+<form action="${pageContext.request.contextPath}/mypage/checkPassProcess" method="post" name="frm" id="frm">	
+		<div style="margin-bottom: 50px">
+			<label class="form-label bld">비밀번호</label>
+			 <input type="password"	class="form-control" placeholder="비밀번호 입력" name="password" id="password">
+			 
+			 
+			<div style="text-align: center;">
+    <input type="button" class="btn btn-info btn-lg frm" value="메인으로" id="back" name="back">
+    <input type="submit" class="btn btn-primary btn-lg frm" value="들어가기" id="go" name="go">
+</div>
+		</div>
+		</form>		
+	</div>
+		<!-- footer -->
+		<jsp:include page="../common/jsp/footer.jsp" />
 </body>
 </html>
 

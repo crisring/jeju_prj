@@ -2,8 +2,6 @@ package kr.co.sist.user.login;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.encrypt.Encryptors;
-import org.springframework.security.crypto.encrypt.TextEncryptor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -22,8 +20,9 @@ public class LoginService {
 	 */
 	public MemberDomain searchLogin(LoginVO lVO) {
 		// DAO를 통해 사용자 정보 조회
-		MemberDomain mDomain = lDAO.selectLogin(lVO);
 
+		MemberDomain mDomain = lDAO.selectLogin(lVO);
+		System.out.println(lVO);
 		// 조회된 사용자 정보가 없는 경우 예외 처리
 		if (mDomain == null) {
 			throw new RuntimeException("해당 사용자가 존재하지 않습니다.");
@@ -34,10 +33,12 @@ public class LoginService {
 		boolean loginFlag = pe.matches(lVO.getPassword(), mDomain.getPassword());
 
 		if (loginFlag) {
+			System.out.println("비번일치" + lVO.getPassword());
 			// 비밀번호 검증 성공: 비밀번호는 반환하지 않음
 			mDomain.setPassword(null);
 			return mDomain;
 		} else {
+			System.out.println("비번틀림" + lVO.getPassword());
 			// 비밀번호 검증 실패
 			throw new RuntimeException("비밀번호가 일치하지 않습니다.");
 		} // end else
@@ -79,14 +80,14 @@ public class LoginService {
 
 		boolean flag = false;
 		PasswordEncoder pe = new BCryptPasswordEncoder();
-
+		System.out.println(mVO.getPassword() + "비번입력값");
 		try {
 			String pass = pe.encode(mVO.getPassword());
 			mVO.setPassword(pass);// 일방향 암호화해서 비번넣기
 			if (flag = lDAO.updatePass(mVO) == 1) {
 				// 비밀번호 업데이트에 성공한 경우
 				flag = true;
-				System.out.println("비밀번호 재설정 성공");
+				System.out.println("비밀번호 재설정 성공" + mVO.getPassword());
 			} else {
 				flag = false;
 			} // end else
@@ -98,4 +99,11 @@ public class LoginService {
 		return flag;
 	}// resetPassword
 
+	
+	 public boolean isWithdrawnUser(String userId) {
+	        String status = lDAO.getUserStatus(userId);
+	        return "탈퇴".equals(status); // user_status가 WITHDRAWN인지 확인
+	    }
+	
+	
 }// class

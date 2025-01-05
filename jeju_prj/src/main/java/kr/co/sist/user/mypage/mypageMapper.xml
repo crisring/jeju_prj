@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.sist.mypageMapper">
+
+
+	<!--세션에 저장된 사용자 정보를 기반으로 비밀번호를 찾는 일. -->
+	<select id="chkPass" resultType="String"
+		parameterType="kr.co.sist.user.member.MemberVO">
+   	     SELECT password
+        FROM member
+        WHERE user_id = #{user_id}
+
+	</select>
+	
+
+
+
+</mapper>

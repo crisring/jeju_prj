@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.sist.infoChange"><!-- namespace: 자바의 패키지와 비슷 -->
+
+   <!-- 1) 특정 user_id의 회원정보 조회 -->
+    <select id="selectOneMember" resultType="kr.co.sist.user.member.MemberDomain" parameterType="String">
+        SELECT user_id,
+               user_name,
+               phone_number,
+               birth,
+               gender
+        FROM member
+        WHERE user_id = #{user_id}
+    </select>
+
+    <!-- 2) 회원정보 수정 -->
+    <update id="updateInfo" parameterType="kr.co.sist.user.member.MemberVO">
+        UPDATE member
+           SET user_name    = #{user_name},
+               phone_number = #{phone_number},
+               birth        = #{birth},
+               gender       = #{gender}
+         WHERE user_id      = #{user_id}
+    </update>
+
+	<!-- 회원정보 삭제  -->
+	<update id="deleteMember" parameterType="String" >
+	    update member
+	    set user_status = '탈퇴',
+	        phone_number = '-',
+	        birth = '-',
+	        gender = '-',
+	        user_ip = '-',
+	        join_date = '',
+	        member_type = '-',
+	        password = '-'
+	    where user_id = #{user_id}
+	</update>
+
+	<insert id="withdrawChange" parameterType="kr.co.sist.infoChange.WithDrawDomain">
+	    insert into withdraw(reason_id,user_id)
+	    values(#{reason_id},#{user_id})
+	</insert>
+
+</mapper>

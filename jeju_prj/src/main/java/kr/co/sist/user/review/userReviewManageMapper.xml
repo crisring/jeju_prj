@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="kr.co.sist.userReview">
+
+    <!-- [목록] user_id로 내가 작성한 리뷰들 조회 (페이징 가능) -->
+  <select id="selectUserReviews" resultType="kr.co.sist.user.ACMdetail.ReviewDomain"
+        parameterType="kr.co.sist.user.util.SearchVO">
+ SELECT 
+        review_id,
+        acm_name,
+        content,
+        created_at,
+        rating
+    FROM (
+        SELECT 
+            r.review_id review_id,
+            a.acm_name acm_name,
+            r.content content,
+            r.created_at created_at,
+            r.rating rating,
+            ROW_NUMBER() OVER (ORDER BY r.review_id DESC) AS rnum
+        FROM accommodation a
+        JOIN review r ON a.acm_id = r.acm_id
+        WHERE r.user_id = #{user_id}
+        <if test="keyWord != null and keyWord != ''">
+            AND INSTR(r.content, #{keyWord}) > 0
+        </if> 
+    )
+    WHERE rnum BETWEEN #{startNum} AND #{endNum}
+    
+    
+    </select>
+
+
+
+    <!-- [총 게시물 수] -->
+    <select id="totalCnt" resultType="int" parameterType="kr.co.sist.user.util.SearchVO">
+       select count(*) as totalCount
+from review 
+where user_id = #{user_id}
+    </select>
+
+
+    <!-- [단일 리뷰 조회] -->
+    <select id="selectOneReview" parameterType="int"
+            resultType="kr.co.sist.user.ACMdetail.ReviewDomain">
+        SELECT 
+            review_id,
+            user_id,
+            rating,
+            content,
+            created_at
+        FROM review
+        WHERE review_id = #{review_id}
+    </select>
+
+
+    <!-- [리뷰 이미지 목록] -->
+    <select id="selectReviewImg" parameterType="int" resultType="String">
+        SELECT img_name 
+        FROM review_img
+        WHERE review_id = #{review_id}
+    </select>
+
+
+    <!-- [리뷰 수정] -->
+    <update id="updateReview" parameterType="kr.co.sist.user.mypage.ReviewVO">
+        UPDATE review
+           SET rating = #{rating},
+               content = #{content},
+                created_at = sysdate 
+           
+         WHERE review_id = #{review_id}
+    </update>
+    
+    
+    
+    <update id="updateReviewImage" parameterType="kr.co.sist.user.mypage.ReviewVO">
+  UPDATE review_img
+SET 
+    img_name = #{img_name}
+WHERE 
+    review_id = #{review_id};
+        
+</update>
+    
+    
+
+
+    <!-- [리뷰 삭제] -->
+    <delete id="deleteReview" parameterType="int">
+        DELETE FROM review
+         WHERE review_id = #{review_id}
+    </delete>
+
+</mapper>

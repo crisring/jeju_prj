@@ -26,12 +26,11 @@
 	</select>
 
 	<update id="resetPass"
-		parameterType="kr.co.sist.user.login.MemberFindVO">
+		parameterType="kr.co.sist.user.member.MemberVO">
 		update member
 		set
 		password = #{password}
-		where USER_ID =
-		#{user_id}
+		where USER_ID = #{user_id}
 	</update>
 
 	<select id="userLogin"
@@ -43,6 +42,13 @@
 		from member
 		where user_id=#{user_id}
 	</select>
+
+
+<select id="getUserStatus" parameterType="String" resultType="String">
+    SELECT user_status
+    FROM member
+    WHERE user_id = #{user_id}
+</select>
 
 
 </mapper>

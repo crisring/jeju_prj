@@ -69,7 +69,9 @@ public class LoginDAO {
 		SqlSession handler = mbh.getHandler();
 		try {
 			System.out.println("Updating password for user_id: " + mVO.getUser_id());
+			System.out.println("rowCnt" + rowCnt);
 			rowCnt = handler.update("kr.co.sist.user.login.resetPass", mVO);
+			handler.commit();
 		} finally {
 			mbh.closeHandler(handler);
 		}
@@ -77,4 +79,18 @@ public class LoginDAO {
 		return rowCnt;
 	}// updatePass
 
+	
+	
+	 public String getUserStatus(String user_id) {
+		 String status="";
+			MyBatisHandler mbh = MyBatisHandler.getInstance();
+			SqlSession handler = mbh.getHandler();
+			try {
+				  status = handler.selectOne("kr.co.sist.user.login.getUserStatus", user_id);				handler.commit();
+			} finally {
+				mbh.closeHandler(handler);
+			}
+		 
+			return status;
+		}
 }// loginDAO

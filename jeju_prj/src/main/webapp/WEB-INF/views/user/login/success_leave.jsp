@@ -42,7 +42,7 @@
 
 <body>
     <!-- 헤더 -->
-	<c:import url="../common/header.jsp"/> 
+	<c:import url="../common/jsp/header.jsp"/> 
     <!-- 로그인 컨텐츠 -->
     <div class="container">
         <div  style="text-align: center">
@@ -50,7 +50,7 @@
 		<h5>다음에 꼭 다시 만나요</h5>
 		<h5 style=" color:#0B5ED7;">더 나은 모습으로 기다릴게요!</h5>
 		<img alt="" src="http://localhost/second_prj/common/images/leave_member.png">
-	           			<input type="button" class="btn btn-primary btn-lg " value="메인으로"  >
+<input type="button" class="btn btn-primary btn-lg" value="메인으로" onclick="location.href='/'">
 
         </div>
         
@@ -58,7 +58,7 @@
         
         
     </div>
-	<c:import url="../common/footer.jsp"/> 
+	<c:import url="../common/jsp/footer.jsp"/> 
     
 </body>
 

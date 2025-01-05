@@ -73,12 +73,12 @@ $(document).ready(function(){
            <form action="/member/resetPassProcess" method="post" id="frm" name="frm">
         <div class="d-grid" style="margin-bottom: 50px">
             <label class="form-label bld">새 비밀번호</label>
-<input type="hidden" name="user_id" id="user_id" value="${user_id}">
+	<input type="hidden" name="user_id" id="user_id" value="${user_id}">
             <input type="password" class="form-control" placeholder="새 비밀번호를 입력" id="password" name="password">
 
             <label class="form-label bld frm">새 비밀번호 확인</label>
             <input type="password" class="form-control" placeholder="새 비밀번호를 확인" id="confirmPassword" name="confirmPassword">
-
+	
             <input type="button" class="btn btn-primary btn-lg frm" value="확인">
         </div>
            </form>

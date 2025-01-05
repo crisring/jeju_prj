@@ -67,18 +67,24 @@ public class MemberController {
 
 	@PostMapping("/member/joinProcess")
 	public String addMember(MemberVO mVO, HttpServletRequest request, Model model) {
+	    // (1) IP 주소 설정
+	    String userIp = request.getRemoteAddr();
+	    mVO.setUser_ip(userIp);
 
-		String userIp = request.getRemoteAddr();
-		mVO.setUser_ip(userIp);
-		String birth = request.getParameter("birthYear") // 요청받는년/월/일 생일컬럼에 추가
-				+ request.getParameter("birthMonth") + request.getParameter("birthDay");
-		mVO.setBirth(birth);
+	    // (2) 생년월일 조합
+	    String birth = request.getParameter("birthYear") 
+	        + request.getParameter("birthMonth") 
+	        + request.getParameter("birthDay");
+	    mVO.setBirth(birth);
 
-		boolean flag = ms.addMember(mVO);
+	    // (3) 회원가입 서비스 호출
+	    boolean flag = ms.addMember(mVO);
 
-		model.addAttribute("insertFlag", flag);
+	    // (4) 결과 전달
+	    model.addAttribute("insertFlag", flag);
 
-		return "user/login/success_join";
+	    return flag ? "user/login/success_join" : "user/login/register_frm";
 	}
+
 
 }// class
