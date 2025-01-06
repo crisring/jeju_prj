@@ -1,5 +1,6 @@
 package kr.co.sist.user.searchACM;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -14,6 +15,30 @@ public class SearchACMService {
 	@Autowired
 	private SearchACMDAO sacmDAO;
 
+	
+	public List<SearchACMDomain> displayDetail(SearchVO sVO){
+		
+		List<SearchACMDomain> list = null;
+		try {
+			list=sacmDAO.selectACM(sVO);
+		} catch (PersistenceException pe) {
+			pe.printStackTrace();
+		}
+		return list;
+	}
+	
+	
+	public List<ACMTypeDomain> displayACMType(){
+		List<ACMTypeDomain> list = null;
+		try {
+			list=sacmDAO.selectAllACMType();
+		} catch (PersistenceException pe) {
+			pe.printStackTrace();
+		}
+		return list;	
+	}
+	
+	
 	/**
 	 * 1.호텔, 2. 펜션 풀빌라, 3. 게하 한옥, 4. 캠핑 글램핑, 5. 홈 빌라 <br>
 	 * 
@@ -55,5 +80,34 @@ public class SearchACMService {
 
 		return list;
 	}// displayPopularTypes
+	
+	public List<ACMTypeDomain> displayAllType() {
+	    List<ACMTypeDomain> list = new ArrayList<>();
+	    try {
+	        int acm_type_id = 0;
+	        List<SearchACMDomain> searchList = sacmDAO.selectByACMType(acm_type_id);
+	        
+	        // SearchACMDomain을 ACMTypeDomain으로 변환
+	        for (SearchACMDomain search : searchList) {
+	            ACMTypeDomain acmType = new ACMTypeDomain();
+	            // SearchACMDomain에서 ACMTypeDomain으로 값 복사
+	            // 예: acmType.setId(search.getId()); 
+	            list.add(acmType);
+	        }
+	    } catch (PersistenceException pe) {
+	        pe.printStackTrace();
+	    }
+	    return list;
+	}
+	
+	public List<FacilityDomain> displayAllFacility(){
+		List<FacilityDomain> list = null;
+		try {
+			list=sacmDAO.selectAllFacility();
+		} catch (PersistenceException pe) {
+			pe.printStackTrace();
+		}
+		return list;	
+	}
 
 }
