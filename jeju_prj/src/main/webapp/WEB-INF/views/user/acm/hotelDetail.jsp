@@ -1,5 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -563,41 +563,67 @@
 	border-radius: 4px;
 	cursor: pointer;
 }
-
-.photo-modal {
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	background-color: rgba(0, 0, 0, 0.8);
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	z-index: 1000;
+.room-modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+    padding-top: 60px;
 }
 
 .modal-content {
-	background: white;
-	padding: 20px;
-	border-radius: 5px;
-	max-width: 80%;
-	max-height: 80%;
-	overflow: auto;
-	text-align: center;
+    background-color: #fff;
+    margin: 5% auto;
+    padding: 20px;
+    border-radius: 10px;
+    width: 80%;
+    max-width: 800px;
 }
 
-.modal-photo {
-	max-width: 100%;
-	margin: 10px;
+.room-photo {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+#photo-gallery {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+#photo-gallery img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: border 0.3s;
+}
+
+#photo-gallery img:hover {
+    border: 2px solid #007bff;
 }
 
 .close-button {
-	position: absolute;
-	top: 10px;
-	right: 10px;
-	font-size: 24px;
-	cursor: pointer;
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    position: absolute;
+    top: 10px;
+    right: 25px;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
 }
 </style>
 
@@ -620,9 +646,8 @@
 				<img src="${acmDetail.main_img_no}" alt="메인 이미지" class="main-image">
 			</div>
 			<div class="sub-image-container">
-				<img src="${acmDetail.main_img_no}" alt="서브 이미지 1"> <img
-					src="${acmDetail.main_img_no}" alt="서브 이미지 2"> <img
-					src="3${acmDetail.main_img_no}" alt="서브 이미지 3"> <img
+				<img src="${acmDetail.main_img_no}" alt="서브 이미지 1"> <img src="${acmDetail.main_img_no}"
+					alt="서브 이미지 2"> <img src="3${acmDetail.main_img_no}" alt="서브 이미지 3"> <img
 					src="${acmDetail.main_img_no}" alt="서브 이미지 4">
 			</div>
 		</section>
@@ -630,12 +655,8 @@
 		<!-- 호텔 정보 -->
 		<section class="hotel-info">
 			<div>
-				<h1 class="hotel-name">
-					<c:out value="${acmDetail.acm_name}" />
-				</h1>
-				<p class="hotel-category">
-					<c:out value="${acmDetail.acm_type}" />
-				</p>
+				<h1 class="hotel-name"><c:out value="${acmDetail.acm_name}"/></h1>
+				<p class="hotel-category"><c:out value="${acmDetail.acm_type}"/></p>
 			</div>
 		</section>
 
@@ -651,54 +672,49 @@
 		<!-- 탭 섹션 -->
 		<section id="overview" class="tab-section">
 			<h2>개요</h2>
-			<p>
-				<c:out value="${acmDetail.content}" />
-			</p>
+			<p><c:out "${roomList.content}"/></p>
 		</section>
 
 		<section id="rooms" class="tab-section">
-			<h2>객실</h2>
-			<c:forEach var="room" items="${roomList}">
-				<div class="room-option">
-					<div class="room-info">
-						<div class="room-image">
-							<img src="${roomList.image}" alt="${roomList.room_name}"
-								class="room-thumbnail" data-room-id="${roomList.room_id}" />
-						</div>
-						<div class="room-details">
-							<h3>
-								<c:out value="${roomList.room_name}" />
-							</h3>
-							<div class="room-times">
-								<span> <c:out value="${roomList.check_info}" /></span>
-							</div>
-							<div class="room-description">
-								<span>기준 <c:out value="${roomList.capacity_info}" /></span>
-								<div class="room-price">
-									<fmt:formatNumber
-										value="${roomList.price != null ? roomList.price : 0}"
-										pattern="#,##0" />
-								</div>
-								<c:if test="${roomList.discount_price != null}">
-									<div class="room-discount_price">
-										<fmt:formatNumber value="${roomList.discount_price}"
-											pattern="#,##0" />
-									</div>
-								</c:if>
-								<button class="room-select-button">객실 예약</button>
-							</div>
-						</div>
-					</div>
-				</div>
-			</c:forEach>
+		    <h2>객실</h2>
+		    <c:forEach var="room" items="${roomList}">
+		        <div class="room-option">
+		            <div class="room-info">
+		                <div class="room-image">
+		                    <img src="${room.image}" alt="${room.room_name}" class="room-thumbnail" data-room-id="${room.room_id}" />
+		                </div>
+		                <div class="room-details">
+		                    <h3><c:out value="${room.room_name}" /></h3>
+		                    <div class="room-times">
+		                        <span> <c:out value="${room.check_info}" /></span>
+		                    </div>
+		                    <div class="room-description">
+		                        <span>기준 <c:out value="${room.capacity_info}" /></span>
+		                        <div class="room-price">
+		                            <fmt:formatNumber value="${room.price != null ? room.price : 0}" pattern="#,##0" />
+		                        </div>
+		                        <c:if test="${room.discount_price != null}">
+		                            <div class="room-discount_price">
+		                                <fmt:formatNumber value="${room.discount_price}" pattern="#,##0" />
+		                            </div>
+		                        </c:if>
+		                        <button class="room-detail-link" onclick="openRoomModal(${room.room_id})">객실 상세</button>
+		                    </div>
+		                </div>
+		            </div>
+		        </div>
+		    </c:forEach>
 
-			<!-- 상세 사진을 표시할 모달 -->
-			<div id="photo-modal" class="photo-modal" style="display: none;">
-				<div class="modal-content">
-					<span id="close-modal" class="close-button">&times;</span>
-					<div id="photo-display"></div>
-				</div>
-			</div>
+		    <!-- 숙소 상세 정보를 표시할 모달 -->
+		    <div id="room-modal" class="room-modal" style="display: none;">
+		        <div class="modal-content">
+		            <span id="close-modal" class="close-button">&times;</span>
+		            <div id="room-title"></div>
+		            <div id="room-description"></div>
+		            <img id="main-photo" src="" alt="Main Room Photo" class="room-photo">
+		            <div id="photo-gallery"></div>
+		        </div>
+		    </div>
 		</section>
 
 
@@ -747,41 +763,26 @@
 			<div class="review-card">
 				<div class="sort-dropdown">
 					<form method="get" action="/acm/acmDetail">
-						<input type="hidden" name="acm_id" value="${acmDetail.acm_id}"
-							class="sort-select"> <select name="sort"
-							onchange="this.form.submit()">
-							<option value="latest"
-								${param.sort == 'latest' ? 'selected' : ''}>최신순</option>
-							<option value="highestRating"
-								${param.sort == 'highestRating' ? 'selected' : ''}>평점
-								높은 순</option>
-							<option value="lowestRating"
-								${param.sort == 'lowestRating' ? 'selected' : ''}>평점 낮은
-								순</option>
-						</select>
+					    <input type="hidden" name="acm_id" value="${acmDetail.acm_id}"  class="sort-select">
+					    <select name="sort" onchange="this.form.submit()">
+					        <option value="latest" ${param.sort == 'latest' ? 'selected' : ''}>최신순</option>
+					        <option value="highestRating" ${param.sort == 'highestRating' ? 'selected' : ''}>평점 높은 순</option>
+					        <option value="lowestRating" ${param.sort == 'lowestRating' ? 'selected' : ''}>평점 낮은 순</option>
+					    </select>
 					</form>
 				</div>
 
 				<div class="review-header">
-					<div class="star-rating">
-						<c:out value="${review.rasting}" />
-					</div>
-					<div class="author">
-						<c:out value="${review.review_id}" />
-					</div>
-					<div class="date">
-						<c:out value="${review.created_at}" />
-					</div>
+					<div class="star-rating"><c:out value="${review.rasting}"/></div>
+					<div class="author"><c:out value="${review.review_id}"/></div>
+					<div class="date"><c:out value="${review.created_at}"/></div>
 				</div>
 				<div class="review-content">
-					<p>
-						<c:out value="${review.content}" />
-					</p>
+					<p><c:out value="${review.content}"/></p>
 				</div>
 				<div class="review-images">
-					<img src="${review.acm_main_img}" alt="리뷰 이미지 1" /> <img
-						src="${review.acm_main_img}" alt="리뷰 이미지 2" /> <img
-						src="${review.acm_main_img}" alt="리뷰 이미지 3" />
+					<img src="${review.acm_main_img}" alt="리뷰 이미지 1"/> <img src="${review.acm_main_img}"
+						alt="리뷰 이미지 2"/> <img src="${review.acm_main_img}" alt="리뷰 이미지 3"/>
 				</div>
 				<div class="review-footer">
 					<p>4명이 이 리뷰를 추천했어요</p>
@@ -884,46 +885,49 @@
 		// 마커가 지도 위에 표시되도록 설정합니다
 		marker.setMap(map);
 
-	document.addEventListener("DOMContentLoaded", function () {
-	    const modal = document.getElementById("photo-modal");
-	    const photoDisplay = document.getElementById("photo-display");
-	    const closeModal = document.getElementById("close-modal");
+		document.addEventListener("DOMContentLoaded", function () {
+		    const modal = document.getElementById("room-modal");
+		    const closeModal = document.getElementById("close-modal");
 
-		document.querySelectorAll(".room-thumbnail").forEach((img) => {
-		    img.addEventListener("click", function () {
-		        const roomId = this.getAttribute("data-room-id");
+		    document.querySelectorAll(".room-thumbnail").forEach((img) => {
+		        img.addEventListener("click", function () {
+		            const roomId = this.getAttribute("data-room-id");
 
-		        // Ajax 요청
-		        fetch(`/room/photos?roomId=${roomId}`)
-		            .then((response) => response.json())
-		            .then((data) => {
-		                photoDisplay.innerHTML = ""; // 기존 사진 초기화
-		                data.forEach((photo) => {
-		                    const imgElement = document.createElement("img");
-		                    imgElement.src = photo.url; // 서버에서 반환된 사진 URL
-		                    imgElement.alt = "Room Photo";
-		                    imgElement.classList.add("modal-photo");
-		                    photoDisplay.appendChild(imgElement);
-		                });
+		            // AJAX 요청
+		            fetch(`/room/details?roomId=${roomId}`)
+		                .then((response) => response.json())
+		                .then((data) => {
+		                    // 숙소 상세 정보 업데이트
+		                    document.getElementById("room-title").innerText = data.room_name;
+		                    document.getElementById("room-description").innerText = data.description;
+		                    document.getElementById("main-photo").src = data.main_photo_url;
 
-		                // 모달 열기
-		                modal.style.display = "block";
-		            })
-		            .catch((error) => console.error("Error fetching photos:", error));
+		                    // 사진 갤러리 업데이트
+		                    const photoGallery = document.getElementById("photo-gallery");
+		                    photoGallery.innerHTML = ""; // 기존 사진 초기화
+		                    data.photos.forEach((photo) => {
+		                        const imgElement = document.createElement("img");
+		                        imgElement.src = photo.url;
+		                        imgElement.alt = "Room Photo";
+		                        imgElement.classList.add("modal-photo");
+		                        imgElement.onclick = () => {
+		                            document.getElementById("main-photo").src = photo.url;
+		                        };
+		                        photoGallery.appendChild(imgElement);
+		                    });
+
+		                    // 모달 열기
+		                    modal.style.display = "block";
+		                })
+		                .catch((error) => console.error("Error fetching room details:", error));
+		        });
+		    });
+
+		    // 모달 닫기
+		    closeModal.addEventListener("click", function () {
+		        modal.style.display = "none";
 		    });
 		});
-
-		// 모달 닫기 버튼 추가
-		document.getElementById("close-modal").addEventListener("click", function() {
-		    modal.style.display = "none";
-		});
-
-	    window.addEventListener("click", function (event) {
-	        if (event.target === modal) {
-	            modal.style.display = "none";
-	        }
-	    });
-	});
 
     </script>
 </body>
