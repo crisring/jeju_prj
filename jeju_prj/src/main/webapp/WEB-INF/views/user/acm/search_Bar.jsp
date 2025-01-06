@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -173,9 +174,8 @@
         <h2>숙소 검색</h2>
         <form role="search" class="search-form">
             <!-- 검색 입력란 -->
-            <div class="search-input">
-                <input id="search-term" name="search_term" type="text" placeholder="여행지나 숙소를 검색해보세요." maxlength="50" autocomplete="off">
-            </div>
+			<div id="search-live-display">검색어: </div>
+			<input id="search-term" name="search_term" type="text" placeholder="여행지나 숙소를 검색해보세요." maxlength="50" autocomplete="off" oninput="updateLiveDisplay()">
 
             <!-- 날짜 선택 -->
             <div class="date-picker">
@@ -207,14 +207,14 @@
             <button id="decrease-guest" class="guest-button">-</button>
             <span id="modal-guest-display">2명</span>
             <button id="increase-guest" class="guest-button">+</button>
-            <button id="complete-button" class="modal-button">완료</button>
+            <button id="complete-button" class="mXodal-button">완료</button>
         </div>
     </div>
 
 </body>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script>
- // 날짜 선택기 설정
+ // 날짜 선택기 설정X
     const dateInput = document.getElementById("hidden-date-input");
     const dateButton = document.getElementById("open-calendar");
 
