@@ -48,6 +48,45 @@
 		WHERE A.ACM_ID = #{ACM_ID}
 		GROUP BY A.ACM_ID
 	</select>
+	
+	<select id="selectACM" parameterType="SearchVO" resultType="ACMTypeDomain">
+    SELECT * FROM acm_table
+    WHERE 1=1
+    <if test="keyword != null and keyword != ''">
+        AND keyword LIKE CONCAT('%', #{keyword}, '%')
+    </if>
+    <if test="startDate != null">
+        AND date >= #{startDate}
+    </if>
+    <if test="finishDate != null">
+        AND date &lt;= #{finishDate}
+    </if>
+    <if test="numberPeople > 0">
+        AND number_people >= #{numberPeople}
+    </if>
+</select>
+	
+	<!-- selectACMType 메소드에 해당하는 쿼리 정의 -->
+    <select id="selectACMType" parameterType="int" resultType="SearchACMDomain">
+        SELECT ACM_TYPE_ID, ACM_TYPE
+        FROM ACCOMMODATION_TYPE
+        WHERE ACM_TYPE_ID = #{acm_type_id}
+    </select>
+	
+	<!-- selectAllACMType 메소드에 해당하는 쿼리 정의 -->
+    <select id="selectAllACMType" resultType="ACMTypeDomain">
+        SELECT ACM_TYPE_ID, ACM_TYPE
+        FROM ACCOMMODATION_TYPE
+    </select>
+
+    <!-- selectAllFacility 메소드에 해당하는 쿼리 정의 -->
+    <select id="selectAllFacility" resultType="FacilityDomain">
+        SELECT f.FCL_ID, f.FCL_NAME
+        FROM FACILITIES f
+        JOIN PROVIDED_FACILITIES pf ON f.FCL_ID = pf.FCL_ID
+        WHERE pf.ACM_ID = #{acmId}
+    </select>
+
 
 
 </mapper>
