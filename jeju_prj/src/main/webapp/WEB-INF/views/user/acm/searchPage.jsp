@@ -1,4 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -180,97 +181,85 @@ body {
 
 	<!-- 헤더 -->
 	<header class="header">
-		<jsp:include page="../common/jsp/header.jsp" />
+		<jsp:include page="../common/header.jsp" />
 	</header>
 
 	<!-- 본문 콘텐츠 -->
 	<main class="main-container">
-		<!-- 왼쪽 필터 섹션 -->
-		<section class="filter-container">
-			<h2>필터</h2>
-			<div class="filter">
-				<label for="matching-location"> <input type="checkbox"
-					id="matching-location"> 매칭 숙소 제외
-				</label>
-			</div>
-			<div class="filter">
-				<h3>숙소 유형</h3>
-				<label><input type="radio" name="accommodation-type"
-					value="호텔"> 호텔</label> <label><input type="radio"
-					name="accommodation-type" value="리조트"> 리조트</label> <label><input
-					type="radio" name="accommodation-type" value="펜션/풀빌라">
-					펜션/풀빌라</label> <label><input type="radio" name="accommodation-type"
-					value="게하/한옥"> 게하/한옥</label> <label><input type="radio"
-					name="accommodation-type" value="캠핑/글램핑"> 캠핑/글램핑</label> <label><input
-					type="radio" name="accommodation-type" value="홈 빌라"> 홈 빌라</label>
-			</div>
-			<div class="filter">
-				<h3>가격</h3>
-				<input type="range" min="0" max="500000" value="0"
-					class="price-range" id="price-range">
-				<p id="price-text">0원 - 500,000원 이상</p>
-			</div>
-			<div class="filter">
-				<h2>시설</h2>
-				<h3>공용 시설</h3>
-				<!-- 버튼 클릭 시 하늘색으로 변경 -->
-				<button class="facility-btn">레스토랑</button>
-				<button class="facility-btn">라운지</button>
-				<button class="facility-btn">바비큐</button>
-				<button class="facility-btn">샤워실</button>
-				<button class="facility-btn">주차장</button>
-			</div>
-			<div class="filter">
-				<h3>객실 내 시설</h3>
-				<!-- 버튼 클릭 시 하늘색으로 변경 -->
-				<button class="facility-btn">무선와이파이</button>
-				<button class="facility-btn">에어컨</button>
-				<button class="facility-btn">금연</button>
-				<button class="facility-btn">TV</button>
-			</div>
+		<form method="get" action="/acm/search">
+		    <!-- 매칭 숙소 제외 필터 -->
+		    <label for="matching-location">
+		        <input type="checkbox" id="matching-location" name="matchingLocation"> 매칭 숙소 제외
+		    </label>
+		    
+		    <!-- 숙소 유형 선택 -->
+		    <h3>숙소 유형</h3>
+		    <label><input type="radio" name="accommodationType" value="호텔"> 호텔</label>
+		    <label><input type="radio" name="accommodationType" value="리조트"> 리조트</label>
+		    <label><input type="radio" name="accommodationType" value="펜션/풀빌라"> 펜션/풀빌라</label>
+		    <label><input type="radio" name="accommodationType" value="게하/한옥"> 게하/한옥</label>
+		    <label><input type="radio" name="accommodationType" value="캠핑/글램핑"> 캠핑/글램핑</label>
+		    <label><input type="radio" name="accommodationType" value="홈 빌라"> 홈 빌라</label>
+		    
+		    <!-- 가격 범위 -->
+		    <input type="range" min="0" max="500000" value="0" class="price-range" id="price-range" name="priceRange">
+		    <p id="price-text">0원 - 500,000원 이상</p>
+		    
+		    <!-- 공용 시설 -->
+		    <h3>공용 시설</h3>
+		    <button type="button" class="facility-btn" name="facility" value="레스토랑">레스토랑</button>
+		    <button type="button" class="facility-btn" name="facility" value="라운지">라운지</button>
+		    <button type="button" class="facility-btn" name="facility" value="바비큐">바비큐</button>
+		    <button type="button" class="facility-btn" name="facility" value="샤워실">샤워실</button>
+		    <button type="button" class="facility-btn" name="facility" value="주차장">주차장</button>
+
+		    <!-- 객실 내 시설 -->
+		    <h3>객실 내 시설</h3>
+		    <button type="button" class="facility-btn" name="roomFacility" value="무선와이파이">무선와이파이</button>
+		    <button type="button" class="facility-btn" name="roomFacility" value="에어컨">에어컨</button>
+		    <button type="button" class="facility-btn" name="roomFacility" value="금연">금연</button>
+		    <button type="button" class="facility-btn" name="roomFacility" value="TV">TV</button>
+		    
+		    <button type="submit">검색</button>
+		</form>
+		<div class="sort-container">
+		    <label for="sort">정렬:</label>
+		    <select id="sort" name="sort" onchange="this.form.submit()">
+		        <option value="rating_desc">평점 높은 순</option>
+		        <option value="review_count_desc">리뷰 많은 순</option>
+		        <option value="price_asc">낮은 가격 순</option>
+		        <option value="price_desc">높은 가격 순</option>
+		    </select>
+		</div>
 
 		</section>
-
-		<!-- 오른쪽 숙소 목록 섹션 -->
-		<section class="accommodation-list">
-			<h2>검색 결과</h2>
-			<div class="accommodation-item">
-				<img src="1.jpg" alt="롯데호텔 제주" class="accommodation-image">
-				<div class="accommodation-details">
-					<!-- 숙소 이름을 클릭하면 hotelDetail.jsp로 이동 -->
-					<h3>
-						<a href="hotelDetail.jsp?hotelId=1"
-							style="text-decoration: none; color: inherit;">롯데호텔 제주</a>
-					</h3>
-					<p>서귀포시 · 중문관광단지 내</p>
-					<p>9.6 ★ 952명 평가</p>
-					<p>
-						<strong>283,100원</strong>
-					</p>
-				</div>
-			</div>
-			<div class="accommodation-item">
-				<img src="2.jpg" alt="제주신라호텔" class="accommodation-image">
-				<div class="accommodation-details">
-					<!-- 숙소 이름을 클릭하면 hotelDetail.jsp로 이동 -->
-					<h3>
-						<a href="hotelDetail.jsp?hotelId=2"
-							style="text-decoration: none; color: inherit;">제주신라호텔</a>
-					</h3>
-					<p>서귀포시 · 서귀포시에서 차로 17분</p>
-					<p>9.7 ★ 732명 평가</p>
-					<p>
-						<strong>310,000원</strong>
-					</p>
-				</div>
-			</div>
+		<section>
+		    <c:forEach var="accommodation" items="${accommodationList}">
+		        <div class="accommodation-item">
+		            <img src="${acmDetail.image}" alt="${acmDetail.name}" class="accommodation-image">
+		            <div class="accommodation-details">
+		                <!-- 숙소 이름을 클릭하면 hotelDetail.jsp로 이동 -->
+		                <h3>
+		                    <a href="hotelDetail.jsp?hotelId=${accommodation.acm_id}" style="text-decoration: none; color: inherit;">
+		                        ${acmDetail.name}
+		                    </a>
+		                </h3>
+		                <p>${acmDetail.address}</p>
+		                <p>${acmDetail.rating} ★ ${acmDetail.reviewCount}명 평가</p>
+		                <p>
+		                    <strong><c:out value="${acmDetail.price}" /></strong>
+		                </p>
+		            </div>
+		        </div>
+		    </c:forEach>
 		</section>
+
 
 	</main>
 
 	<!-- 푸터 -->
 	<footer class="footer">
-		<jsp:include page="../common/jsp/footer.jsp" />
+		<jsp:include page="../common/footer.jsp" />
 	</footer>
 
 	<script>
@@ -306,6 +295,8 @@ body {
 
     // 페이지 로드 시 기본 텍스트 설정
     priceText.textContent = `0원 - 500,000원 이상`;
+	
+	
 </script>
 
 </body>
