@@ -382,7 +382,7 @@ $(function(){
 						<c:forEach var="img" items="${room.img_name}">
 							<div class="img-container"
 								style="display: inline-block; position: relative; margin: 5px;">
-								<img src="/common/admin/images/${img}" style="max-width: 200px;"
+								<img src="/images/${img}" style="max-width: 200px;"
 									alt="객실 이미지"> <input type="hidden" name="existingImages"
 									value="${img}">
 								<button class="delete-btn"

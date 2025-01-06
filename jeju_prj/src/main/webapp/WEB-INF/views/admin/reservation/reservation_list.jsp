@@ -225,7 +225,7 @@ document.querySelectorAll('.rsv-state').forEach(select => {
 							<tr>
 								<td>${ i.count }</td>
 								<td><a href="/admin/res_detail?rsr_id=${ res.rsr_id }">${ res.acm_name }</a></td>
-								<td><img src="/common/admin/images/${ res.main_img }"
+								<td><img src="/images/${ res.main_img }"
 									alt="숙소 이미지" class="thumbnail"></td>
 								<td>${res.user_id }</td>
 								<td>${ res.rsr_date }</td>

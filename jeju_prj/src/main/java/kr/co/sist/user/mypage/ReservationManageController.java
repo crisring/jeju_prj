@@ -102,7 +102,7 @@ public class ReservationManageController {
 	// private String uploadDir =
 	// "C:/Users/crisring/git/jeju_prj/jeju_prj/src/main/resources/static/common/user/review_Img";
 
-	@Value("${file.upload-dir}")
+	@Value("${file.upload.review-dir}")
 	private String uploadDir;
 
 	@PostMapping("/mypage/ReviewWriteProcess")

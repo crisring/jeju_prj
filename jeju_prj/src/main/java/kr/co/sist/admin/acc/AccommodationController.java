@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -61,8 +62,8 @@ public class AccommodationController {
 		return "admin/acc/add_acc";
 	}// addAcc
 
-	private String uploadDir = "C:/Users/user/git/jeju_prj/jeju_prj/src/main/resources/static/common/admin/images"; // 업로드
-																													// 경로
+	@Value("${file.upload.admin-dir}")
+	private String uploadDir;																											// 경로
 
 	@PostMapping("/admin/add_acc_process")
 	public String addAccProcess(AccommodationVO aVO, @RequestParam("mainFile") MultipartFile mainImg, // name 변경

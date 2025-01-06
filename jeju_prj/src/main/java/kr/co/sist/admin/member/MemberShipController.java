@@ -33,7 +33,7 @@ public class MemberShipController {
 	    return "admin/member/member_list";
 	}//membershipList
 	
-	@GetMapping("/member/member_detail")
+	@GetMapping("/admin/member_detail")
 	public String memberDetail(String user_id, Model model) {
 		MemberShipDomain msDomain=new MemberShipDomain();
 		

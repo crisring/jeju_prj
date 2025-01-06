@@ -450,7 +450,7 @@ table a {
 							<!-- 기존 대표 이미지 표시 -->
 							<div class="mb-2">
 								<img id="current_image"
-									src="/common/admin/images/${acc.main_img}" alt="대표이미지"
+									src="/images/${acc.main_img}" alt="대표이미지"
 									style="max-width: 200px;">
 								<div class="text-secondary file-name mt-1">현재 이미지:
 									${acc.main_img}</div>
@@ -485,7 +485,7 @@ table a {
 										<!-- 현재 이미지 이름 표시 -->
 										<div class="text-secondary mb-2">현재 파일: ${subImg}</div>
 										<!-- 현재 이미지 표시 -->
-										<img src="/common/admin/images/${subImg}" alt="서브이미지"
+										<img src="/images/${subImg}" alt="서브이미지"
 											style="max-width: 150px;"> <input type="hidden"
 											name="existingSubFiles" value="${subImg}">
 									</div>

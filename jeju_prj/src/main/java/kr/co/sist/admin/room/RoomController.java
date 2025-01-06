@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -36,8 +37,8 @@ public class RoomController {
 		return "admin/acc/room_detail";
 	}//selectOneRoom
 	
-	private String uploadDir = "C:/Users/user/git/jeju_prj/jeju_prj/src/main/resources/static/common/admin/images";
-	
+	@Value("${file.upload.admin-dir}")
+	private String uploadDir;
 	
 	@GetMapping("/admin/add_room")
 	public String addRoom(@RequestParam("acm_id") int acm_id, Model model) {

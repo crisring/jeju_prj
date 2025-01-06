@@ -140,7 +140,7 @@ body {
 			<div class="left-section">
 				<table class="info-table">
 					<tr>
-						<td colspan="2"><img src="/common/admin/images/${ res.main_img }" alt="숙소 이미지"
+						<td colspan="2"><img src="/images/${ res.main_img }" alt="숙소 이미지"
 							class="accommodation-image"></td>
 					</tr>
 					<tr>

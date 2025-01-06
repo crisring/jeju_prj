@@ -122,7 +122,7 @@ body {
 							<td>${status.index + 1}</td>
 							<!-- 1부터 시작하는 번호 -->
 							<td><a
-								href="/member/member_detail?user_id=${ member.user_id }">${member.user_id}</a></td>
+								href="/admin/member_detail?user_id=${ member.user_id }">${member.user_id}</a></td>
 							<td>${member.user_name}</td>
 							<td>${member.decrypt_birth}</td>
 							<td>${member.gender}</td>
