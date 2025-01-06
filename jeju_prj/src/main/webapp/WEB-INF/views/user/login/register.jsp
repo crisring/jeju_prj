@@ -117,7 +117,21 @@ body {
 					data-bs-toggle="collapse" data-bs-target="#term1Content"
 					aria-expanded="false" aria-controls="term1Content">보기</button>
 				<div class="collapse mt-2" id="term1Content">
-					<div class="card card-body">여기에는 "이용약관" 내용을 삽입합니다.</div>
+					<div class="card card-body">
+  <strong>제1조 (목적)</strong><br>
+            본 약관은 [서비스 이름](이하 "회사")가 제공하는 서비스의 이용조건 및 절차, 권리, 의무 및 책임사항을 규정함을 목적으로 합니다.<br><br>
+            
+            <strong>제2조 (정의)</strong><br>
+            - <strong>서비스:</strong> 회사가 제공하는 온라인 및 오프라인 모든 서비스<br>
+            - <strong>회원:</strong> 회사와 서비스 이용계약을 체결하고 회원 ID를 부여받은 자<br>
+            - <strong>이용자:</strong> 회원 및 비회원을 포함한 모든 서비스 이용자<br><br>
+            
+            <strong>제3조 (회원가입)</strong><br>
+            - 이용자는 회사의 요구에 따라 정확한 정보를 제공해야 합니다.<br>
+            - 타인의 명의를 도용하거나 허위 정보를 제공할 경우 서비스 이용이 제한될 수 있습니다.<br><br>
+            
+         
+</div>
 				</div>
 			</div>
 
@@ -129,7 +143,22 @@ body {
 					data-bs-toggle="collapse" data-bs-target="#term2Content"
 					aria-expanded="false" aria-controls="term2Content">보기</button>
 				<div class="collapse mt-2" id="term2Content">
-					<div class="card card-body">여기에는 "만 14세 이상 확인" 관련 내용을 삽입합니다.
+					<div class="card card-body">
+					
+				  <strong>제1조 (대상)</strong><br>
+            본 서비스는 만 14세 이상인 사용자만 이용할 수 있습니다.<br><br>
+            
+            <strong>제2조 (확인 및 제한)</strong><br>
+            - 회원가입 시 본인이 만 14세 이상임을 확인해야 합니다.<br>
+            - 만 14세 미만 사용자의 가입은 제한됩니다.<br><br>
+            
+            <strong>제3조 (허위 정보)</strong><br>
+            - 만 14세 미만 사용자가 허위로 정보를 입력하거나 가입한 경우, 서비스 이용은 즉시 중단되며 관련 정보는 삭제됩니다.<br><br>
+            
+            <strong>제4조 (추가 확인)</strong><br>
+            - 회사는 필요에 따라 만 14세 이상 여부를 확인하기 위해 추가 증빙 서류를 요청할 수 있습니다.
+					
+					
 					</div>
 				</div>
 			</div>
@@ -143,8 +172,21 @@ body {
 					data-bs-toggle="collapse" data-bs-target="#term3Content"
 					aria-expanded="false" aria-controls="term3Content">보기</button>
 				<div class="collapse mt-2" id="term3Content">
-					<div class="card card-body">여기에는 "개인정보 수집 및 이용 동의" 관련 약관 내용을
-						삽입합니다.</div>
+					<div class="card card-body">
+				<strong>제1조 (개인정보의 수집 목적)</strong><br>
+            - 회원가입 및 서비스 제공<br>
+            - 고객 상담 및 불만 처리<br>
+            - 맞춤형 서비스 제공<br><br>
+            
+            <strong>제2조 (수집하는 개인정보 항목)</strong><br>
+            - <strong>필수 항목:</strong> 이름, 이메일, 휴대전화번호<br>
+            - <strong>선택 항목:</strong> 생년월일, 주소<br><br>
+            
+            <strong>제3조 (보유 및 이용기간)</strong><br>
+            - 회원 탈퇴 시 즉시 파기됩니다.<br>
+            - 법령에 따라 일정 기간 보관이 필요한 경우 관련 법령을 따릅니다.<br><br>
+						
+						</div>
 				</div>
 			</div>
 
