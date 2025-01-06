@@ -1,4 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -562,6 +563,41 @@
 	border-radius: 4px;
 	cursor: pointer;
 }
+.photo-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 5px;
+    max-width: 80%;
+    max-height: 80%;
+    overflow: auto;
+    text-align: center;
+}
+
+.modal-photo {
+    max-width: 100%;
+    margin: 10px;
+}
+
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 24px;
+    cursor: pointer;
+}
 </style>
 
 <link
@@ -571,7 +607,7 @@
 </head>
 <body>
 	<header class="header">
-		<jsp:include page="../common/jsp/header.jsp" />
+		<jsp:include page="../common/header.jsp" />
 
 
 	</header>
@@ -580,20 +616,20 @@
 		<!-- 이미지 섹션 -->
 		<section class="image-section">
 			<div class="main-image-container">
-				<img src="1.jpg" alt="메인 이미지" class="main-image">
+				<img src="${acmDetail.main_img_no}" alt="메인 이미지" class="main-image">
 			</div>
 			<div class="sub-image-container">
-				<img src="1.jpg" alt="서브 이미지 1"> <img src="2.jpg"
-					alt="서브 이미지 2"> <img src="3.jpg" alt="서브 이미지 3"> <img
-					src="4.jpg" alt="서브 이미지 4">
+				<img src="${acmDetail.main_img_no}" alt="서브 이미지 1"> <img src="${acmDetail.main_img_no}"
+					alt="서브 이미지 2"> <img src="3${acmDetail.main_img_no}" alt="서브 이미지 3"> <img
+					src="${acmDetail.main_img_no}" alt="서브 이미지 4">
 			</div>
 		</section>
 
 		<!-- 호텔 정보 -->
 		<section class="hotel-info">
 			<div>
-				<h1 class="hotel-name">롯데호텔 제주</h1>
-				<p class="hotel-category">호텔 · 5성급</p>
+				<h1 class="hotel-name"><c:out value="${acmDetail.acm_name}"/></h1>
+				<p class="hotel-category"><c:out value="${acmDetail.acm_type}"/></p>
 			</div>
 		</section>
 
@@ -609,78 +645,48 @@
 		<!-- 탭 섹션 -->
 		<section id="overview" class="tab-section">
 			<h2>개요</h2>
-			<p>제주 롯데호텔은 아름다운 풍경과 고급스러운 서비스를 제공하는 5성급 호텔입니다...</p>
+			<p><c:out value="${acmDetail.content}"/></p>
 		</section>
 
 		<section id="rooms" class="tab-section">
-			<h2>객실</h2>
-			<div class="room-option">
-				<div class="room-info">
-					<div class="room-image">
-						<img src="room1.jpg" alt="디럭스룸">
-					</div>
-					<div class="room-details">
-						<h3>디럭스 룸</h3>
-						<div class="room-times">
-							<span>입실 15:00</span> <span>퇴실 11:00</span>
-						</div>
-						<div class="room-description">
-							<span>기준2인 / 최대3인 (유료)</span>
-						</div>
-					</div>
-				</div>
-				<div class="room-price-container">
-					<button class="room-detail-link" onclick="openRoomModal()">객실
-						상세</button>
-					<div class="room-price">₩206,900</div>
-					<button class="room-select-button">객실 예약</button>
-				</div>
-			</div>
-			<div class="room-option">
-				<div class="room-info">
-					<div class="room-image">
-						<img src="room2.jpg" alt="스위트룸">
-					</div>
-					<div class="room-details">
-						<h3>스위트룸</h3>
-						<div class="room-times">
-							<span>입실 15:00</span> <span>퇴실 11:00</span>
-						</div>
-						<div class="room-description">
-							<span>기준2인 / 최대3인 (유료)</span>
-						</div>
-					</div>
-				</div>
-				<div class="room-price-container">
-					<button class="room-detail-link" onclick="openRoomModal()">객실
-						상세</button>
-					<div class="room-price">₩206,900</div>
-					<button class="room-select-button">객실 예약</button>
-				</div>
-			</div>
-			<div class="room-option">
-				<div class="room-info">
-					<div class="room-image">
-						<img src="room3.jpg" alt="프리미엄룸">
-					</div>
-					<div class="room-details">
-						<h3>프리미엄룸</h3>
-						<div class="room-times">
-							<span>입실 15:00</span> <span>퇴실 11:00</span>
-						</div>
-						<div class="room-description">
-							<span>기준2인 / 최대3인 (유료)</span>
-						</div>
-					</div>
-				</div>
-				<div class="room-price-container">
-					<button class="room-detail-link" onclick="openRoomModal()">객실
-						상세</button>
-					<div class="room-price">₩206,900</div>
-					<button class="room-select-button">객실 예약</button>
-				</div>
-			</div>
+		    <h2>객실</h2>
+		    <c:forEach var="room" items="${roomList}">
+		        <div class="room-option">
+		            <div class="room-info">
+		                <div class="room-image">
+		                    <img src="${roomList.image}" alt="${roomList.room_name}" class="room-thumbnail" data-room-id="${roomList.room_id}" />
+		                </div>
+		                <div class="room-details">
+		                    <h3><c:out value="${roomList.room_name}" /></h3>
+		                    <div class="room-times">
+		                        <span> <c:out value="${roomList.check_info}" /></span>
+		                    </div>
+		                    <div class="room-description">
+		                        <span>기준 <c:out value="${roomList.capacity_info}" /></span>
+								<div class="room-price">
+								    <fmt:formatNumber value="${roomList.price != null ? roomList.price : 0}" pattern="#,##0" />
+								</div>
+								<c:if test="${roomList.discount_price != null}">
+								    <div class="room-discount_price">
+								        <fmt:formatNumber value="${roomList.discount_price}" pattern="#,##0" />
+								    </div>
+								</c:if>
+								<button class="room-select-button">객실 예약</button>
+		                    </div>
+		                </div>
+		            </div>
+		        </div>
+		    </c:forEach>
+
+		    <!-- 상세 사진을 표시할 모달 -->
+		    <div id="photo-modal" class="photo-modal" style="display: none;">
+		        <div class="modal-content">
+		            <span id="close-modal" class="close-button">&times;</span>
+		            <div id="photo-display"></div>
+		        </div>
+		    </div>
 		</section>
+
 
 
 		<section id="services" class="tab-section">
@@ -726,27 +732,27 @@
 			<h2>리뷰</h2>
 			<div class="review-card">
 				<div class="sort-dropdown">
-					<select id="sort-select" class="sort-select">
-						<option value="recommend" selected>추천순</option>
-						<option value="recent">최신순</option>
-						<option value="high-rating">평점 높은순</option>
-						<option value="low-rating">평점 낮은순</option>
-					</select>
+					<form method="get" action="/acm/acmDetail">
+					    <input type="hidden" name="acm_id" value="${acmDetail.acm_id}"  class="sort-select">
+					    <select name="sort" onchange="this.form.submit()">
+					        <option value="latest" ${param.sort == 'latest' ? 'selected' : ''}>최신순</option>
+					        <option value="highestRating" ${param.sort == 'highestRating' ? 'selected' : ''}>평점 높은 순</option>
+					        <option value="lowestRating" ${param.sort == 'lowestRating' ? 'selected' : ''}>평점 낮은 순</option>
+					    </select>
+					</form>
 				</div>
 
 				<div class="review-header">
-					<div class="star-rating">⭐⭐⭐⭐⭐</div>
-					<div class="author">여행좋아하는가족들</div>
-					<div class="date">2개월 전</div>
+					<div class="star-rating"><c:out value="${review.rasting}"/></div>
+					<div class="author"><c:out value="${review.review_id}"/></div>
+					<div class="date"><c:out value="${review.created_at}"/></div>
 				</div>
 				<div class="review-content">
-					<p>[오픈리뷰] [홀로린 특가] 디럭스 마운틴 더블</p>
-					<p>롯데호텔 주변에 스타벅스, 편의점, 테디베어뮤지엄, 박물관이 살아있다, 런닝맨, 감골카트, 버디플래닛 칼곳이
-						너무 많아요. 식당도 여러군데 있어서 골라가기 좋아요...</p>
+					<p><c:out value="${review.content}"/></p>
 				</div>
 				<div class="review-images">
-					<img src="image1.jpg" alt="리뷰 이미지 1"> <img src="image2.jpg"
-						alt="리뷰 이미지 2"> <img src="image3.jpg" alt="리뷰 이미지 3">
+					<img src="${review.acm_main_img}" alt="리뷰 이미지 1"/> <img src="${review.acm_main_img}"
+						alt="리뷰 이미지 2"/> <img src="${review.acm_main_img}" alt="리뷰 이미지 3"/>
 				</div>
 				<div class="review-footer">
 					<p>4명이 이 리뷰를 추천했어요</p>
@@ -758,7 +764,7 @@
 	</main>
 
 	<footer class="footer">
-		<jsp:include page="../common/jsp/footer.jsp" />
+		<jsp:include page="../common/footer.jsp" />
 	</footer>
 
 	<!-- 객실 상세 모달 팝업 -->
@@ -824,24 +830,71 @@
 
             
         });
-        var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
-        mapOption = { 
-            center: new kakao.maps.LatLng(33.2484468, 126.4106058), // 지도의 중심좌표
-            level: 3 // 지도의 확대 레벨
-        };
-        
-    var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+		// 지도 표시를 위한 div 설정
+		var mapContainer = document.getElementById('map'), 
+		    mapOption = { 
+		        center: new kakao.maps.LatLng(33.2484468, 126.4106058), // 지도의 중심좌표 (기본값)
+		        level: 3 // 지도의 확대 레벨
+		    };
 
-    // 마커가 표시될 위치입니다 
-    var markerPosition  = new kakao.maps.LatLng(33.450701, 126.570667); 
+		// 지도를 생성합니다
+		var map = new kakao.maps.Map(mapContainer, mapOption);
 
-    // 마커를 생성합니다
-    var marker = new kakao.maps.Marker({
-        position: markerPosition
-    });
+		// JSP에서 가져온 좌표값
+		var latitude = ${acmDetail.latitude != null ? acmDetail.latitude : 33.2484468}; // Null일 경우 기본값 설정
+		var longitude = ${acmDetail.longitude != null ? acmDetail.longitude : 126.4106058}; // Null일 경우 기본값 설정
 
-    // 마커가 지도 위에 표시되도록 설정합니다
-    marker.setMap(map);
+		// 마커 위치 설정
+		var markerPosition = new kakao.maps.LatLng(latitude, longitude); 
+
+		// 마커를 생성합니다
+		var marker = new kakao.maps.Marker({
+		    position: markerPosition
+		});
+
+		// 마커가 지도 위에 표시되도록 설정합니다
+		marker.setMap(map);
+
+	document.addEventListener("DOMContentLoaded", function () {
+	    const modal = document.getElementById("photo-modal");
+	    const photoDisplay = document.getElementById("photo-display");
+	    const closeModal = document.getElementById("close-modal");
+
+		document.querySelectorAll(".room-thumbnail").forEach((img) => {
+		    img.addEventListener("click", function () {
+		        const roomId = this.getAttribute("data-room-id");
+
+		        // Ajax 요청
+		        fetch(`/room/photos?roomId=${roomId}`)
+		            .then((response) => response.json())
+		            .then((data) => {
+		                photoDisplay.innerHTML = ""; // 기존 사진 초기화
+		                data.forEach((photo) => {
+		                    const imgElement = document.createElement("img");
+		                    imgElement.src = photo.url; // 서버에서 반환된 사진 URL
+		                    imgElement.alt = "Room Photo";
+		                    imgElement.classList.add("modal-photo");
+		                    photoDisplay.appendChild(imgElement);
+		                });
+
+		                // 모달 열기
+		                modal.style.display = "block";
+		            })
+		            .catch((error) => console.error("Error fetching photos:", error));
+		    });
+		});
+
+		// 모달 닫기 버튼 추가
+		document.getElementById("close-modal").addEventListener("click", function() {
+		    modal.style.display = "none";
+		});
+
+	    window.addEventListener("click", function (event) {
+	        if (event.target === modal) {
+	            modal.style.display = "none";
+	        }
+	    });
+	});
 
     </script>
 </body>
