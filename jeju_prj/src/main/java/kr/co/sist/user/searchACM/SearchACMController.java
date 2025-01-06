@@ -3,6 +3,7 @@ package kr.co.sist.user.searchACM;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jakarta.servlet.http.HttpSession;
-import kr.co.sist.user.util.SearchVO;
+import kr.co.sist.user.ACMdetail.ACMDomain;
 
 @SessionAttributes("user_info")
 @Controller
@@ -54,12 +55,12 @@ public class SearchACMController {
 	@GetMapping("/acm/searchProcess")
 	public String searchProc(SearchVO sVO, RedirectAttributes redirectAttributes, Model model) {
 
-		redirectAttributes.addAttribute("keyword", sVO.getKeyWord());
+		redirectAttributes.addAttribute("room_id", 44);
 		redirectAttributes.addAttribute("startDate", sVO.getStartDate());
 		redirectAttributes.addAttribute("finishDate", sVO.getFinishDate());
 		redirectAttributes.addAttribute("numberPeople", sVO.getNumberPeople());
 
-		return "redirect:/searchPage";
+		return "redirect:/reservation";
 	}// searchProc
 
 	/**
@@ -71,8 +72,25 @@ public class SearchACMController {
 	 */
 	@RequestMapping(value = "/acm/searchDetailFrm", method = { GET, POST })
 	public String searchDetailFrm(SearchVO sVO, Model model) {
+	    // 서비스에서 검색 결과를 가져옴
+	    List<SearchACMDomain> searchResults = sacms.displayDetail(sVO);  // displayDetail 메서드 호출
 
-		return "/acm/searchPage";
-	}// main
+	    // SearchACMDomain을 ACMTypeDomain으로 변환
+	    List<ACMTypeDomain> acmTypeResults = new ArrayList<>();
+	    for (SearchACMDomain search : searchResults) {
+	        ACMTypeDomain acmType = new ACMTypeDomain();
+	        
+	        // SearchACMDomain에서 필요한 정보를 가져와서 ACMTypeDomain에 설정
+	        acmType.setAcm_type_id(search.getAcm_type_id());  // 예: 숙소 타입 ID
+	        acmType.setAcm_type(search.getAcm_name());  // 예: 숙소 이름
+	        
+	        acmTypeResults.add(acmType);
+	    }
+
+	    // 변환된 검색 결과를 모델에 추가
+	    model.addAttribute("searchResults", acmTypeResults);
+
+	    return "/acm/acmDetail";  // 결과 페이지로 이동
+	}
 
 }
