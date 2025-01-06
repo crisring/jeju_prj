@@ -10,9 +10,10 @@
 <div id="sidebar" class="btn-group-vertical" role="group"
 	aria-label="Vertical button group">
 	<a href="/mypage/rerListFrm" class="btn btn-outline-secondary"
-		onclick="setActive(this)">예약내역</a> 
-		<a href="/mypage/main" class="btn btn-outline-secondary" onclick="setActive(this)">내정보관리</a>
-	<a href="/mypage/reviewList" class="btn btn-outline-secondary" onclick="setActive(this)">리뷰관리</a>
+		onclick="setActive(this)">예약내역</a> <a href="/mypage/mypage_main"
+		class="btn btn-outline-secondary" onclick="setActive(this)">내정보관리</a>
+	<a href="/mypage/reviewList" class="btn btn-outline-secondary"
+		onclick="setActive(this)">리뷰관리</a>
 </div>
 
 <!-- sidebar 관련 CSS -->

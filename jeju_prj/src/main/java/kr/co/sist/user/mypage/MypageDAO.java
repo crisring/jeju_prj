@@ -16,7 +16,6 @@ public class MypageDAO {
 
 		try {
 			pass = handler.selectOne("kr.co.sist.mypageMapper.chkPass", mVO);
-			System.out.println("조회된 암호화 비밀번호: " + pass);
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {

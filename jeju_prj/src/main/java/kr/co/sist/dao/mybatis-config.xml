@@ -15,6 +15,7 @@
 		<!-- 메인페이지 Domain -->
 		<typeAlias type="kr.co.sist.user.searchACM.SearchACMDomain"
 			alias="searchACMDomain" />
+
 		<!-- 마이페이지 예약 Domain -->
 		<typeAlias type="kr.co.sist.user.mypage.ReservationDomain"
 			alias="reservationDomain" />
@@ -24,6 +25,10 @@
 		<!-- 리뷰 쓰기 VO -->
 		<typeAlias type="kr.co.sist.user.mypage.ReviewVO"
 			alias="reviewVO" />
+
+		<!-- 리뷰 Domain -->
+		<typeAlias type="kr.co.sist.user.review.ReviewDomain"
+			alias="reviewDomain" />
 
 		<!-- 예약페이지 Domain -->
 		<typeAlias type="kr.co.sist.user.reservation.RoomDomain"
@@ -107,8 +112,11 @@
 		<mapper resource="kr/co/sist/user/login/loginMapper.xml" />
 
 		<!-- 마이페이지 -->
+		<mapper resource="kr/co/sist/user/mypage/mypageMapper.xml" />
 		<mapper resource="kr/co/sist/user/mypage/RSRManageMapper.xml" />
-
+		<mapper
+			resource="kr/co/sist/user/review/userReviewManageMapper.xml" />
+		<mapper resource="kr/co/sist/infoChange/infoChangeMapper.xml" />
 
 
 		<!-- admin -->

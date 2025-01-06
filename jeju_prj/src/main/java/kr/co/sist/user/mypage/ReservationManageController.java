@@ -98,7 +98,8 @@ public class ReservationManageController {
 	}// rsrListFrm
 
 	// 리뷰가 먼저 추가되고 -> 리뷰 아이디 받아서 번호 추가
-	private String uploadDir = "C:/Users/user/git/jeju_prj/jeju_prj/src/main/resources/static/common/user/review_Img";
+	private String uploadDir = "C:/Users/crisring/git/jeju_prj/jeju_prj/src/main/resources/static/common/user/review_Img";
+
 	@PostMapping("/mypage/ReviewWriteProcess")
 	public String reviewWriteProc(@RequestParam("upfile") MultipartFile[] mf, @RequestParam("rsr_id") int rsrId,
 			@RequestParam("content") String content, @RequestParam("user_id") String userId,

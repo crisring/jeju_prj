@@ -33,6 +33,7 @@ public class LoginController {
 
 			// 🔑 @SessionAttributes("userInfo")에 의해 세션에 자동 저장
 			model.addAttribute("user_info", member);
+
 			return "redirect:/";
 		} catch (RuntimeException e) {
 			model.addAttribute("error", "아이디와 비밀번호를 정확히 입력해주세요.");
@@ -63,11 +64,9 @@ public class LoginController {
 		if (userId != null && !userId.isEmpty()) {
 			model.addAttribute("userId", userId);
 			model.addAttribute("userName", mfVO.getUser_name());
-			System.out.println("아이디찾기성공-----" + userId);
 			return "user/find_account/find_id_success"; // 성공 시 결과 페이지로 이동
 		} else {
 			model.addAttribute("error", "일치하는 아이디가 없습니다. \\n 이름과 연락처를 확인해주세요.");
-			System.out.println("아이디 못찾은경우");
 			return "user/find_account/find_id"; // 실패 시 아이디 찾기 사이트로 이동해서 alert로 알릴거임
 		} // end else
 	}// findIdProcess
@@ -82,12 +81,9 @@ public class LoginController {
 	public String findPassProcess(MemberFindVO mfVO, Model model) {
 		boolean flag = ls.findPassService(mfVO);
 		if (flag) {
-			System.out.println("비밀번호 찾기 성공");
 			model.addAttribute("user_id", mfVO.getUser_id()); // user_id 전달
-			System.out.println(mfVO.getUser_id());
 			return "user/find_account/reset_pass";
 		} else {
-			System.out.println("비밀번호 찾기 실패");
 			model.addAttribute("error", "해당하는 계정이 없습니다.\\n정보를 확인해주세요.");
 			return "user/find_account/find_pass";
 		}
@@ -101,8 +97,6 @@ public class LoginController {
 
 	@PostMapping("/member/resetPassProcess")
 	public String resetPassProcess(MemberVO mVO, Model model) {
-		System.out.println("user_id: " + mVO.getUser_id());
-		System.out.println("password: " + mVO.getPassword());
 
 		boolean flag = ls.resetPassword(mVO);
 		if (flag) { // 재설정 성공한 경우

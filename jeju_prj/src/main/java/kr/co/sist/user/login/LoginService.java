@@ -22,7 +22,6 @@ public class LoginService {
 		// DAO를 통해 사용자 정보 조회
 
 		MemberDomain mDomain = lDAO.selectLogin(lVO);
-		System.out.println(lVO);
 		// 조회된 사용자 정보가 없는 경우 예외 처리
 		if (mDomain == null) {
 			throw new RuntimeException("해당 사용자가 존재하지 않습니다.");
@@ -33,12 +32,10 @@ public class LoginService {
 		boolean loginFlag = pe.matches(lVO.getPassword(), mDomain.getPassword());
 
 		if (loginFlag) {
-			System.out.println("비번일치" + lVO.getPassword());
 			// 비밀번호 검증 성공: 비밀번호는 반환하지 않음
 			mDomain.setPassword(null);
 			return mDomain;
 		} else {
-			System.out.println("비번틀림" + lVO.getPassword());
 			// 비밀번호 검증 실패
 			throw new RuntimeException("비밀번호가 일치하지 않습니다.");
 		} // end else
@@ -52,7 +49,6 @@ public class LoginService {
 
 			// 2️ 아이디가 존재할 경우 로직 (복호화 불필요)
 			if (findId != null && !findId.isEmpty()) {
-				System.out.println("조회된 아이디: " + findId);
 			}
 
 		} catch (PersistenceException e) {
@@ -69,7 +65,6 @@ public class LoginService {
 			// USER_ID가 존재하면 true
 			String userId = lDAO.selectPass(mfVO);
 			flag = (userId != null && !userId.isEmpty());
-			System.out.println("계정 유무: " + flag);
 		} catch (PersistenceException e) {
 			e.printStackTrace();
 		}
@@ -87,7 +82,6 @@ public class LoginService {
 			if (flag = lDAO.updatePass(mVO) == 1) {
 				// 비밀번호 업데이트에 성공한 경우
 				flag = true;
-				System.out.println("비밀번호 재설정 성공" + mVO.getPassword());
 			} else {
 				flag = false;
 			} // end else
@@ -99,11 +93,9 @@ public class LoginService {
 		return flag;
 	}// resetPassword
 
-	
-	 public boolean isWithdrawnUser(String userId) {
-	        String status = lDAO.getUserStatus(userId);
-	        return "탈퇴".equals(status); // user_status가 WITHDRAWN인지 확인
-	    }
-	
-	
+	public boolean isWithdrawnUser(String userId) {
+		String status = lDAO.getUserStatus(userId);
+		return "탈퇴".equals(status); // user_status가 WITHDRAWN인지 확인
+	}
+
 }// class

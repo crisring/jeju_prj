@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 
 import jakarta.servlet.http.HttpSession;
 import kr.co.sist.user.member.MemberDomain;
-import kr.co.sist.user.member.MemberVO;
 
 @Controller
 @SessionAttributes("user_info")

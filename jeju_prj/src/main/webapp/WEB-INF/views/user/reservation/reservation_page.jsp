@@ -29,6 +29,7 @@
 
 			if (user_id == null || user_id === '') {
 				alert("로그인을 먼저해주세요!");
+				location.href = '/login/loginFrm';
 			} else if (chkTerms()) {
 				if (confirm('결제하시겠습니까?')) {
 					$('#rsrFrm').submit();

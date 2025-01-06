@@ -593,7 +593,6 @@ a:hover {
 	<br>
 </body>
 
-
 <jsp:include page="user/common/jsp/footer.jsp" />
 
 
