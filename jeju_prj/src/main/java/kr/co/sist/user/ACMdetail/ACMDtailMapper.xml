@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.sist.user.ACMdetail.ACMDetailDAO">
+
+    <!-- 숙소 상세 정보 조회 -->
+    <select id="selectACMDetail" resultType="kr.co.sist.user.ACMdetail.ACMDomain" parameterType="int">
+        SELECT 
+            acm_id, acm_name, address, description, main_image 
+        FROM 
+            accommodation 
+        WHERE 
+            acm_id = #{acm_id}
+    </select>
+
+    <!-- 숙소 서브 이미지 조회 -->
+    <select id="selectACMSubImages" resultType="kr.co.sist.user.ACMdetail.ACMSubimgDomain" parameterType="int">
+        SELECT 
+            img_id, img_url 
+        FROM 
+            accommodation_images 
+        WHERE 
+            acm_id = #{acm_id}
+    </select>
+
+    <!-- 숙소의 모든 방 조회 -->
+    <select id="selectAllRooms" resultType="kr.co.sist.user.ACMdetail.RoomDomain" parameterType="int">
+        SELECT 
+            room_id, room_name, price, capacity 
+        FROM 
+            room 
+        WHERE 
+            acm_id = #{acm_id}
+    </select>
+
+    <!-- 방 이미지 조회 -->
+    <select id="selectRoomImages" resultType="kr.co.sist.user.ACMdetail.ACMDomain" parameterType="int">
+        SELECT 
+            img_id, img_url 
+        FROM 
+            room_images 
+        WHERE 
+            room_id = #{room_id}
+    </select>
+
+    <!-- 숙소 리뷰 조회 -->
+    <select id="selectReview" resultType="ReviewDomain">
+    SELECT *
+    FROM reviews
+    WHERE acm_id = #{acm_id}
+    <choose>
+        <when test="sort == 'latest'">
+            ORDER BY created_at DESC
+        </when>
+        <when test="sort == 'highestRating'">
+            ORDER BY rating DESC
+        </when>
+        <when test="sort == 'lowestRating'">
+            ORDER BY rating ASC
+        </when>
+        <otherwise>
+            ORDER BY created_at DESC
+        </otherwise>
+    </choose>
+</select>
+
+    <!-- 숙소 시설 목록 조회 -->
+    <select id="selectFacilities" resultType="string" parameterType="int">
+        SELECT 
+            facility_name 
+        FROM 
+            facilities 
+        WHERE 
+            acm_id = #{acm_id}
+    </select>
+
+    <!-- 방 상세 정보 조회 -->
+    <select id="selectRoomDetail" resultType="kr.co.sist.user.ACMdetail.RoomDomain" parameterType="int">
+        SELECT 
+            room_id, room_name, price, capacity, description,check_in,check_out
+        FROM 
+            room 
+        WHERE 
+            room_id = #{room_id}
+    </select>
+
+</mapper>
