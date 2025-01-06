@@ -1,4 +1,4 @@
-package kr.co.sist.ACMDetail;
+package kr.co.sist.user.ACMdetail;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -100,10 +100,13 @@
 		<!-- 메인페이지 검색 -->
 		<mapper
 			resource="kr/co/sist/user/searchACM/searchACMMapper.xml" />
+		<mapper resource="kr/co/sist/user/ACMdetail/ACMDtailMapper.xml" />
 
-		<!-- 메인페이지 검색 -->
+
+		<!-- 예약페이지 -->
 		<mapper
 			resource="kr/co/sist/user/reservation/reservationMapper.xml" />
+
 
 		<!-- member -->
 		<mapper resource="kr/co/sist/user/member/memberMapper.xml" />

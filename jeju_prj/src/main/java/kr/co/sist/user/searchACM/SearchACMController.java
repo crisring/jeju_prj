@@ -54,12 +54,12 @@ public class SearchACMController {
 	@GetMapping("/acm/searchProcess")
 	public String searchProc(SearchVO sVO, RedirectAttributes redirectAttributes, Model model) {
 
-		redirectAttributes.addAttribute("room_id", 44);
+		redirectAttributes.addAttribute("keyword", sVO.getKeyWord());
 		redirectAttributes.addAttribute("startDate", sVO.getStartDate());
 		redirectAttributes.addAttribute("finishDate", sVO.getFinishDate());
 		redirectAttributes.addAttribute("numberPeople", sVO.getNumberPeople());
 
-		return "redirect:/reservation";
+		return "redirect:/searchPage";
 	}// searchProc
 
 	/**
@@ -72,7 +72,7 @@ public class SearchACMController {
 	@RequestMapping(value = "/acm/searchDetailFrm", method = { GET, POST })
 	public String searchDetailFrm(SearchVO sVO, Model model) {
 
-		return "/acm/acmDetail";
+		return "/acm/searchPage";
 	}// main
 
 }

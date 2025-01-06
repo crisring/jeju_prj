@@ -1,5 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -563,40 +563,41 @@
 	border-radius: 4px;
 	cursor: pointer;
 }
+
 .photo-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.8);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.8);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	z-index: 1000;
 }
 
 .modal-content {
-    background: white;
-    padding: 20px;
-    border-radius: 5px;
-    max-width: 80%;
-    max-height: 80%;
-    overflow: auto;
-    text-align: center;
+	background: white;
+	padding: 20px;
+	border-radius: 5px;
+	max-width: 80%;
+	max-height: 80%;
+	overflow: auto;
+	text-align: center;
 }
 
 .modal-photo {
-    max-width: 100%;
-    margin: 10px;
+	max-width: 100%;
+	margin: 10px;
 }
 
 .close-button {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    font-size: 24px;
-    cursor: pointer;
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	font-size: 24px;
+	cursor: pointer;
 }
 </style>
 
@@ -607,7 +608,7 @@
 </head>
 <body>
 	<header class="header">
-		<jsp:include page="../common/header.jsp" />
+		<jsp:include page="../common/jsp/header.jsp" />
 
 
 	</header>
@@ -619,8 +620,9 @@
 				<img src="${acmDetail.main_img_no}" alt="메인 이미지" class="main-image">
 			</div>
 			<div class="sub-image-container">
-				<img src="${acmDetail.main_img_no}" alt="서브 이미지 1"> <img src="${acmDetail.main_img_no}"
-					alt="서브 이미지 2"> <img src="3${acmDetail.main_img_no}" alt="서브 이미지 3"> <img
+				<img src="${acmDetail.main_img_no}" alt="서브 이미지 1"> <img
+					src="${acmDetail.main_img_no}" alt="서브 이미지 2"> <img
+					src="3${acmDetail.main_img_no}" alt="서브 이미지 3"> <img
 					src="${acmDetail.main_img_no}" alt="서브 이미지 4">
 			</div>
 		</section>
@@ -628,8 +630,12 @@
 		<!-- 호텔 정보 -->
 		<section class="hotel-info">
 			<div>
-				<h1 class="hotel-name"><c:out value="${acmDetail.acm_name}"/></h1>
-				<p class="hotel-category"><c:out value="${acmDetail.acm_type}"/></p>
+				<h1 class="hotel-name">
+					<c:out value="${acmDetail.acm_name}" />
+				</h1>
+				<p class="hotel-category">
+					<c:out value="${acmDetail.acm_type}" />
+				</p>
 			</div>
 		</section>
 
@@ -645,46 +651,54 @@
 		<!-- 탭 섹션 -->
 		<section id="overview" class="tab-section">
 			<h2>개요</h2>
-			<p><c:out value="${acmDetail.content}"/></p>
+			<p>
+				<c:out value="${acmDetail.content}" />
+			</p>
 		</section>
 
 		<section id="rooms" class="tab-section">
-		    <h2>객실</h2>
-		    <c:forEach var="room" items="${roomList}">
-		        <div class="room-option">
-		            <div class="room-info">
-		                <div class="room-image">
-		                    <img src="${roomList.image}" alt="${roomList.room_name}" class="room-thumbnail" data-room-id="${roomList.room_id}" />
-		                </div>
-		                <div class="room-details">
-		                    <h3><c:out value="${roomList.room_name}" /></h3>
-		                    <div class="room-times">
-		                        <span> <c:out value="${roomList.check_info}" /></span>
-		                    </div>
-		                    <div class="room-description">
-		                        <span>기준 <c:out value="${roomList.capacity_info}" /></span>
+			<h2>객실</h2>
+			<c:forEach var="room" items="${roomList}">
+				<div class="room-option">
+					<div class="room-info">
+						<div class="room-image">
+							<img src="${roomList.image}" alt="${roomList.room_name}"
+								class="room-thumbnail" data-room-id="${roomList.room_id}" />
+						</div>
+						<div class="room-details">
+							<h3>
+								<c:out value="${roomList.room_name}" />
+							</h3>
+							<div class="room-times">
+								<span> <c:out value="${roomList.check_info}" /></span>
+							</div>
+							<div class="room-description">
+								<span>기준 <c:out value="${roomList.capacity_info}" /></span>
 								<div class="room-price">
-								    <fmt:formatNumber value="${roomList.price != null ? roomList.price : 0}" pattern="#,##0" />
+									<fmt:formatNumber
+										value="${roomList.price != null ? roomList.price : 0}"
+										pattern="#,##0" />
 								</div>
 								<c:if test="${roomList.discount_price != null}">
-								    <div class="room-discount_price">
-								        <fmt:formatNumber value="${roomList.discount_price}" pattern="#,##0" />
-								    </div>
+									<div class="room-discount_price">
+										<fmt:formatNumber value="${roomList.discount_price}"
+											pattern="#,##0" />
+									</div>
 								</c:if>
 								<button class="room-select-button">객실 예약</button>
-		                    </div>
-		                </div>
-		            </div>
-		        </div>
-		    </c:forEach>
+							</div>
+						</div>
+					</div>
+				</div>
+			</c:forEach>
 
-		    <!-- 상세 사진을 표시할 모달 -->
-		    <div id="photo-modal" class="photo-modal" style="display: none;">
-		        <div class="modal-content">
-		            <span id="close-modal" class="close-button">&times;</span>
-		            <div id="photo-display"></div>
-		        </div>
-		    </div>
+			<!-- 상세 사진을 표시할 모달 -->
+			<div id="photo-modal" class="photo-modal" style="display: none;">
+				<div class="modal-content">
+					<span id="close-modal" class="close-button">&times;</span>
+					<div id="photo-display"></div>
+				</div>
+			</div>
 		</section>
 
 
@@ -733,26 +747,41 @@
 			<div class="review-card">
 				<div class="sort-dropdown">
 					<form method="get" action="/acm/acmDetail">
-					    <input type="hidden" name="acm_id" value="${acmDetail.acm_id}"  class="sort-select">
-					    <select name="sort" onchange="this.form.submit()">
-					        <option value="latest" ${param.sort == 'latest' ? 'selected' : ''}>최신순</option>
-					        <option value="highestRating" ${param.sort == 'highestRating' ? 'selected' : ''}>평점 높은 순</option>
-					        <option value="lowestRating" ${param.sort == 'lowestRating' ? 'selected' : ''}>평점 낮은 순</option>
-					    </select>
+						<input type="hidden" name="acm_id" value="${acmDetail.acm_id}"
+							class="sort-select"> <select name="sort"
+							onchange="this.form.submit()">
+							<option value="latest"
+								${param.sort == 'latest' ? 'selected' : ''}>최신순</option>
+							<option value="highestRating"
+								${param.sort == 'highestRating' ? 'selected' : ''}>평점
+								높은 순</option>
+							<option value="lowestRating"
+								${param.sort == 'lowestRating' ? 'selected' : ''}>평점 낮은
+								순</option>
+						</select>
 					</form>
 				</div>
 
 				<div class="review-header">
-					<div class="star-rating"><c:out value="${review.rasting}"/></div>
-					<div class="author"><c:out value="${review.review_id}"/></div>
-					<div class="date"><c:out value="${review.created_at}"/></div>
+					<div class="star-rating">
+						<c:out value="${review.rasting}" />
+					</div>
+					<div class="author">
+						<c:out value="${review.review_id}" />
+					</div>
+					<div class="date">
+						<c:out value="${review.created_at}" />
+					</div>
 				</div>
 				<div class="review-content">
-					<p><c:out value="${review.content}"/></p>
+					<p>
+						<c:out value="${review.content}" />
+					</p>
 				</div>
 				<div class="review-images">
-					<img src="${review.acm_main_img}" alt="리뷰 이미지 1"/> <img src="${review.acm_main_img}"
-						alt="리뷰 이미지 2"/> <img src="${review.acm_main_img}" alt="리뷰 이미지 3"/>
+					<img src="${review.acm_main_img}" alt="리뷰 이미지 1" /> <img
+						src="${review.acm_main_img}" alt="리뷰 이미지 2" /> <img
+						src="${review.acm_main_img}" alt="리뷰 이미지 3" />
 				</div>
 				<div class="review-footer">
 					<p>4명이 이 리뷰를 추천했어요</p>
@@ -764,7 +793,7 @@
 	</main>
 
 	<footer class="footer">
-		<jsp:include page="../common/footer.jsp" />
+		<jsp:include page="../common/jsp/footer.jsp" />
 	</footer>
 
 	<!-- 객실 상세 모달 팝업 -->
