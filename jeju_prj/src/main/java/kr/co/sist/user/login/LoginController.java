@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
@@ -98,17 +99,25 @@ public class LoginController {
 	}// resestPassFrm
 
 	@PostMapping("/member/resetPassProcess")
-	public String resetPassProcess(MemberVO mVO, Model model) {
+	public String resetPassProcess(MemberVO mVO, @RequestParam("source") String source, Model model) {
+	    System.out.println("user_id: " + mVO.getUser_id());
+	    System.out.println("password: " + mVO.getPassword());
 
-		boolean flag = ls.resetPassword(mVO);
-		if (flag) { // 재설정 성공한 경우
-			model.addAttribute("success", true);
-			model.addAttribute("user_id", mVO.getUser_id());
-			return "user/find_account/find_pass_success";
-		} else { // 비밀번호 재설정 실패한 경우
-			model.addAttribute("error", "비밀번호 재설정에 실패했습니다. 다시 시도해주세요.");
-			return "user/find_account/reset_pass";
-		} // end else
+	    boolean flag = ls.resetPassword(mVO);
+	    if (flag) { // 재설정 성공한 경우
+	        if ("mypage".equals(source)) {
+	            // 마이페이지에서 요청한 경우, 마이페이지 메인으로 리다이렉트
+	            return "redirect:/mypage/mypage_main";
+	        } else {
+	            // 그 외의 경우, 성공 페이지로 포워딩
+	            model.addAttribute("success", true);
+	            model.addAttribute("user_id", mVO.getUser_id());
+	            return "user/find_account/find_pass_success";
+	        }
+	    } else { // 비밀번호 재설정 실패한 경우
+	        model.addAttribute("error", "비밀번호 재설정에 실패했습니다. 다시 시도해주세요.");
+	        return "user/find_account/reset_pass";
+	    } // end else
 	}// resetPassProcess
 
 }// loginController

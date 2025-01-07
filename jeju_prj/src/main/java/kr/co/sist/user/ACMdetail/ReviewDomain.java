@@ -1,4 +1,4 @@
-package kr.co.sist.user.review;
+package kr.co.sist.user.ACMdetail;
 
 
 import java.sql.Timestamp;
@@ -9,10 +9,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+
+@Getter
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
 @Setter
 public class ReviewDomain {
 

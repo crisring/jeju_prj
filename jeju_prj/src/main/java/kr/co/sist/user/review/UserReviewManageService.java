@@ -2,7 +2,6 @@ package kr.co.sist.user.review;
 
 import java.util.List;
 
-import org.apache.ibatis.exceptions.PersistenceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,92 +11,49 @@ import kr.co.sist.user.util.SearchVO;
 @Service
 public class UserReviewManageService {
 
-	@Autowired
-	private UserReviewManageDAO urDAO;
+    @Autowired
+    private UserReviewManageDAO urDAO;
 
-	
+    public List<ReviewDomain> searchAllReview(SearchVO sVO) {
+        List<ReviewDomain> reviews = urDAO.selectAllReview(sVO);
+        for (ReviewDomain review : reviews) {
+            List<String> imgNames = urDAO.selectReviewImg(review.getReview_id());
+            if (imgNames != null && !imgNames.isEmpty()) {
+                review.setImg_name(imgNames); // 첫 번째 이미지를 img_name으로 설정
+            }
+        }
+        return reviews;
+    }
 
-	/**
-	 * user_id로 리뷰 목록 조회
-	 */
-	public List<ReviewDomain> searchAllReview(SearchVO sVO) {
-		// DAO 호출
-		return urDAO.selectAllReview(sVO);
-	}
+    public ReviewDomain displayReview(int review_id) {
+        ReviewDomain rDomain = urDAO.selectOneReview(review_id);
+        rDomain.setImg_name(urDAO.selectReviewImg(review_id));
+        return rDomain;
+    }
 
-	/**
-	 * review_id로 단일 리뷰 조회
-	 */
-	public ReviewDomain displayReview(int review_id) {
-		ReviewDomain rDomain = urDAO.selectOneReview(review_id);
-		return rDomain;
-	}
+    public boolean modifyReview(ReviewVO rVO) {
+        return urDAO.updateReview(rVO) > 0;
+    }
 
-	/**
-	 * 리뷰 수정
-	 */
-	public boolean modifyReview(ReviewVO rVO) {
-		// 실제로 update가 1건 이상 되었다면 성공
-		int rowCnt = urDAO.updateReview(rVO);
-		return rowCnt > 0;
-	}
+    public boolean removeReview(int review_id) {
+        // 리뷰 삭제 전 이미지 삭제
+        List<String> imgNames = urDAO.selectReviewImg(review_id);
+        for (String imgName : imgNames) {
+            urDAO.deleteReviewImage(review_id, imgName);
+        }
+        // 리뷰 삭제
+        return urDAO.deleteReview(review_id) > 0;
+    }
 
-	/**
-	 * 리뷰 삭제
-	 */
-	public boolean removeReview(int review_id) {
-		int rowCnt = urDAO.deleteReview(review_id);
-		return rowCnt > 0;
-	}
+    public void addReviewImage(int review_id, String imgName) {
+        urDAO.insertReviewImage(review_id, imgName);
+    }
 
-	/**
-	 * (선택) 리뷰 이미지 목록 조회 - 예: 리뷰 상세 페이지에서 썸네일들 불러올 때 사용
-	 */
-	public List<String> displayImg(int review_id) {
-		List<String> imgs = urDAO.selectReviewImg(review_id);
-		return imgs;
-	}//displayImg
+    public void deleteReviewImage(int review_id, String imgName) {
+        urDAO.deleteReviewImage(review_id, imgName);
+    }
 
-	public int totalCount(SearchVO sVO) {
-		int cnt = 0;
-		try {
-			cnt = urDAO.selectTotalCount(sVO);
-		} catch (PersistenceException pe) {
-			pe.printStackTrace();
-		} // end catch
-
-		return cnt;
-	}// totalCount
-
-	public int pageScale() {
-		int pageScale = 8;
-		return pageScale;
-	}// pageScacle
-
-	public int totalPage(int totalCount, int pageScale) {
-		int totalPage = (int) Math.ceil((double) totalCount / pageScale);
-		return totalPage;
-	}//totalPage
-
-	public int currentPage(String paramPage) {
-		int currentPage = 1;
-		if (paramPage != null) {
-			try {
-				currentPage = Integer.parseInt(paramPage);
-			} catch (NumberFormatException nfe) {
-			} // end catch
-		} // end if
-		return currentPage;
-	}//currentPage
-
-	public int startNum(int currentPage, int pageScale) {
-		int startNum = currentPage * pageScale - pageScale + 1;// 시작번호
-		return startNum;
-	}// startNum
-
-	public int endNum(int startNum, int pageScale) {
-		int endNum = startNum + pageScale - 1; // 끝 번호
-		return endNum;
-	}// endNum
-
-}// class
+    public int totalCount(SearchVO sVO) {
+        return urDAO.selectTotalCount(sVO);
+    }
+}

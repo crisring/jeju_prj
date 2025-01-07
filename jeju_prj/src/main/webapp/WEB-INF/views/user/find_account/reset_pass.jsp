@@ -19,71 +19,69 @@
     .container {
         margin-top:80px;
         width:500px;
-        height:500px;
+        height:auto; /* 높이를 자동으로 조정 */
         padding: 20px;
         border-radius: 8px;
         margin-bottom: 80px;
+        border: 1px solid #dee2e6; /* 테두리 추가 */
+        box-shadow: 0 0 10px rgba(0,0,0,0.1); /* 그림자 추가 */
     }
     
- .frm{
- margin-top: 30px;
- }
- .bld{
- font-weight: bold;
- }
+    .frm{
+        margin-top: 30px;
+    }
+    .bld{
+        font-weight: bold;
+    }
 </style>
 
 <script>
 $(document).ready(function(){
-    $('input[value="확인"]').on('click', function(){
+    $('#frm').on('submit', function(event){
         var newPassword = $('#password').val().trim();
         var confirmPassword = $('#confirmPassword').val().trim();
         
         if(newPassword.length < 8){
             alert("비밀번호는 8자 이상이어야 합니다.");
             $('#password').focus();
+            event.preventDefault();
             return;
         }
 
         if(newPassword !== confirmPassword){
             alert("비밀번호가 일치하지 않습니다.");
             $('#confirmPassword').focus();
+            event.preventDefault();
             return;
         }
-        
-        $("#frm").submit();
     });
 });
-
-
 </script>
 </head>
 
-
 <body>
     <!-- 헤더 -->
-	<c:import url="../common/jsp/header.jsp"/> 
+    <c:import url="../common/jsp/header.jsp"/> 
     <!-- 로그인 컨텐츠 -->
     <div class="container">
-        <div  style="text-align: center">
+        <div style="text-align: center">
             <img src="http://localhost/common/svg/logo.svg" alt="제주어때 로고" id="logo" style="display: block; margin: 0 auto;">
             <h5 class="bld">비밀번호 재설정</h5>
-            <p class="text-muted">현재비밀번호와 새 비밀번호를 입력해주세요</p>
+            <p class="text-muted">현재 비밀번호와 새 비밀번호를 입력해주세요</p>
         </div>
-          <form action="/member/resetPassProcess" method="post" id="frm" name="frm">
-    <div class="d-grid" style="margin-bottom: 50px">
-        <label class="form-label bld">새 비밀번호</label>
-        <input type="hidden" name="user_id" id="user_id" value="${user_id}">
-        <input type="hidden" name="source" id="source" value="${source}"> <!-- 숨겨진 필드 추가 -->
-        <input type="password" class="form-control" placeholder="새 비밀번호를 입력" id="password" name="password">
+        <form action="/member/resetPassProcess" method="post" id="frm" name="frm">
+            <div class="d-grid" style="margin-bottom: 50px">
+                <label class="form-label bld">새 비밀번호</label>
+                <input type="hidden" name="user_id" id="user_id" value="${user_id}">
+                <input type="hidden" name="source" id="source" value="${source}"> <!-- 숨겨진 필드 추가 -->
+                <input type="password" class="form-control" placeholder="새 비밀번호를 입력" id="password" name="password">
 
-        <label class="form-label bld frm">새 비밀번호 확인</label>
-        <input type="password" class="form-control" placeholder="새 비밀번호를 확인" id="confirmPassword" name="confirmPassword">
-
-        <input type="button" class="btn btn-primary btn-lg frm" value="확인">
-    </div>
-</form>
-
+                <label class="form-label bld frm">새 비밀번호 확인</label>
+                <input type="password" class="form-control" placeholder="새 비밀번호를 확인" id="confirmPassword" name="confirmPassword">
+        
+                <input type="submit" class="btn btn-primary btn-lg frm" value="확인">
+            </div>
+        </form>
     </div>
     <c:import url="../common/jsp/footer.jsp"/> 
     

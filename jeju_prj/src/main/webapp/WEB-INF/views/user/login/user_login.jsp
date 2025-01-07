@@ -61,10 +61,7 @@
 			<p class="text-muted">로그인/회원가입</p>
 		</div>
 		<div class="d-grid" style="margin-top: 50px">
-			<a href="/login/oauth/kakao"> <img
-				src="/common/user/images/kakao_login_medium_wide.png"
-				style="width: 100%; height: 100%;">
-			</a> <br>
+			
 			<button class="btn btn-light btn-lg" onclick="normalLogin()">일반회원
 				로그인/회원가입</button>
 		</div>

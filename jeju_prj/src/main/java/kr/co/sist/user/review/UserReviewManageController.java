@@ -1,112 +1,11 @@
-/*
- * package kr.co.sist.user.review;
- * 
- * import java.net.http.HttpRequest; import java.util.List;
- * 
- * import org.springframework.beans.factory.annotation.Autowired; import
- * org.springframework.stereotype.Controller; import
- * org.springframework.ui.Model; import
- * org.springframework.web.bind.annotation.PostMapping; import
- * org.springframework.web.bind.annotation.RequestMapping; import
- * org.springframework.web.bind.annotation.RequestMethod; // 파라미터 받을
- * 때 @RequestParam 등 사용 가능 import
- * org.springframework.web.bind.annotation.RequestParam; import
- * org.springframework.web.bind.annotation.SessionAttribute; import
- * org.springframework.web.bind.annotation.SessionAttributes;
- * 
- * import jakarta.security.auth.message.callback.PrivateKeyCallback.Request;
- * import jakarta.servlet.http.HttpServletRequest; import
- * kr.co.sist.admin.review.ReviewManageDomain; import
- * kr.co.sist.user.ACMdetail.ReviewDomain; import
- * kr.co.sist.user.member.MemberDomain; import kr.co.sist.user.mypage.ReviewVO;
- * import kr.co.sist.user.util.BoardUtil; import kr.co.sist.user.util.SearchVO;
- * 
- * @SessionAttributes("user_info")
- * 
- * @Controller public class UserReviewManageController {
- * 
- * @Autowired private UserReviewManageService urService;
- * 
- * 
- * 
- * @Autowired BoardUtil bu;
- * 
- * 
- *//**
-	 * 1) 나의 리뷰 목록 보기 - 세션에서 user_id를 가져왔다고 가정
-	 */
-/*
- * @RequestMapping(value = "/mypage/reviewList", method = { RequestMethod.GET,
- * RequestMethod.POST }) public String reviewList(@SessionAttribute(name =
- * "user_info", required = false) MemberDomain memberDomain,SearchVO sVO,
- * HttpServletRequest request, Model model) { // 세션이 없거나 user_id가 없으면 로그인 필요 예외
- * 처리 if (memberDomain == null || memberDomain.getUser_id() == null) { throw new
- * IllegalArgumentException("로그인이 필요합니다. 세션에 user_id가 존재하지 않습니다."); } // end if
- * 
- * 
- * sVO.setUser_id(memberDomain.getUser_id());
- * 
- * // 1. 총 레코드 수 구하기 int totalCount = urService.totalCount(sVO);
- * 
- * // 2. 한 화면에 보여줄 레코드의 수 int pageScale = urService.pageScale();
- * 
- * // 3. 총 페이지 수 int totalPage = urService.totalPage(totalCount, pageScale);
- * 
- * // 4. 현재 페이지 구하기 String paramPage = request.getParameter("currentPage"); int
- * currentPage = urService.currentPage(paramPage);
- * 
- * // 5. 시작 번호 및 끝 번호 계산 int startNum = urService.startNum(currentPage,
- * pageScale); int endNum = urService.endNum(startNum, pageScale);
- * 
- * // SearchVO에 페이지 및 범위 정보 세팅 sVO.setCurrentPage(currentPage);
- * sVO.setStartNum(startNum); sVO.setEndNum(endNum);
- * sVO.setTotalPage(totalPage); sVO.setTotalCount(totalCount);
- * 
- * // 7. 페이지네이션 생성 sVO.setUrl("/mypage/review_list"); List<ReviewDomain>
- * myReviewList = urService.searchAllReview(sVO);
- * 
- * String pagination = bu.pagination(sVO); model.addAttribute("pagination",
- * pagination);
- * 
- * 
- * 
- * 
- * // JSP에서 반복문으로 활용할 수 있도록 Model에 담기 model.addAttribute("myReviewList",
- * myReviewList);
- * 
- * // 예: /WEB-INF/views/user/mypage/mypage_review.jsp로 이동 return
- * "user/mypage/mypage_review"; }// reviewList
- * 
- *//**
-	 * 3) 리뷰 수정 처리 - 수정 폼에서 POST로 받은 데이터를 DB에 반영
-	 */
-/*
- * @PostMapping("/mypage/modifyReviewProcess") public String
- * modifyReviewProcess(ReviewVO rVO, Model model) { // 실제 DB update 처리 boolean
- * isSuccess = urService.modifyReview(rVO);
- * 
- * // 성공/실패 여부에 따라 메시지나 이동 경로 설정 if (isSuccess) { // 예: 성공 시 내 리뷰 목록 페이지로 이동
- * return "redirect:/mypage/reviewList"; } else { // 예: 실패 시 폼으로 다시
- * model.addAttribute("errorMsg", "리뷰 수정에 실패했습니다."); return
- * "user/mypage/mypage_review_modify"; } }
- * 
- *//**
-	 * 4) 리뷰 삭제 처리
-	 *//*
-		 * @PostMapping("/mypage/removeReviewProcess") public String
-		 * removeReviewProcess(@RequestParam("review_id") int reviewId) { boolean
-		 * isSuccess = urService.removeReview(reviewId);
-		 * 
-		 * // 삭제 후 목록 페이지로 리다이렉트 return "redirect:/mypage/reviewList"; }
-		 * 
-		 * }// class
-		 */
-
 package kr.co.sist.user.review;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -115,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.servlet.http.HttpServletRequest;
 import kr.co.sist.user.member.MemberDomain;
@@ -122,99 +22,133 @@ import kr.co.sist.user.mypage.ReviewVO;
 import kr.co.sist.user.util.BoardUtil;
 import kr.co.sist.user.util.SearchVO;
 
-/**
- * 세션 속성 "user_info"를 통해 user_id를 가져온다고 가정
- */
 @SessionAttributes("user_info")
 @Controller
 public class UserReviewManageController {
 
-	@Autowired
-	private UserReviewManageService urService;
+    @Autowired
+    private UserReviewManageService urService;
 
-	@Autowired
-	private BoardUtil bu;
+    @Autowired
+    private BoardUtil bu;
 
-	/**
-	 * 1) [나의 리뷰 목록 보기] - 세션에서 user_id를 가져와 페이징 처리된 리뷰 목록을 조회
-	 */
-	@RequestMapping(value = "/mypage/reviewList", method = { RequestMethod.GET, RequestMethod.POST })
-	public String reviewList(@SessionAttribute(name = "user_info", required = false) MemberDomain memberDomain,
-			SearchVO sVO, HttpServletRequest request, Model model) {
+    // 업로드 디렉토리 설정 (application.properties에서 주입)
+    @Value("${file.upload.review-dir}")
+    private String uploadDir;
 
-		// 1. 세션 유효성 검사
-		if (memberDomain == null || memberDomain.getUser_id() == null) {
-			// 로그인되지 않았으면 로그인 페이지로
-			return "redirect:/login/loginFrm";
-		}
+    /**
+     * [나의 리뷰 목록 보기]
+     */
+    @RequestMapping(value = "/mypage/reviewList", method = { RequestMethod.GET, RequestMethod.POST })
+    public String reviewList(
+            @SessionAttribute(name = "user_info", required = false) MemberDomain memberDomain,
+            SearchVO sVO,
+            HttpServletRequest request,
+            Model model) {
 
-		// 2. SearchVO에 user_id 세팅
-		sVO.setUser_id(memberDomain.getUser_id());
+        // 세션 유효성 검사
+        if (memberDomain == null || memberDomain.getUser_id() == null) {
+            return "redirect:/login/loginFrm";
+        }
 
-		// 3. 총 게시물 수 (DB에서 계산)
-		int totalCount = urService.totalCount(sVO);
+        // 페이징 및 조회 설정
+        sVO.setUser_id(memberDomain.getUser_id());
+        int totalCount = urService.totalCount(sVO);
+        int pageScale = 8; // 한 화면에 보여줄 게시물 수
+        int totalPage = (int) Math.ceil((double) totalCount / pageScale);
+        String paramPage = request.getParameter("currentPage");
+        int currentPage = (paramPage != null) ? Integer.parseInt(paramPage) : 1;
+        int startNum = (currentPage - 1) * pageScale + 1;
+        int endNum = startNum + pageScale - 1;
 
-		// 4. 한 화면에 보여줄 게시물 수
-		int pageScale = urService.pageScale();
+        sVO.setStartNum(startNum);
+        sVO.setEndNum(endNum);
+        sVO.setTotalPage(totalPage);
+        sVO.setTotalCount(totalCount);
+        sVO.setUrl("/mypage/reviewList");
 
-		// 5. 전체 페이지 수
-		int totalPage = urService.totalPage(totalCount, pageScale);
+        // 리뷰 목록 조회
+        List<ReviewDomain> myReviewList = urService.searchAllReview(sVO);
+        String pagination = bu.pagination(sVO);
 
-		// 6. 현재 페이지 번호 파라미터 처리
-		String paramPage = request.getParameter("currentPage");
-		int currentPage = urService.currentPage(paramPage);
+        model.addAttribute("myReviewList", myReviewList);
+        model.addAttribute("pagination", pagination);
 
-		// 7. 시작 번호, 끝 번호 계산
-		int startNum = urService.startNum(currentPage, pageScale);
-		int endNum = urService.endNum(startNum, pageScale);
+        return "user/mypage/mypage_review";
+    }
 
-		// 8. SearchVO에 페이징 정보 세팅
-		sVO.setCurrentPage(currentPage);
-		sVO.setStartNum(startNum);
-		sVO.setEndNum(endNum);
-		sVO.setTotalPage(totalPage);
-		sVO.setTotalCount(totalCount);
+    /**
+     * [리뷰 수정 처리]
+     */
+    @PostMapping("/mypage/modifyReviewProcess")
+    public String modifyReviewProcess(
+            ReviewVO rVO,
+            @RequestParam(value = "upfiles", required = false) List<MultipartFile> upfiles,
+            @RequestParam(value = "deleteImgNames", required = false) List<String> deleteImgNames,
+            Model model) {
+        try {
+            // 리뷰 내용 수정
+            boolean isUpdateSuccess = urService.modifyReview(rVO);
+            if (!isUpdateSuccess) {
+                model.addAttribute("errorMsg", "리뷰 수정에 실패했습니다.");
+                return "user/mypage/mypage_review_modify";
+            }
 
-		// 9. 페이지네이션 URL 설정
-		// Controller 매핑 주소와 동일하게 "/mypage/reviewList" 사용
-		sVO.setUrl("/mypage/reviewList");
+            // 기존 이미지 삭제
+            if (deleteImgNames != null && !deleteImgNames.isEmpty()) {
+                for (String imgName : deleteImgNames) {
+                    // 파일 삭제
+                    File imgFile = new File(uploadDir + File.separator + imgName);
+                    if (imgFile.exists()) {
+                        imgFile.delete();
+                    }
+                    // DB에서 이미지 정보 삭제
+                    urService.deleteReviewImage(rVO.getReview_id(), imgName);
+                }
+            }
 
-		// 10. 리뷰 목록 조회 (페이징 적용)
-		List<ReviewDomain> myReviewList = urService.searchAllReview(sVO);
+            // 새로운 이미지 업로드
+            if (upfiles != null && !upfiles.isEmpty()) {
+                for (MultipartFile upfile : upfiles) {
+                    if (!upfile.isEmpty()) {
+                        String originalFilename = upfile.getOriginalFilename();
+                        String fileName = originalFilename.substring(0, originalFilename.lastIndexOf("."));
+                        String fileExt = originalFilename.substring(originalFilename.lastIndexOf("."));
+                        File uploadFile = new File(uploadDir + File.separator + originalFilename);
+                        int cnt = 1;
+                        String newFileName = originalFilename;
 
-		// 11. 페이지네이션 HTML 생성
-		String pagination = bu.pagination(sVO);
+                        // 파일명 중복 방지
+                        while (uploadFile.exists()) {
+                            newFileName = fileName + "_" + cnt + fileExt;
+                            uploadFile = new File(uploadDir + File.separator + newFileName);
+                            cnt++;
+                        }
 
-		// 12. Model에 결과 담기
-		model.addAttribute("myReviewList", myReviewList);
-		model.addAttribute("pagination", pagination);
+                        // 파일 저장
+                        upfile.transferTo(uploadFile);
 
-		// 13. 뷰(JSP) 반환
-		return "user/mypage/mypage_review";
-	}
+                        // DB에 이미지 정보 저장
+                        urService.addReviewImage(rVO.getReview_id(), newFileName);
+                    }
+                }
+            }
 
-	/**
-	 * 3) [리뷰 수정 처리] - 수정 폼에서 POST로 받은 데이터를 DB에 반영
-	 */
-	@PostMapping("/mypage/modifyReviewProcess")
-	public String modifyReviewProcess(ReviewVO rVO, Model model) {
-		boolean isSuccess = urService.modifyReview(rVO);
-		if (isSuccess) {
-			return "redirect:/mypage/reviewList";
-		} else {
-			model.addAttribute("errorMsg", "리뷰 수정에 실패했습니다.");
-			return "user/mypage/mypage_review_modify";
-		}
-	}
+            return "redirect:/mypage/reviewList";
 
-	/**
-	 * 4) [리뷰 삭제 처리]
-	 */
-	@PostMapping("/mypage/removeReviewProcess")
-	public String removeReviewProcess(@RequestParam("review_id") int reviewId) {
-		boolean isSuccess = urService.removeReview(reviewId);
-		// 삭제 후 목록 페이지 리다이렉트
-		return "redirect:/mypage/reviewList";
-	}
+        } catch (IOException e) {
+            e.printStackTrace();
+            model.addAttribute("errorMsg", "파일 업로드 중 오류가 발생했습니다.");
+            return "user/mypage/mypage_review_modify";
+        }
+    }
 
+    /**
+     * [리뷰 삭제 처리]
+     */
+    @PostMapping("/mypage/removeReviewProcess")
+    public String removeReviewProcess(@RequestParam("review_id") int reviewId) {
+        urService.removeReview(reviewId);
+        return "redirect:/mypage/reviewList";
+    }
 }
