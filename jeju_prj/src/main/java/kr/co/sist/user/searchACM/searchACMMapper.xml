@@ -48,44 +48,81 @@
 		WHERE A.ACM_ID = #{ACM_ID}
 		GROUP BY A.ACM_ID
 	</select>
-	
-	<select id="selectACM" parameterType="SearchVO" resultType="ACMTypeDomain">
-        SELECT * 
-        FROM accommodation
-        WHERE 1=1
-        <if test="keyword != null and keyword != ''">
-            AND acm_name LIKE CONCAT('%', #{keyword}, '%')
-        </if>
-        <if test="startDate != null">
-            AND check_in >= #{startDate}
-        </if>
-        <if test="finishDate != null">
-            AND check_out &lt;= #{finishDate}
-        </if>
-        <if test="numberPeople > 0">
-            AND max_person >= #{numberPeople}
-        </if>
-    </select>
-    
-    <!-- 특정 숙소 유형 조회 -->
-    <select id="selectACMType" parameterType="int" resultType="SearchACMDomain">
-        SELECT acm_type_id, acm_type
-        FROM accommodation_type
-        WHERE acm_type_id = #{acm_type_id}
-    </select>
-    
-    <!-- 모든 숙소 유형 조회 -->
-    <select id="selectAllACMType" resultType="ACMTypeDomain">
-        SELECT acm_type_id, acm_type
-        FROM accommodation_type
-    </select>
 
-    <!-- 특정 숙소의 모든 시설 조회 -->
-    <select id="selectAllFacility" resultType="FacilityDomain">
-        SELECT f.fcL_id, f.fcL_name
-        FROM facilities f
-        JOIN provided_facilities pf ON f.fcL_id = pf.fcL_id
-        WHERE pf.acm_id = #{acmId}
-    </select>
+
+	<!-- 모든 숙소 유형 조회 -->
+	<select id="selectAllACMType" resultType="ACMTypeDomain">
+		SELECT acm_type_id,
+		acm_type
+		FROM accommodation_type
+	</select>
+
+	<!-- 숙소 검색 -->
+	<select id="selectACM" parameterType="searchVO"
+		resultType="searchACMDomain">
+		SELECT
+		A.ACM_ID AS acm_id,
+		TO_CHAR(A.ACM_NAME) AS acm_name,
+		A.DETAIL_ADDRESS AS detail_address,
+		A.MAIN_IMG AS main_img,
+		A.ACM_TYPE_ID AS acm_type_id,
+		MIN(R.PRICE) AS price,
+		MIN(R.DISCOUNT_PRICE) AS discountPrice
+		FROM ACCOMMODATION A
+		JOIN ROOM R
+		ON A.ACM_ID = R.ACM_ID
+		WHERE 1 = 1
+
+		<!-- 키워드 검색 -->
+		<if test="keyWord != null and keyWord != ''">
+			AND TO_CHAR(A.ACM_NAME) LIKE '%' || #{keyWord} || '%'
+		</if>
+
+		<!-- 인원 수 조건 -->
+		<if test="numberPeople != null">
+    <![CDATA[
+    AND (#{numberPeople} IS NULL OR #{numberPeople} <= 0 OR
+    R.MAX_PERSON >= #{numberPeople})
+    ]]>
+		</if>
+
+		<!-- 예약 날짜 조건 -->
+		<if test="startDate != null and finishDate != null">
+		    <![CDATA[
+			AND NOT EXISTS (
+			SELECT 1
+			FROM RESERVATION RES
+			WHERE
+			RES.ROOM_ID = R.ROOM_ID
+			AND (
+			(#{startDate} >= RES.CHECK_IN_DATE AND
+			#{startDate} < RES.CHECK_OUT_DATE)
+			OR (#{finishDate} >
+			RES.CHECK_IN_DATE AND #{finishDate} <=
+			RES.CHECK_OUT_DATE)
+			OR
+			(#{startDate} <= RES.CHECK_IN_DATE AND #{finishDate} >=
+			RES.CHECK_OUT_DATE)
+			)
+			)
+			    ]]>
+		</if>
+		GROUP BY
+		A.ACM_ID,
+		A.ACM_NAME,
+		A.DETAIL_ADDRESS,
+		A.MAIN_IMG,
+		A.ACM_TYPE_ID
+	</select>
+
+
+	<!-- selectACMType 메소드에 해당하는 쿼리 정의 -->
+	<select id="selectACMType" parameterType="int"
+		resultType="searchACMDomain">
+		SELECT ACM_TYPE_ID, ACM_TYPE
+		FROM ACCOMMODATION_TYPE
+		WHERE
+		ACM_TYPE_ID = #{acm_type_id}
+	</select>
 
 </mapper>

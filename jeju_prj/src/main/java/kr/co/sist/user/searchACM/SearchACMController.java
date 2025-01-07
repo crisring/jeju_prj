@@ -3,19 +3,19 @@ package kr.co.sist.user.searchACM;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jakarta.servlet.http.HttpSession;
-import kr.co.sist.user.ACMdetail.ACMDomain;
+import kr.co.sist.user.util.SearchVO;
 
 @SessionAttributes("user_info")
 @Controller
@@ -53,14 +53,13 @@ public class SearchACMController {
 	 * @return
 	 */
 	@GetMapping("/acm/searchProcess")
-	public String searchProc(SearchVO sVO, RedirectAttributes redirectAttributes, Model model) {
-
-		redirectAttributes.addAttribute("room_id", 44);
+	public String searchProc(SearchVO sVO, RedirectAttributes redirectAttributes) {
+		redirectAttributes.addAttribute("keyWord", sVO.getKeyWord());
 		redirectAttributes.addAttribute("startDate", sVO.getStartDate());
 		redirectAttributes.addAttribute("finishDate", sVO.getFinishDate());
 		redirectAttributes.addAttribute("numberPeople", sVO.getNumberPeople());
 
-		return "redirect:/reservation";
+		return "redirect:/acm/searchDetailFrm"; // redirect 쿼리 파라미터로 전달
 	}// searchProc
 
 	/**
@@ -71,26 +70,20 @@ public class SearchACMController {
 	 * @return
 	 */
 	@RequestMapping(value = "/acm/searchDetailFrm", method = { GET, POST })
-	public String searchDetailFrm(SearchVO sVO, Model model) {
-	    // 서비스에서 검색 결과를 가져옴
-	    List<SearchACMDomain> searchResults = sacms.displayDetail(sVO);  // displayDetail 메서드 호출
+	public String searchDetailFrm(@ModelAttribute SearchVO sVO, Model model) {
+		// 서비스에서 검색 결과를 가져옴
 
-	    // SearchACMDomain을 ACMTypeDomain으로 변환
-	    List<ACMTypeDomain> acmTypeResults = new ArrayList<>();
-	    for (SearchACMDomain search : searchResults) {
-	        ACMTypeDomain acmType = new ACMTypeDomain();
-	        
-	        // SearchACMDomain에서 필요한 정보를 가져와서 ACMTypeDomain에 설정
-	        acmType.setAcm_type_id(search.getAcm_type_id());  // 예: 숙소 타입 ID
-	        acmType.setAcm_type(search.getAcm_name());  // 예: 숙소 이름
-	        
-	        acmTypeResults.add(acmType);
-	    }
+		List<SearchACMDomain> list = sacms.displayDetail(sVO);
 
-	    // 변환된 검색 결과를 모델에 추가
-	    model.addAttribute("searchResults", acmTypeResults);
+		// 변환된 검색 결과를 모델에 추가
+		model.addAttribute("accommodationList", list);
 
-	    return "/acm/acmDetail";  // 결과 페이지로 이동
-	}
+		model.addAttribute("keyWord", sVO.getKeyWord());
+		model.addAttribute("startDate", sVO.getStartDate());
+		model.addAttribute("finishDate", sVO.getFinishDate());
+		model.addAttribute("numberPeople", sVO.getNumberPeople());
+
+		return "user/acm/searchPage"; // 결과 페이지로 이동
+	}// searchDetailFrm
 
 }
