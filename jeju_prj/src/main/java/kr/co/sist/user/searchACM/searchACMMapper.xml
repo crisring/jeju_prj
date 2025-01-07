@@ -50,43 +50,42 @@
 	</select>
 	
 	<select id="selectACM" parameterType="SearchVO" resultType="ACMTypeDomain">
-    SELECT * FROM acm_table
-    WHERE 1=1
-    <if test="keyword != null and keyword != ''">
-        AND keyword LIKE CONCAT('%', #{keyword}, '%')
-    </if>
-    <if test="startDate != null">
-        AND date >= #{startDate}
-    </if>
-    <if test="finishDate != null">
-        AND date &lt;= #{finishDate}
-    </if>
-    <if test="numberPeople > 0">
-        AND number_people >= #{numberPeople}
-    </if>
-</select>
-	
-	<!-- selectACMType 메소드에 해당하는 쿼리 정의 -->
+        SELECT * 
+        FROM accommodation
+        WHERE 1=1
+        <if test="keyword != null and keyword != ''">
+            AND acm_name LIKE CONCAT('%', #{keyword}, '%')
+        </if>
+        <if test="startDate != null">
+            AND check_in >= #{startDate}
+        </if>
+        <if test="finishDate != null">
+            AND check_out &lt;= #{finishDate}
+        </if>
+        <if test="numberPeople > 0">
+            AND max_person >= #{numberPeople}
+        </if>
+    </select>
+    
+    <!-- 특정 숙소 유형 조회 -->
     <select id="selectACMType" parameterType="int" resultType="SearchACMDomain">
-        SELECT ACM_TYPE_ID, ACM_TYPE
-        FROM ACCOMMODATION_TYPE
-        WHERE ACM_TYPE_ID = #{acm_type_id}
+        SELECT acm_type_id, acm_type
+        FROM accommodation_type
+        WHERE acm_type_id = #{acm_type_id}
     </select>
-	
-	<!-- selectAllACMType 메소드에 해당하는 쿼리 정의 -->
+    
+    <!-- 모든 숙소 유형 조회 -->
     <select id="selectAllACMType" resultType="ACMTypeDomain">
-        SELECT ACM_TYPE_ID, ACM_TYPE
-        FROM ACCOMMODATION_TYPE
+        SELECT acm_type_id, acm_type
+        FROM accommodation_type
     </select>
 
-    <!-- selectAllFacility 메소드에 해당하는 쿼리 정의 -->
+    <!-- 특정 숙소의 모든 시설 조회 -->
     <select id="selectAllFacility" resultType="FacilityDomain">
-        SELECT f.FCL_ID, f.FCL_NAME
-        FROM FACILITIES f
-        JOIN PROVIDED_FACILITIES pf ON f.FCL_ID = pf.FCL_ID
-        WHERE pf.ACM_ID = #{acmId}
+        SELECT f.fcL_id, f.fcL_name
+        FROM facilities f
+        JOIN provided_facilities pf ON f.fcL_id = pf.fcL_id
+        WHERE pf.acm_id = #{acmId}
     </select>
-
-
 
 </mapper>
