@@ -50,5 +50,15 @@
     WHERE user_id = #{user_id}
 </select>
 
+<select id="selectKakaoUser" parameterType="String" resultType="kr.co.sist.user.member.MemberDomain">
+    SELECT * FROM users WHERE kakao_id = #{kakaoId}
+</select>
+
+<insert id="insertKakaoUser" parameterType="kr.co.sist.user.member.MemberDomain">
+    INSERT INTO users (user_id, user_name, email, kakao_id)
+    VALUES (#{user_id}, #{user_name}, #{email}, #{kakao_id})
+</insert>
+
+
 
 </mapper>

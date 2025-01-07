@@ -56,7 +56,7 @@ public class UserReviewManageService {
 	public List<String> displayImg(int review_id) {
 		List<String> imgs = urDAO.selectReviewImg(review_id);
 		return imgs;
-	}
+	}//displayImg
 
 	public int totalCount(SearchVO sVO) {
 		int cnt = 0;

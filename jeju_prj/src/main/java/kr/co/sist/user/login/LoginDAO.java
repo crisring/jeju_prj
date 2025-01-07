@@ -93,4 +93,22 @@ public class LoginDAO {
 		 
 			return status;
 		}
+	 
+	 
+	 public MemberDomain selectKakaoUser(String kakaoId) {
+			MyBatisHandler mbh = MyBatisHandler.getInstance();
+			SqlSession handler = mbh.getHandler();	
+		 
+		    return handler.selectOne("LoginMapper.selectKakaoUser", kakaoId);
+		}
+
+		public int insertKakaoUser(MemberDomain member) {
+			MyBatisHandler mbh = MyBatisHandler.getInstance();
+			SqlSession handler = mbh.getHandler();	
+			
+			
+		    return handler.insert("LoginMapper.insertKakaoUser", member);
+		}
+
+	 
 }// loginDAO
