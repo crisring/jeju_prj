@@ -2,6 +2,8 @@ package kr.co.sist.user.review;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -97,13 +99,15 @@ public class UserReviewManageController {
             // 기존 이미지 삭제
             if (deleteImgNames != null && !deleteImgNames.isEmpty()) {
                 for (String imgName : deleteImgNames) {
+                    // 경로에서 파일명만 추출
+                    String fileName = imgName.substring(imgName.lastIndexOf("/") + 1);
                     // 파일 삭제
-                    File imgFile = new File(uploadDir + File.separator + imgName);
+                    File imgFile = new File(uploadDir + File.separator + fileName);
                     if (imgFile.exists()) {
                         imgFile.delete();
                     }
                     // DB에서 이미지 정보 삭제
-                    urService.deleteReviewImage(rVO.getReview_id(), imgName);
+                    urService.deleteReviewImage(rVO.getReview_id(), fileName);
                 }
             }
 
@@ -112,24 +116,28 @@ public class UserReviewManageController {
                 for (MultipartFile upfile : upfiles) {
                     if (!upfile.isEmpty()) {
                         String originalFilename = upfile.getOriginalFilename();
-                        String fileName = originalFilename.substring(0, originalFilename.lastIndexOf("."));
-                        String fileExt = originalFilename.substring(originalFilename.lastIndexOf("."));
-                        File uploadFile = new File(uploadDir + File.separator + originalFilename);
-                        int cnt = 1;
-                        String newFileName = originalFilename;
+                        if (originalFilename == null) continue;
 
-                        // 파일명 중복 방지
-                        while (uploadFile.exists()) {
-                            newFileName = fileName + "_" + cnt + fileExt;
-                            uploadFile = new File(uploadDir + File.separator + newFileName);
-                            cnt++;
+                        // 현재 시간을 이용한 고유한 파일명 생성
+                        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+                        String fileExt = originalFilename.substring(originalFilename.lastIndexOf("."));
+                        String newFileName = timeStamp + "_" + rVO.getReview_id() + fileExt;
+
+                        // 파일 저장
+                        File uploadFile = new File(uploadDir + File.separator + newFileName);
+
+                        // 디렉토리 존재 여부 확인 및 생성
+                        File dir = uploadFile.getParentFile();
+                        if (!dir.exists()) {
+                            dir.mkdirs();
                         }
 
                         // 파일 저장
                         upfile.transferTo(uploadFile);
-
-                        // DB에 이미지 정보 저장
-                        urService.addReviewImage(rVO.getReview_id(), newFileName);
+                        
+                        // DB에 저장할 때는 웹 경로 형식으로 저장
+                        String webPath = newFileName; // 파일명만 저장
+                        urService.addReviewImage(rVO.getReview_id(), webPath);
                     }
                 }
             }

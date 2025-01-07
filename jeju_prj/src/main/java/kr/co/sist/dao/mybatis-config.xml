@@ -98,8 +98,7 @@
 
 		<!--user -->
 		<!-- 메인페이지 검색 -->
-		<mapper
-			resource="kr/co/sist/user/searchACM/searchACMMapper.xml" />
+	
 		<mapper resource="kr/co/sist/user/ACMdetail/ACMDtailMapper.xml" />
 
 

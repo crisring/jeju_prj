@@ -217,91 +217,139 @@
     </div>
 
     <script>
-        $(document).ready(function() {
+    $(document).ready(function() {
 
-            // [별점 클릭 시] 동작
-            $(".star").on("click", function() {
-                var value = $(this).data("value");
-                // 모든 별 초기화
-                $(".star").removeClass("selected").css("color", "#ccc");
-                // 선택한 별까지 색칠
-                for (var i = 1; i <= value; i++) {
-                    $(".star[data-value='" + i + "']").addClass("selected").css("color", "#FFD700");
-                }
-                // hidden rating에 값 세팅
-                $("#modal_rating").val(value);
-            });
+       // [별점 클릭 시] 동작
+       $(".star").on("click", function() {
+           var value = $(this).data("value");
+           // 모든 별 초기화
+           $(".star").removeClass("selected").css("color", "#ccc");
+           // 선택한 별까지 색칠
+           for (var i = 1; i <= value; i++) {
+               $(".star[data-value='" + i + "']").addClass("selected").css("color", "#FFD700");
+           }
+           // hidden rating에 값 세팅
+           $("#modal_rating").val(value);
+       });
 
-            // [수정하기] 버튼 클릭
-            $("#btnUpdateReview").on("click", function() {
-                // 간단 검증
-                var rating = $("#modal_rating").val();
-                var content = $("#modal_content").val();
-                if (!rating || rating < 1) {
-                    alert("별점을 선택하세요.");
-                    return false;
-                }
-                if (!content || content.trim().length < 5) {
-                    alert("리뷰 내용을 5자 이상 입력해주세요.");
-                    return false;
-                }
-                // 폼 제출
-                $("#frmReviewUpdate").submit();
-            });
+       // [수정하기] 버튼 클릭
+       $("#btnUpdateReview").on("click", function() {
+           // 간단 검증
+           var rating = $("#modal_rating").val();
+           var content = $("#modal_content").val();
+           if (!rating || rating < 1) {
+               alert("별점을 선택하세요.");
+               return false;
+           }
+           if (!content || content.trim().length < 5) {
+               alert("리뷰 내용을 5자 이상 입력해주세요.");
+               return false;
+           }
+           // 폼 제출
+           $("#frmReviewUpdate").submit();
+       });
 
-            // [상세/수정] 버튼 클릭 -> 모달 띄울 때 기존 데이터 세팅
-            $(".btn-open-modal").on("click", function() {
-                // 1) 별 초기화
-                $(".star").removeClass("selected").css("color", "#ccc");
-                $("#modal_rating").val("");
+       // [상세/수정] 버튼 클릭 -> 모달 띄울 때 기존 데이터 세팅
+       $(".btn-open-modal").on("click", function() {
+           // 1) 별 초기화
+           $(".star").removeClass("selected").css("color", "#ccc");
+           $("#modal_rating").val("");
 
-                // 2) data-* 속성에서 값 추출
-                var reviewId = $(this).data("review-id");
-                var acmName = $(this).data("acm-name");
-                var rating = $(this).data("rating");
-                var content = $(this).data("content");
-                var img = $(this).data("img");
-                var created = $(this).data("created");
+           // 2) data-* 속성에서 값 추출
+           var reviewId = $(this).data("review-id");
+           var acmName = $(this).data("acm-name");
+           var rating = $(this).data("rating");
+           var content = $(this).data("content");
+           var img = $(this).data("img");
+           var created = $(this).data("created");
 
-                // 3) hidden / input / textarea에 값 세팅
-                $("#modal_review_id").val(reviewId);
-                $("#modal_acm_name").val(acmName);
-                $("#modal_content").val(content);
+           // 3) hidden / input / textarea에 값 세팅
+           $("#modal_review_id").val(reviewId);
+           $("#modal_acm_name").val(acmName);
+           $("#modal_content").val(content);
 
-                // 별점 채우기
-                for (var i = 1; i <= rating; i++) {
-                    $(".star[data-value='" + i + "']").addClass("selected").css("color", "#FFD700");
-                }
-                $("#modal_rating").val(rating);
+           // 별점 채우기
+           for (var i = 1; i <= rating; i++) {
+               $(".star[data-value='" + i + "']").addClass("selected").css("color", "#FFD700");
+           }
+           $("#modal_rating").val(rating);
 
-                // 기존 이미지 미리보기
-                if (img) {
-                    $("#modal_old_img").attr("src", "${pageContext.request.contextPath}/common/user/review_Img/" + img).show();
-                } else {
-                    $("#modal_old_img").hide();
-                }
-            });
+           // 이미지 처리 - 콤마로 구분된 문자열을 배열로 변환
+           if (img) {
+               var imgArray = img.split(',').map(function(item) {
+                   return item.trim(); // 앞뒤 공백 제거
+               });
+               
+               // 기존 이미지 미리보기 컨테이너 초기화
+               $("#oldImgWrap").empty();
+               
+               // 각 이미지에 대해 미리보기 생성
+               imgArray.forEach(function(imgName) {
+                   if (imgName) {
+                	   var imgHtml = '<div class="me-2 mb-2 d-inline-block">' +
+                       '<img src="/common/user/review_Img/' + imgName + '" ' +
+                       'alt="리뷰 이미지" ' +
+                       'style="max-width: 150px; max-height: 150px;">' +
+                       '</div>';
+                       $("#oldImgWrap").append(imgHtml);
+                   }
+               });
+           } else {
+               $("#oldImgWrap").empty();
+           }
+       });
 
-            // 새로운 이미지 선택 시 미리보기
-            $("#newImageInput").on("change", function(event) {
-                var input = event.target;
-                $("#newImagesPreview").empty(); // 기존 미리보기 초기화
-                if (input.files && input.files.length > 0) {
-                    Array.from(input.files).forEach(function(file) {
-                        var reader = new FileReader();
-                        reader.onload = function(e) {
-                            var imgHtml = `
-                                <div class="me-2 mb-2">
-                                    <img src="${e.target.result}" alt="새 리뷰 이미지" style="width: 100px; height: 100px; object-fit: cover;">
-                                </div>
-                            `;
-                            $("#newImagesPreview").append(imgHtml);
-                        }
-                        reader.readAsDataURL(file);
-                    });
-                }
-            });
-        });
+       // 새로운 이미지 선택 시 미리보기
+       $("#newImageInput").on("change", function(event) {
+           var input = event.target;
+           
+           // 파일 수 체크
+           if (input.files.length > 3) {
+               alert("최대 3개의 이미지만 업로드할 수 있습니다.");
+               $(this).val(''); // 선택된 파일들 초기화
+               $("#newImagesPreview").empty();
+               return;
+           }
+           
+           // 파일 크기 및 타입 체크
+           var maxSize = 5 * 1024 * 1024; // 5MB
+           var validImageTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'];
+           
+           for (var i = 0; i < input.files.length; i++) {
+               var file = input.files[i];
+               
+               if (file.size > maxSize) {
+                   alert("파일 크기는 5MB를 초과할 수 없습니다.");
+                   $(this).val('');
+                   $("#newImagesPreview").empty();
+                   return;
+               }
+               
+               if (!validImageTypes.includes(file.type)) {
+                   alert("이미지 파일만 업로드할 수 있습니다.");
+                   $(this).val('');
+                   $("#newImagesPreview").empty();
+                   return;
+               }
+           }
+           
+           // 미리보기 생성
+           $("#newImagesPreview").empty();
+           Array.from(input.files).forEach(function(file) {
+               var reader = new FileReader();
+               reader.onload = function(e) {
+            	   var imgHtml = '<div class="me-2 mb-2 d-inline-block">' +
+                   '<img src="' + e.target.result + '" ' +
+                   'alt="새 리뷰 이미지" ' +
+                   'style="width: 100px; height: 100px; object-fit: cover;">' +
+                   '</div>';
+
+                   $("#newImagesPreview").append(imgHtml);
+               }
+               reader.readAsDataURL(file);
+           });
+       });
+    });
     </script>
 
 </body>
